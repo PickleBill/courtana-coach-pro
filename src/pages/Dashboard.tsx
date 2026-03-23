@@ -79,30 +79,9 @@ export default function Dashboard() {
           </div>
         </ScrollReveal>
 
-        {/* Time leverage highlight — HERO SIZED */}
+        {/* Coaching Economics Calculator */}
         <ScrollReveal>
-          <div className="glass rounded-2xl p-8 lg:p-10 mb-8 relative overflow-hidden glow">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/6 via-primary/3 to-transparent pointer-events-none" />
-            <div className="relative z-10">
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs mb-4 badge-glow">
-                <Zap size={10} className="mr-1" /> Time Leverage
-              </Badge>
-              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-                <div>
-                  <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3">This Week's Performance</h2>
-                  <p className="text-muted-foreground text-lg">
-                    You reviewed <span className="text-primary font-semibold">{dashboardMetrics.completedThisWeek} sessions</span>, earning <span className="text-primary font-semibold">${(dashboardMetrics.completedThisWeek * 78).toLocaleString()}</span> in <span className="text-primary font-semibold">~1.6 hours</span>
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-2">Traditional 1:1 coaching would take ~{dashboardMetrics.completedThisWeek} hours for the same revenue</p>
-                </div>
-                <div className="text-center lg:text-right shrink-0">
-                  <div className="stat-number text-5xl lg:text-6xl text-primary">$1,122</div>
-                  <div className="text-sm text-muted-foreground mt-1">effective hourly rate</div>
-                  <div className="text-xs text-primary font-semibold mt-1">14x traditional coaching rate</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <CoachingCalculator />
         </ScrollReveal>
 
         {/* Quick Actions */}

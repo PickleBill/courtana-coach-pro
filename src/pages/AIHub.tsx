@@ -1,15 +1,11 @@
-import { useState } from 'react';
 import { aiAnalysisResult } from '@/data/mockData';
 import { toast } from '@/hooks/use-toast';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Upload, Wifi, Send, CheckCircle, AlertTriangle, Lightbulb, Brain, ArrowRight, User, Zap, Play, ExternalLink, Clock, ShieldCheck, Users, Sparkles } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import TournamentFeed from '@/components/TournamentFeed';
-import MatchmakingModal from '@/components/MatchmakingModal';
+import { Upload, Wifi, Send, CheckCircle, AlertTriangle, Lightbulb, Brain, User, Zap, Play, ExternalLink, Clock, ShieldCheck, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const gradeColors: Record<string, string> = {
   'A+': 'text-primary', 'A': 'text-primary', 'A-': 'text-primary',
@@ -30,7 +26,6 @@ const recentSessions = [
   { date: 'Mar 10, 2026', grade: 'B-', rallies: 31, label: 'Kitchen Drills — Black Barn, OH' },
 ];
 
-// Sparkline data for each shot type (last 5 sessions)
 const sparklineData: Record<string, number[]> = {
   'Third Shot Drop': [72, 78, 80, 84, 87],
   'Dinking': [75, 77, 79, 81, 82],
@@ -55,11 +50,11 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
 
 export default function AIHub() {
   usePageTitle('AI Analysis Hub — Courtana Coaching');
-  const [matchOpen, setMatchOpen] = useState(false);
 
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4">
+        {/* Header */}
         <ScrollReveal>
           <div className="flex items-start justify-between flex-wrap gap-4 mb-4">
             <div>
@@ -76,14 +71,9 @@ export default function AIHub() {
                 Upload a video or connect your Courtana session. Our AI breaks down every shot — then a pro adds the human touch.
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="gap-1.5 border-primary/25 text-primary hover:bg-primary/10 active:scale-95 transition-transform" onClick={() => setMatchOpen(true)}>
-                <Users size={14} /> Find Players
-              </Button>
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-sm px-4 py-2 badge-glow gap-1.5">
-                <ShieldCheck size={14} /> AI Confidence: 94.2%
-              </Badge>
-            </div>
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-sm px-4 py-2 badge-glow gap-1.5">
+              <ShieldCheck size={14} /> AI Confidence: 94.2%
+            </Badge>
           </div>
           {/* Data layer stats row */}
           <div className="flex flex-wrap gap-4 mb-10 text-xs text-muted-foreground">
@@ -100,32 +90,7 @@ export default function AIHub() {
           </div>
         </ScrollReveal>
 
-        {/* Upload area */}
-        <ScrollReveal>
-          <div className="glass rounded-2xl p-10 mb-12 text-center border-dashed border-2 border-border/40 hover:border-primary/25 transition-all cursor-pointer group relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative z-10">
-              <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-4">
-                <Upload size={28} className="text-primary" />
-              </div>
-              <h3 className="font-display text-xl font-bold text-foreground mb-1">Upload Match Video</h3>
-              <p className="text-sm text-muted-foreground mb-6">Drag & drop or click to upload. MP4, MOV up to 500MB.</p>
-              <div className="flex justify-center gap-3">
-                <Button className="active:scale-95 transition-transform glow-sm gap-1.5 px-6" onClick={() => { toast({ title: '📤 Video upload launches with your Courtana session.' }); setTimeout(() => window.open('https://courtana.com/ai-analysis/', '_blank'), 300); }}>
-                  <Upload size={14} /> Upload Video
-                </Button>
-                <Button variant="outline" className="active:scale-95 transition-transform gap-1.5 px-6 border-border/50 hover:border-primary/20" onClick={() => window.open('https://courtana.com/ai-analysis/', '_blank')}>
-                  <Wifi size={14} /> Connect Courtana Session
-                </Button>
-              </div>
-              <a href="https://courtana.com/ai-analysis/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-primary/70 hover:text-primary mt-4 transition-colors">
-                Try AI Analysis on Courtana <ExternalLink size={10} />
-              </a>
-            </div>
-          </div>
-        </ScrollReveal>
-
-        {/* Mock completed analysis */}
+        {/* Analysis Complete heading */}
         <ScrollReveal>
           <div className="flex items-center gap-3 mb-6">
             <Brain size={20} className="text-primary" />
@@ -138,27 +103,19 @@ export default function AIHub() {
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            {/* Video thumbnail + court SVG overlay */}
+            {/* 1. Court analysis visualization — FIRST */}
             <ScrollReveal>
               <div className="glass rounded-2xl overflow-hidden relative group cursor-pointer">
                 <div className="h-72 bg-gradient-to-br from-secondary/60 via-primary/5 to-secondary/40 relative flex items-center justify-center">
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,_hsla(145,100%,45%,0.06),transparent_50%)]" />
-
-                  {/* Court SVG underlay (V4c) */}
                   <svg className="absolute inset-4 w-[calc(100%-2rem)] h-[calc(100%-2rem)] opacity-20" viewBox="0 0 400 200" fill="none">
-                    {/* Court outline */}
                     <rect x="20" y="10" width="360" height="180" rx="4" stroke="hsl(var(--primary))" strokeWidth="1" strokeDasharray="4 4" />
-                    {/* Net */}
                     <line x1="200" y1="10" x2="200" y2="190" stroke="hsl(var(--primary))" strokeWidth="1.5" opacity="0.5" />
-                    {/* Kitchen lines */}
                     <line x1="130" y1="10" x2="130" y2="190" stroke="hsl(var(--primary))" strokeWidth="0.5" strokeDasharray="3 3" />
                     <line x1="270" y1="10" x2="270" y2="190" stroke="hsl(var(--primary))" strokeWidth="0.5" strokeDasharray="3 3" />
-                    {/* Center line */}
                     <line x1="20" y1="100" x2="130" y2="100" stroke="hsl(var(--primary))" strokeWidth="0.5" strokeDasharray="3 3" />
                     <line x1="270" y1="100" x2="380" y2="100" stroke="hsl(var(--primary))" strokeWidth="0.5" strokeDasharray="3 3" />
                   </svg>
-
-                  {/* Heat zones with court-aware positioning */}
                   <div className="absolute left-[8%] top-[15%] w-[28%] h-[35%] rounded-lg bg-primary/10 border border-primary/20">
                     <span className="absolute top-1 left-2 text-[9px] text-primary/60 font-medium">Strong Zone</span>
                   </div>
@@ -168,8 +125,6 @@ export default function AIHub() {
                   <div className="absolute right-[8%] top-[12%] w-[22%] h-[30%] rounded-lg bg-blue-400/10 border border-blue-400/20">
                     <span className="absolute top-1 left-2 text-[9px] text-blue-400/60 font-medium">Consistent</span>
                   </div>
-
-                  {/* Shot markers */}
                   {[
                     { x: '20%', y: '35%', label: 'Serve A-', color: 'text-primary' },
                     { x: '55%', y: '55%', label: 'Drop B+', color: 'text-blue-400' },
@@ -183,7 +138,6 @@ export default function AIHub() {
                       </div>
                     </motion.div>
                   ))}
-
                   <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform">
                     <Play size={24} className="text-primary-foreground ml-1" />
                   </div>
@@ -194,8 +148,6 @@ export default function AIHub() {
                     47 rallies analyzed
                   </Badge>
                 </div>
-
-                {/* Court legend (V4c) */}
                 <div className="px-5 py-3 bg-card/80 border-t border-border/20 flex items-center gap-4 text-[10px] text-muted-foreground">
                   <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-primary/20 border border-primary/30" /> Strong</span>
                   <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-blue-400/20 border border-blue-400/30" /> Consistent</span>
@@ -204,7 +156,7 @@ export default function AIHub() {
               </div>
             </ScrollReveal>
 
-            {/* Shot grades grid with sparklines (V4c) */}
+            {/* 2. Shot grades grid with sparklines */}
             <ScrollReveal>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {aiAnalysisResult.shotBreakdown.map((shot, i) => (
@@ -212,7 +164,6 @@ export default function AIHub() {
                     <div className={`stat-number text-2xl ${gradeColors[shot.grade]}`}>{shot.grade}</div>
                     <div className="text-[11px] text-muted-foreground mt-1 font-medium">{shot.shot}</div>
                     <div className="text-[10px] text-muted-foreground/60 mt-0.5">{shot.score}/100</div>
-                    {/* Sparkline trend */}
                     <div className="flex justify-center mt-2">
                       <Sparkline data={sparklineData[shot.shot] || [50, 55, 60, 65, 70]} color={gradeColors[shot.grade]} />
                     </div>
@@ -222,7 +173,7 @@ export default function AIHub() {
               </div>
             </ScrollReveal>
 
-            {/* Strengths & Weaknesses */}
+            {/* 3. Strengths & Weaknesses */}
             <div className="grid sm:grid-cols-2 gap-4">
               <ScrollReveal delay={0.05}>
                 <div className="glass rounded-xl p-5 h-full border-primary/10">
@@ -250,7 +201,7 @@ export default function AIHub() {
               </ScrollReveal>
             </div>
 
-            {/* Pro Review Received */}
+            {/* 4. AI + Human comparison */}
             <ScrollReveal delay={0.15}>
               <div className="glass rounded-2xl p-6 border-primary/10 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/3 to-transparent pointer-events-none" />
@@ -282,7 +233,7 @@ export default function AIHub() {
               </div>
             </ScrollReveal>
 
-            {/* Share with Coach + DaaS teaser (V5c) */}
+            {/* 5. Share + Export buttons */}
             <ScrollReveal delay={0.18}>
               <div className="flex gap-3">
                 <Button variant="outline" className="flex-1 gap-1.5 text-xs border-primary/20 text-primary hover:bg-primary/10 active:scale-95 transition-transform">
@@ -294,16 +245,56 @@ export default function AIHub() {
               </div>
             </ScrollReveal>
 
+            {/* 6. CourtSense Data Layer (replaces Pickle DaaS) */}
             <ScrollReveal delay={0.2}>
               <div className="glass rounded-xl p-5 border-blue-400/15 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-400/3 to-transparent pointer-events-none" />
                 <div className="relative z-10">
                   <Badge variant="outline" className="bg-blue-400/10 text-blue-400 border-blue-400/20 text-[10px] mb-3">
-                    <Brain size={8} className="mr-0.5" /> Coming Soon
+                    <Brain size={8} className="mr-0.5" /> CourtSense™ Data Layer
                   </Badge>
-                  <h4 className="font-display font-bold text-foreground text-sm mb-1">Pickle DaaS™</h4>
-                  <p className="text-xs text-muted-foreground leading-relaxed">Data-as-a-Service for facilities. Real-time player analytics, court utilization insights, and coaching marketplace integration — all from one API.</p>
-                  <p className="text-[10px] text-primary mt-2 font-medium">Interested? Contact partnerships@courtana.com</p>
+                  <h4 className="font-display font-bold text-foreground text-sm mb-1">Every Session Generates Facility Intelligence</h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">Court utilization, peak hours, player engagement, coaching revenue per court — all captured automatically from the same cameras powering AI analysis.</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="text-center p-2 rounded-lg bg-secondary/20">
+                      <div className="stat-number text-lg text-blue-400">87%</div>
+                      <div className="text-[9px] text-muted-foreground">Court Utilization</div>
+                    </div>
+                    <div className="text-center p-2 rounded-lg bg-secondary/20">
+                      <div className="stat-number text-lg text-blue-400">$340</div>
+                      <div className="text-[9px] text-muted-foreground">Revenue/Court/Mo</div>
+                    </div>
+                    <div className="text-center p-2 rounded-lg bg-secondary/20">
+                      <div className="stat-number text-lg text-blue-400">2.4x</div>
+                      <div className="text-[9px] text-muted-foreground">Player Retention</div>
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-primary mt-3 font-medium">Alpha data from The Underground · 50 sessions analyzed</p>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            {/* 7. Analyze Your Own Session (upload moved here) */}
+            <ScrollReveal>
+              <div className="glass rounded-2xl p-10 text-center border-dashed border-2 border-border/40 hover:border-primary/25 transition-all cursor-pointer group relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-primary/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative z-10">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-4">
+                    <Upload size={28} className="text-primary" />
+                  </div>
+                  <h3 className="font-display text-xl font-bold text-foreground mb-1">Analyze Your Own Session</h3>
+                  <p className="text-sm text-muted-foreground mb-6">Drag & drop or click to upload. MP4, MOV up to 500MB.</p>
+                  <div className="flex justify-center gap-3">
+                    <Button className="active:scale-95 transition-transform glow-sm gap-1.5 px-6" onClick={() => { toast({ title: '📤 Video upload launches with your Courtana session.' }); setTimeout(() => window.open('https://courtana.com/ai-analysis/', '_blank'), 300); }}>
+                      <Upload size={14} /> Upload Video
+                    </Button>
+                    <Button variant="outline" className="active:scale-95 transition-transform gap-1.5 px-6 border-border/50 hover:border-primary/20" onClick={() => window.open('https://courtana.com/ai-analysis/', '_blank')}>
+                      <Wifi size={14} /> Connect Courtana Session
+                    </Button>
+                  </div>
+                  <a href="https://courtana.com/ai-analysis/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-primary/70 hover:text-primary mt-4 transition-colors">
+                    Try AI Analysis on Courtana <ExternalLink size={10} />
+                  </a>
                 </div>
               </div>
             </ScrollReveal>
@@ -367,19 +358,9 @@ export default function AIHub() {
                 </ul>
               </div>
             </ScrollReveal>
-
-            {/* Tournament Feed (V5b) */}
-            <ScrollReveal delay={0.18}>
-              <TournamentFeed />
-            </ScrollReveal>
           </div>
         </div>
       </div>
-
-      {/* Matchmaking Modal (V5b) */}
-      <AnimatePresence>
-        {matchOpen && <MatchmakingModal onClose={() => setMatchOpen(false)} />}
-      </AnimatePresence>
     </div>
   );
 }
