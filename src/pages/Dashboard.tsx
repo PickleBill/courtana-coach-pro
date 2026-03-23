@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReviewModal from '@/components/ReviewModal';
 import { dashboardMetrics, coaches } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
 import CoachingCalculator from '@/components/CoachingCalculator';
