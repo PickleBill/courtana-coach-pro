@@ -8,7 +8,7 @@ import usePageTitle from '@/hooks/usePageTitle';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Crown, ShieldCheck, Sparkles, Filter, Activity, Target, Quote, Search } from 'lucide-react';
+import { Crown, ShieldCheck, Sparkles, Filter, Activity, Target, Quote, Search, ArrowRight } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const tiers = ['all', 'celebrity', 'certified', 'rising'] as const;
@@ -95,29 +95,51 @@ export default function Coaches() {
           </div>
         </ScrollReveal>
 
+        {/* Find My Coach banner */}
+        <ScrollReveal delay={0.08}>
+          <div className="glass rounded-2xl p-6 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center shrink-0">
+                <Target size={20} className="text-primary" />
+              </div>
+              <div>
+                <h3 className="font-display font-bold text-foreground">🎯 Not sure where to start?</h3>
+                <p className="text-sm text-muted-foreground">Take a 30-second quiz and we'll match you with your ideal coach.</p>
+              </div>
+            </div>
+            <Button className="active:scale-95 transition-transform glow-sm font-semibold gap-1.5 shrink-0" onClick={() => setShowQuiz(true)}>
+              Find My Coach <ArrowRight size={14} />
+            </Button>
+          </div>
+        </ScrollReveal>
+
         {/* Search + Tier filter tabs */}
         <ScrollReveal delay={0.1}>
           <div className="flex flex-col sm:flex-row gap-3 mb-10">
-            <div className="relative flex-1 max-w-xs">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search coaches, specialties..."
-                className="pl-9 bg-secondary/30 border-border/30 h-9 text-sm"
-              />
+            <div className="flex-1 max-w-xs">
+              <div className="text-sm font-medium text-foreground mb-2">Find your coach</div>
+              <div className="relative">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search coaches, specialties..."
+                  className="pl-9 bg-secondary/30 border-border/30 h-9 text-sm"
+                />
+              </div>
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-2 flex-wrap items-end">
               {tiers.map((t) => {
                 const cfg = tierConfig[t];
                 const TierIcon = cfg.icon;
+                const isActive = filter === t;
                 return (
                   <Button
                     key={t}
-                    variant={filter === t ? 'default' : 'outline'}
+                    variant={isActive ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setFilter(t)}
-                    className={`active:scale-95 transition-all gap-1.5 ${filter === t ? 'glow-sm' : 'border-border/50 hover:border-primary/20'}`}
+                    className={`active:scale-95 transition-all gap-1.5 rounded-full ${isActive ? 'shadow-sm' : 'border-border/50 hover:border-primary/20'}`}
                   >
                     <TierIcon size={13} />
                     {cfg.label}
