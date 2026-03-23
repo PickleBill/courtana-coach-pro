@@ -239,7 +239,7 @@ export default function AIHub() {
 
             {/* 4. AI + Human comparison */}
             <ScrollReveal delay={0.1}>
-              <div className="glass rounded-2xl p-6 border-primary/10 relative overflow-hidden">
+              <div className="glass rounded-2xl p-6 border-primary/10 relative overflow-hidden animated-gradient-border">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/3 to-transparent pointer-events-none" />
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-4">
