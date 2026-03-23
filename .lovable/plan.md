@@ -1,59 +1,135 @@
+# Okay, so a couple of notes here as I'm going through the business plan----> still follow your plan just make the edits as you see fit and go ahead and approve it --------I'm thinking about this Google or Apple sign-in, real working, if someone enters an email on a lovable site or does it with Google. We figure out a way to automatically add them to Cortana. Maybe what they do is get created as a ghost user in Cortana, or maybe get a separate session started.
 
+# I think there's definitely some stuff we have to do on our end, but I'm just basically thinking about this quick action thing where they go in and do something on this demo but real site, and then get put into our system somehow. At bare minimum, we could just take them to our QR code page, have them sign up, and then start a session. That might get a little messy, because then they'll be like, "Why do I want to do that?" Although we could just advertise it; it could be like, "Try Cortana quick, quick sign up type of thing," and then they get put in and start a session. The highlights have been starts and whatever. We could just keep repeating that or bulk upload them somehow in our system.
 
-# V5 Sequence Implementation Plan
+# Think about that link sign-in modal, yes avatar sign-in, set out, join the network. Yeah, I think we're to say the player coach pro is optional. Waitlist, yes, 100% on that. Video upload, yes. Mike did support coach completes review, yeah, yep, yep. Coach competes for view dashboard interactivity, yeah, and I would like seeing through the calculator too. I already love the sort of calculations there, but maybe we'll want to add other layers on it, like, "Oh, player view right would be maybe the inverse of creates a value proposition for a player. Why would they do it, so the coach, like, days of the year traveling, right? It's like a big thing, and so getting their, like, thinking about opportunity cost lost for a pro, you know, that's on tour, that might be coaching." We set some dollar hourly rate, so that's some changes there.
 
-## What the V5 Prompts Do
+Give me the next video like that. Book a session, yeah, yeah, love that! Stripe integration, yeah, I'll get the API key. Let's just do it. I don't know if we need a subscription. Yeah, whatever, we can do a subscription. Definitely do it with all the simulated flows. Live integration, we will run links to an in live public display dashboard. Yeah, I'll give you those links in there and that upload video. Okay, this is fantastic! Why do I need Apple sign-in credentials? I feel like I've used this before. I'll get you the Stripe API key. I don't really care about the tournament sign-up links; just find some random ones. GCourtana Coach Pro — Production Readiness Plan
 
-Three sequential prompts that layer on top of V4:
+## Phase 1: Foundation — Lovable Cloud + Auth (First)
 
-**V5a — Demo Polish + Real Partner Data** (~8 changes)
-Wire broken Quick Action buttons in Dashboard.tsx, add "Court Kings Facilities: 24+" stat to Index.tsx stats bar, replace partner ticker with real CK partner names, add pilot facility pills to the Court Kings section, add Chuck Norris persona to AskAProChat.tsx (live API call to chucknorris.io), add welcome message to chat, add coach search input to Coaches.tsx, wire navbar CTA.
+Enable Lovable Cloud, then set up real authentication. This is the gating step for everything else.
 
-**V5b — AI Edge Features + Matchmaking** (~3 components + 3 refinements)
-New TournamentFeed.tsx component with mock tournament data from real CK venues, new MatchmakingModal.tsx (3-step "Tinder for pickleball" flow), add "Analyzing" pulse badge + "CourtSense Shot Analysis" branding + data layer stats row to AIHub.tsx.
+**Auth setup:**
 
-**V5c — DaaS Vision + Court Kings Shop + Rewards** (~3 components + 3 edits)
-New CourtAvailabilityBar.tsx (live court marquee for Index.tsx), new CourtKingsShop.tsx (3 real CK products with Shopify CDN images for Rewards.tsx), "Earn XP at Court Kings" CTA card on Rewards, "Share with Coach" button + Pickle DaaS teaser section on AIHub.tsx, dismissible demo banner on Dashboard, DUPR keyword response in AskAProChat.
+- Google and Apple OAuth sign-in (real, working)
+- Simple `profiles` table: `id`, `user_id`, `display_name`, `avatar_url`, `role` (player/coach/pro), `created_at`
+- Separate `user_roles` table per security requirements
+- Update `SignInModal.tsx` to use real Supabase auth (Google + Apple buttons, email/password)
+- Add auth state to Navbar — show avatar + name when signed in, "Sign Out" replaces "Sign In"
+- Protected routes: Dashboard, Curriculum require auth. Everything else is public.
+- "Join the Network" → opens SignInModal in "signup" mode with role selection (Player / Coach / Pro)
 
-## Current State Assessment
+**Waitlist collection (immediate value):**
 
-- **Navbar CTA**: Currently has `scrollToPartner` — V5a wants it to navigate to `/coaches`. Simple fix.
-- **Quick Actions**: Currently 3 buttons (Review/Message/Curriculum) with no navigation wiring. V5a wants 4 wired buttons.
-- **Partner ticker**: Already has real names (Court Kings, PPA Tour, DUPR, etc.) — V5a's list overlaps ~70%. Will merge, adding Centerline Athletics, Dink Dynamics, Dinkville Nashville, Cellutrex.
-- **Chuck Norris**: Entirely new — AskAProChat has 3 personas, needs a 4th with live API.
-- **Tournament/Matchmaking**: Entirely new components for AIHub.
-- **Court Kings Shop**: New component using real Shopify CDN product images.
-- **CourtAvailabilityBar**: New component for Index.
+- Add `waitlist` table: `id`, `email`, `name`, `role_interest`, `created_at`
+- Every CTA that currently toasts ("Join the Ecosystem — Early Access", "Book Session", "Offer Contract") → collects email in a quick inline modal before confirming
+- This starts capturing leads immediately
 
-## Edits to the Sequence
+## Phase 2: Interactive Flows — Make Every Click Do Something
 
-1. **V5a partner names**: The current `partnerNames` array already has Court Kings, PPA Tour, DUPR, Black Barn, etc. I'll merge rather than replace — keeping existing good names and adding the CK-specific ones (Centerline Athletics, Dink Dynamics, Dinkville Nashville, Cellutrex).
+**Video upload → Coach review flow (Curriculum.tsx + new modal):**
 
-2. **V5a Quick Actions**: The prompt says 4 buttons but current code has 3. I'll add the 4th ("Send Update") and wire all with `useNavigate` + toast.
+- Upload button opens a modal: shows a placeholder video thumbnail (court image), "Sending to Coach Marcus" with coach avatar, estimated response time
+- Add "⚡ Expedite Review" option: "$5 for 2-hour response (normal: 48 hrs)" — shows a mock Stripe checkout card (Phase 3 wires it real)
+- After "send": animated confirmation with confetti/checkmark, toast: "Coach Marcus will review within 48 hours"
 
-3. **V5a stats bar**: Need to find where the stats are rendered in Index.tsx and add the Court Kings entry.
+**Coach completes review → Player notification flow:**
 
-4. **V5b AIHub state**: Need to add `matchOpen` state and wire both new components into the existing AIHub page layout.
+- On Dashboard: clicking a "pending" review shows a "Review Video" modal with mock video frame, text area for feedback, grade selector, "Submit Review" button
+- Submitting triggers a toast simulating push notification: "Tyler R. just received your feedback! 🎾"
+- On Curriculum: add a "New Feedback" badge that appears on modules with unread coach notes
 
-5. **V5c product images**: These reference `shop.courtkings.com` CDN URLs — will use directly as `<img>` sources. If CORS blocks them, I'll add fallback placeholder styling.
+**Coaching Calculator mobile fix:**
 
-## Uploaded Assets Plan
+- Replace HTML range inputs with shadcn `Slider` component (already in project) — much better touch targets on mobile
+- Add touch-friendly thumb sizing
 
-The uploaded files (MHTML pages, levelup.png, courtana.ai) are **reference only** for now. After V5 is stable, the next pass could:
-- Copy the levelup.png to `src/assets/` and use it as a visual in the Rewards or Curriculum page to show the gamification TV overlay
-- Extract visual patterns from the Courtana profile/session MHTML to align card layouts
-- Use the AI Analysis MHTML structure to make our AIHub shot grades match the real Courtana UI more closely
+**Dashboard interactivity:**
 
-For now, these inform design decisions but don't get embedded directly.
+- "Review Next Video" card → opens inline review panel (not just navigate to AI Hub)
+- "Message Student" → opens a simple chat-style modal with mock conversation
+- Metric cards: clicking "Pending Reviews" scrolls to reviews list, "Active Students" shows student roster modal
 
-## Execution Order
+**Coach marketplace booking:**
 
-1. **Pass 1 (V5a)**: Wire navbar, add CK stat, merge partner names, add pilot facility pills, wire quick actions, add Chuck Norris persona + welcome message, add coach search
-2. **Pass 2 (V5b)**: Create TournamentFeed + MatchmakingModal, add to AIHub with state, add Analyzing badge + CourtSense branding + data layer stats
-3. **Pass 3 (V5c)**: Create CourtAvailabilityBar + CourtKingsShop, add to Index/Rewards, add Earn XP card, add Share + DaaS teaser to AIHub, add demo banner to Dashboard, add DUPR response to chat
+- "Book Session" on any coach → opens booking modal: select session type (Video Review / Live Drill / Curriculum), date preference, payment preview
+- For celebrity tier: show "Limited Availability" warning, slot countdown
 
-Files touched per pass:
-- V5a: `Navbar.tsx`, `Index.tsx`, `Dashboard.tsx`, `AskAProChat.tsx`, `Coaches.tsx`
-- V5b: New `TournamentFeed.tsx`, new `MatchmakingModal.tsx`, `AIHub.tsx`
-- V5c: New `CourtAvailabilityBar.tsx`, new `CourtKingsShop.tsx`, `Index.tsx`, `Rewards.tsx`, `AIHub.tsx`, `Dashboard.tsx`, `AskAProChat.tsx`
+## Phase 3: Stripe Integration + Checkout Flows
 
+Enable Stripe (will need API key from you).
+
+**Checkout scenarios:**
+
+- Coach booking: real Stripe checkout for session booking ($35-$750 depending on tier)
+- Expedited review: $5 micro-payment
+- Rewards store: purchase merch/experiences
+- Subscription tiers: Player Basic ($35/mo), Player Pro ($99/mo), Player Elite ($249/mo)
+
+**Pre-Stripe (immediate):**
+
+- Build all the checkout UI now with simulated flows
+- When Stripe is connected, swap in real payment processing
+
+## Phase 4: Live Integration + Real-World Links
+
+**Courtana live display integration:**
+
+- Add "Tune In Live" section on homepage: links to Courtana's public display dashboard
+- "Live at The Underground" card with a green pulse dot, opens courtana.com display view in new tab
+- Tournament section: links to real tournament sign-up pages
+
+**Session flow bridge:**
+
+- "Upload Video" → opens courtana.com/ai-analysis in new tab
+- When they return: show a "Welcome back! Your session is being analyzed" banner
+- "Connect Courtana Account" flow: simple email linking (stored in profiles table)
+
+**Live feed elements:**
+
+- Activity ticker on homepage already exists — make it pull from a `public_activity` table (seeded with mock data, but real infrastructure)
+- "Currently analyzing" counter: reads from a simple counter in Supabase, updatable via edge function
+
+## Phase 5: Mobile Polish + UX Tightening
+
+- Coaching calculator: switch to Slider components, larger touch targets
+- All modals: full-screen on mobile (sheet-style slide up)
+- Coach cards: stack vertically on mobile, larger tap targets
+- AI Hub: single-column layout on mobile, collapsible sections
+- Bottom CTA bar: context-aware ("Continue Curriculum" on curriculum page, "Find a Coach" on homepage)
+- Navbar mobile menu: add role-based quick links after auth
+
+## Phase 6: Notification System + Feedback Loops
+
+**Edge functions for async events:**
+
+- `notify-review-complete`: when coach submits review → sends email to player + creates in-app notification
+- `notify-new-submission`: when player uploads video → notifies assigned coach
+- `weekly-progress-digest`: weekly email with curriculum progress, earnings (for coaches)
+
+**In-app notifications:**
+
+- Bell icon in navbar with badge count
+- Notification dropdown: "Coach Marcus reviewed your serve video", "You earned 50 XP", "New curriculum module unlocked"
+- Stored in `notifications` table, real-time via Supabase subscriptions
+
+## Implementation Order
+
+1. **Phase 1** (Cloud + Auth) — must be first, everything depends on it
+2. **Phase 2** (Interactive flows) — biggest visual impact for demos
+3. **Phase 5** (Mobile polish) — can run in parallel with Phase 2
+4. **Phase 3** (Stripe) — after you provide API key
+5. **Phase 4** (Live integrations) — links + display connections
+6. **Phase 6** (Notifications) — polish layer
+
+## What I Need From You
+
+- **Approve enabling Lovable Cloud** — I'll do this first
+- **Google OAuth credentials** — for real Google sign-in (Client ID from Google Cloud Console)
+- **Apple Sign-In credentials** — Apple Developer account required
+- **Stripe API key** — when ready for Phase 3
+- **Courtana display dashboard URL** — the public view of your live displays for the "Tune In" feature
+- **Tournament sign-up links** — any real tournament registration pages to link to
+
+I'll start with Phase 1 (Cloud + Auth) and Phase 2 (Interactive flows) simultaneously once approved.
