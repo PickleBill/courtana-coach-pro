@@ -181,6 +181,7 @@ export default function Scout() {
             )}
           </div>
         </ScrollReveal>
+        <WaitlistModal open={waitlistOpen} onClose={() => setWaitlistOpen(false)} context={waitlistCtx} />
       </div>
     </div>
   );
