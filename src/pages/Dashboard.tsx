@@ -1,8 +1,10 @@
 import { dashboardMetrics, coaches } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
+import usePageTitle from '@/hooks/usePageTitle';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { DollarSign, Clock, Users, TrendingUp, CheckCircle, BarChart3, Crown, Timer, ArrowRight, Zap, Video, MessageSquare, UserPlus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { DollarSign, Clock, Users, TrendingUp, CheckCircle, BarChart3, Crown, Timer, ArrowRight, Zap, Video, MessageSquare, UserPlus, Play, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const metricCards = [
@@ -23,21 +25,22 @@ const recentReviews = [
 ];
 
 const recentActivity = [
-  { icon: Video, text: 'Tyler R. submitted a new video for review', time: '4 min ago', color: 'text-primary' },
+  { icon: Video, text: 'Tyler R. submitted a new practice video', time: '4 min ago', color: 'text-primary' },
   { icon: CheckCircle, text: 'Maya O. completed Module 3 of her curriculum', time: '1 hr ago', color: 'text-primary' },
-  { icon: UserPlus, text: 'New rising star applied to your network', time: '2 hrs ago', color: 'text-blue-400' },
-  { icon: MessageSquare, text: 'Alex T. replied to your feedback on serve analysis', time: '3 hrs ago', color: 'text-[hsl(var(--gold))]' },
+  { icon: Zap, text: 'AI Analysis ready for review: Sarah K.', time: '2 hrs ago', color: 'text-blue-400' },
+  { icon: UserPlus, text: 'New rising star applied to your network', time: '3 hrs ago', color: 'text-[hsl(var(--gold))]' },
   { icon: DollarSign, text: 'Revenue share payout of $1,280 from Ben Johns processed', time: '6 hrs ago', color: 'text-primary' },
 ];
 
 export default function Dashboard() {
+  usePageTitle('Coach Dashboard — Courtana Coaching');
   const certifiedCoaches = coaches.filter((c) => c.tier === 'certified');
 
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4">
         <ScrollReveal>
-          <div className="flex items-start justify-between flex-wrap gap-4 mb-10">
+          <div className="flex items-start justify-between flex-wrap gap-4 mb-8">
             <div>
               <h1 className="font-display text-4xl lg:text-5xl font-bold">Coach Dashboard</h1>
               <p className="text-muted-foreground mt-2 text-lg">Welcome back, Marcus. Here's your coaching snapshot.</p>
@@ -49,29 +52,45 @@ export default function Dashboard() {
           </div>
         </ScrollReveal>
 
-        {/* Time leverage highlight — LARGE AND PROMINENT */}
+        {/* Time leverage highlight — HERO SIZED */}
         <ScrollReveal>
-          <div className="glass rounded-2xl p-8 mb-8 relative overflow-hidden glow-sm">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-              <div className="flex items-center gap-5">
-                <div className="w-16 h-16 rounded-2xl bg-primary/12 border border-primary/15 flex items-center justify-center">
-                  <Zap size={28} className="text-primary" />
-                </div>
+          <div className="glass rounded-2xl p-8 lg:p-10 mb-8 relative overflow-hidden glow">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/6 via-primary/3 to-transparent pointer-events-none" />
+            <div className="relative z-10">
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs mb-4 badge-glow">
+                <Zap size={10} className="mr-1" /> Time Leverage
+              </Badge>
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
                 <div>
-                  <h3 className="font-display font-bold text-foreground text-xl mb-1">Time Leverage This Week</h3>
-                  <p className="text-muted-foreground">
+                  <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3">This Week's Performance</h2>
+                  <p className="text-muted-foreground text-lg">
                     You reviewed <span className="text-primary font-semibold">{dashboardMetrics.completedThisWeek} sessions</span>, earning <span className="text-primary font-semibold">${(dashboardMetrics.completedThisWeek * 78).toLocaleString()}</span> in <span className="text-primary font-semibold">~1.6 hours</span>
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">Traditional 1:1 coaching would take ~{dashboardMetrics.completedThisWeek} hours for the same revenue</p>
+                  <p className="text-sm text-muted-foreground mt-2">Traditional 1:1 coaching would take ~{dashboardMetrics.completedThisWeek} hours for the same revenue</p>
+                </div>
+                <div className="text-center lg:text-right shrink-0">
+                  <div className="stat-number text-5xl lg:text-6xl text-primary">$1,122</div>
+                  <div className="text-sm text-muted-foreground mt-1">effective hourly rate</div>
+                  <div className="text-xs text-primary font-semibold mt-1">14x traditional coaching rate</div>
                 </div>
               </div>
-              <div className="text-right lg:text-right">
-                <div className="stat-number text-4xl text-primary">$1,122/hr</div>
-                <div className="text-xs text-muted-foreground">effective hourly rate</div>
-                <div className="text-[10px] text-primary mt-1">14x traditional coaching rate</div>
-              </div>
             </div>
+          </div>
+        </ScrollReveal>
+
+        {/* Quick Actions */}
+        <ScrollReveal>
+          <div className="grid grid-cols-3 gap-3 mb-8">
+            {[
+              { label: 'Review Next Video', icon: Play, color: 'text-primary' },
+              { label: 'Message Student', icon: MessageSquare, color: 'text-blue-400' },
+              { label: 'Update Curriculum', icon: BookOpen, color: 'text-[hsl(var(--gold))]' },
+            ].map((action) => (
+              <Button key={action.label} variant="outline" className="h-auto py-4 flex-col gap-2 border-border/30 hover:border-primary/20 active:scale-[0.97] transition-transform">
+                <action.icon size={18} className={action.color} />
+                <span className="text-xs font-medium">{action.label}</span>
+              </Button>
+            ))}
           </div>
         </ScrollReveal>
 
@@ -96,7 +115,6 @@ export default function Dashboard() {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Recent reviews */}
           <div className="lg:col-span-2 space-y-8">
             <div>
               <ScrollReveal>
@@ -105,10 +123,7 @@ export default function Dashboard() {
               <div className="space-y-2">
                 {recentReviews.map((r, i) => (
                   <ScrollReveal key={i} delay={i * 0.06}>
-                    <motion.div
-                      whileHover={{ scale: 1.01 }}
-                      className="glass rounded-xl p-4 flex items-center justify-between glass-hover cursor-pointer"
-                    >
+                    <motion.div whileHover={{ scale: 1.01 }} className="glass rounded-xl p-4 flex items-center justify-between glass-hover cursor-pointer">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-secondary/60 border border-border/30 flex items-center justify-center text-xs font-bold text-foreground">
                           {r.student.charAt(0)}{r.student.split(' ')[1]?.charAt(0)}
@@ -122,9 +137,7 @@ export default function Dashboard() {
                         {r.time !== '—' && <span className="text-xs text-muted-foreground hidden sm:block">{r.time}</span>}
                         <span className="stat-number text-base text-foreground">{r.earned}</span>
                         <Badge variant="outline" className={`text-[10px] ${
-                          r.status === 'completed'
-                            ? 'text-primary border-primary/25 bg-primary/8'
-                            : 'text-[hsl(var(--gold))] border-[hsl(var(--gold))]/25 bg-[hsl(var(--gold))]/8'
+                          r.status === 'completed' ? 'text-primary border-primary/25 bg-primary/8' : 'text-[hsl(var(--gold))] border-[hsl(var(--gold))]/25 bg-[hsl(var(--gold))]/8'
                         }`}>
                           {r.status === 'completed' ? <CheckCircle size={9} className="mr-0.5" /> : <Clock size={9} className="mr-0.5" />}
                           {r.status}
@@ -148,7 +161,7 @@ export default function Dashboard() {
                     const ActivityIcon = activity.icon;
                     return (
                       <div key={i} className="flex items-start gap-3">
-                        <div className={`w-7 h-7 rounded-lg bg-secondary/40 flex items-center justify-center shrink-0 mt-0.5`}>
+                        <div className="w-7 h-7 rounded-lg bg-secondary/40 flex items-center justify-center shrink-0 mt-0.5">
                           <ActivityIcon size={12} className={activity.color} />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -169,25 +182,24 @@ export default function Dashboard() {
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-4">
                     <Crown size={14} className="text-[hsl(var(--gold))]" />
-                    <h3 className="font-display font-bold text-foreground">Network Overview</h3>
+                    <h3 className="font-display font-bold text-foreground">Network Revenue Chain</h3>
                   </div>
                   <p className="text-xs text-muted-foreground mb-4">You are part of the <span className="text-[hsl(var(--gold))] font-semibold">Ben Johns</span> coaching network</p>
 
-                  {/* Rev share chain */}
                   <div className="space-y-2 mb-4 p-3 rounded-lg bg-secondary/20 border border-border/15">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-[hsl(var(--gold))] font-medium">Ben Johns (Celebrity)</span>
-                      <span className="text-[hsl(var(--gold))] font-semibold">40%</span>
+                      <span className="text-[hsl(var(--gold))] font-semibold">40% → $1,280/mo</span>
                     </div>
                     <div className="text-center text-muted-foreground/30 text-xs">↓</div>
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-primary font-medium">You (Certified)</span>
-                      <span className="text-primary font-semibold">45%</span>
+                      <span className="text-primary font-semibold">45% → $1,440/mo</span>
                     </div>
                     <div className="text-center text-muted-foreground/30 text-xs">↓</div>
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-muted-foreground font-medium">Platform</span>
-                      <span className="text-muted-foreground font-semibold">15%</span>
+                      <span className="text-muted-foreground font-semibold">15% → $480/mo</span>
                     </div>
                   </div>
 
@@ -206,7 +218,7 @@ export default function Dashboard() {
               </div>
             </ScrollReveal>
 
-            {/* Revenue Share */}
+            {/* Revenue Share bars */}
             <ScrollReveal delay={0.15}>
               <div className="glass rounded-2xl p-5">
                 <h3 className="font-display font-bold text-foreground mb-4">Revenue Share</h3>

@@ -1,8 +1,10 @@
 import { curriculumItems } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
+import usePageTitle from '@/hooks/usePageTitle';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Circle, BookOpen, Video, BarChart3, Lock, Trophy, MessageSquare, User, Gift } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { CheckCircle, Circle, BookOpen, Video, BarChart3, Lock, Trophy, MessageSquare, User, Gift, Upload, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const typeIcons = { drill: BookOpen, video: Video, analysis: BarChart3 };
@@ -19,11 +21,13 @@ const skills = [
 ];
 
 const milestones = [
-  { label: 'Complete 4 modules', reward: 'Signed Pro Paddle', tier: 'silver', unlocked: false, progress: `${completedCount}/4` },
-  { label: 'Complete all modules', reward: 'VIP PPA Championship Seats', tier: 'gold', unlocked: false, progress: `${completedCount}/6` },
+  { label: 'Complete 4 modules', reward: 'Signed Pro Paddle', tier: 'silver', progress: `${completedCount}/4` },
+  { label: 'Complete all modules', reward: 'VIP PPA Championship Seats', tier: 'gold', progress: `${completedCount}/6` },
 ];
 
 export default function Curriculum() {
+  usePageTitle('Your Curriculum — Courtana Coaching');
+
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4">
@@ -71,19 +75,10 @@ export default function Curriculum() {
                     )}
                     <div className="flex items-start gap-3">
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                        item.completed
-                          ? 'bg-primary/15 text-primary'
-                          : isCurrent
-                          ? 'bg-primary/10 text-primary animate-pulse'
-                          : 'bg-secondary/40 text-muted-foreground/40'
+                        item.completed ? 'bg-primary/15 text-primary' : isCurrent ? 'bg-primary/10 text-primary animate-pulse' : 'bg-secondary/40 text-muted-foreground/40'
                       }`}>
                         {item.completed ? (
-                          <motion.div
-                            initial={{ scale: 0 }}
-                            whileInView={{ scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ type: 'spring', stiffness: 500, damping: 20, delay: 0.2 }}
-                          >
+                          <motion.div initial={{ scale: 0 }} whileInView={{ scale: 1 }} viewport={{ once: true }} transition={{ type: 'spring', stiffness: 500, damping: 20, delay: 0.2 }}>
                             <CheckCircle size={18} />
                           </motion.div>
                         ) : isCurrent ? <Circle size={18} /> : <Lock size={14} />}
@@ -103,6 +98,7 @@ export default function Curriculum() {
                           )}
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">{item.description}</p>
+
                         {item.coachFeedback && (
                           <div className="mt-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
                             <div className="flex items-center gap-1.5 mb-1.5">
@@ -116,20 +112,37 @@ export default function Curriculum() {
                           </div>
                         )}
 
-                        {/* Coach Notes for current module */}
+                        {/* Coach Notes + Reply + Upload for current module */}
                         {isCurrent && (
-                          <div className="mt-3 p-3 rounded-lg bg-blue-500/5 border border-blue-500/10">
-                            <div className="flex items-center gap-1.5 mb-1.5">
-                              <div className="w-5 h-5 rounded-md bg-blue-500/15 flex items-center justify-center">
-                                <MessageSquare size={10} className="text-blue-400" />
+                          <>
+                            <div className="mt-3 p-3 rounded-lg bg-blue-500/5 border border-blue-500/10">
+                              <div className="flex items-center gap-1.5 mb-1.5">
+                                <div className="w-5 h-5 rounded-md bg-blue-500/15 flex items-center justify-center">
+                                  <MessageSquare size={10} className="text-blue-400" />
+                                </div>
+                                <span className="text-[10px] text-blue-400 font-semibold">Coach Notes</span>
+                                <span className="text-[10px] text-muted-foreground/50">Just now</span>
                               </div>
-                              <span className="text-[10px] text-blue-400 font-semibold">Coach Notes</span>
-                              <span className="text-[10px] text-muted-foreground/50">Just now</span>
+                              <p className="text-xs text-muted-foreground leading-relaxed">
+                                Great progress on your kitchen positioning! For this module, I want you to focus on the approach shot — record yourself from the side angle and upload here. Pay attention to your split-step timing.
+                              </p>
                             </div>
-                            <p className="text-xs text-muted-foreground leading-relaxed">
-                              Great progress on your kitchen positioning! For this module, I want you to focus on the approach shot — record yourself from the side angle and upload here. Pay attention to your split-step timing.
-                            </p>
-                          </div>
+                            {/* Reply input */}
+                            <div className="mt-2 flex gap-2">
+                              <input
+                                placeholder="Reply to Coach Marcus..."
+                                className="flex-1 bg-secondary/30 border border-border/20 rounded-lg px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/25"
+                              />
+                              <Button size="icon" variant="ghost" className="shrink-0 w-8 h-8 text-primary">
+                                <Send size={12} />
+                              </Button>
+                            </div>
+                            {/* Upload zone */}
+                            <div className="mt-3 p-4 rounded-lg border-2 border-dashed border-border/30 hover:border-primary/20 transition-colors cursor-pointer text-center group">
+                              <Upload size={18} className="mx-auto text-muted-foreground/40 group-hover:text-primary/60 transition-colors mb-1" />
+                              <p className="text-[10px] text-muted-foreground">Upload Practice Video · MP4, MOV up to 500MB</p>
+                            </div>
+                          </>
                         )}
                       </div>
                     </div>
@@ -141,7 +154,6 @@ export default function Curriculum() {
 
           {/* Sidebar */}
           <div className="space-y-5">
-            {/* Skill Breakdown */}
             <ScrollReveal delay={0.1}>
               <div className="glass rounded-2xl p-5 sticky top-24">
                 <h3 className="font-display font-bold text-foreground mb-5">Skill Breakdown</h3>
@@ -153,13 +165,7 @@ export default function Curriculum() {
                         <span className="stat-number text-sm text-foreground">{skill.value}</span>
                       </div>
                       <div className="h-2 rounded-full bg-secondary/60 overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${skill.value}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                          className={`h-full rounded-full ${skill.color}`}
-                        />
+                        <motion.div initial={{ width: 0 }} whileInView={{ width: `${skill.value}%` }} viewport={{ once: true }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }} className={`h-full rounded-full ${skill.color}`} />
                       </div>
                     </div>
                   ))}
@@ -190,7 +196,7 @@ export default function Curriculum() {
                     <Gift size={14} className="text-primary" />
                     <span className="text-xs font-bold text-foreground">Next Reward Unlock</span>
                   </div>
-                  <p className="text-xs text-muted-foreground mb-3">Complete 2 more modules → <span className="text-primary font-medium">Signed Pro Paddle 🏓</span></p>
+                  <p className="text-xs text-muted-foreground mb-3">Complete 2 more modules → <span className="text-primary font-medium">Freakshow Gen 3 Paddle (30% off) 🏓</span></p>
                   <Progress value={(completedCount / 4) * 100} className="h-2" />
                   <p className="text-[10px] text-muted-foreground mt-1.5">{completedCount}/4 modules complete</p>
                 </div>
