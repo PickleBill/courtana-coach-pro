@@ -223,33 +223,6 @@ export default function Rewards() {
             );
           })}
 
-          {/* Experience rewards */}
-          {experienceRewards.map((exp, i) => {
-            const style = tierStyles[exp.tier];
-            return (
-              <ScrollReveal key={exp.title} delay={(rewards.length + i + 2) * 0.08}>
-                <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className={`glass rounded-2xl overflow-hidden glass-hover border ${style.border} ${style.glow} relative`}>
-                  <div className="absolute inset-0 rounded-2xl pointer-events-none overflow-hidden">
-                    <div className={`absolute inset-0 bg-gradient-to-r ${style.shimmer} opacity-20`} />
-                  </div>
-                  <div className={`h-28 ${style.bg} relative flex items-center justify-center`}>
-                    <span className="text-5xl">{exp.icon}</span>
-                    <Badge variant="outline" className={`absolute top-3 right-3 text-[10px] ${style.bg} ${style.text} ${style.border}`}>{style.label}</Badge>
-                    <Badge variant="outline" className="absolute top-3 left-3 text-[10px] bg-secondary/50 text-muted-foreground border-border/30">
-                      <Ticket size={8} className="mr-0.5" /> Experience
-                    </Badge>
-                  </div>
-                  <div className="p-5 relative z-10">
-                    <h3 className="font-display font-bold text-foreground mb-1">{exp.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{exp.desc}</p>
-                     <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs" onClick={() => toast({ title: '🎁 Reward details coming soon', description: 'Check back after the Court Kings pilot launch.' })}>
-                       View Details <ArrowRight size={12} />
-                    </Button>
-                  </div>
-                </motion.div>
-              </ScrollReveal>
-            );
-          })}
         </div>
 
         {/* Earn XP at Court Kings (V5c) */}

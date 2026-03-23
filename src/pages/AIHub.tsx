@@ -153,6 +153,14 @@ export default function AIHub() {
                   <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-blue-400/20 border border-blue-400/30" /> Consistent</span>
                   <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-[hsl(var(--gold))]/20 border border-[hsl(var(--gold))]/30" /> Developing</span>
                 </div>
+                {/* Live Court Feed placeholder */}
+                <div className="mt-3 p-3 rounded-lg bg-secondary/20 border border-border/15 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                    <span className="text-xs text-muted-foreground">Underground 50 — Live Court Feed</span>
+                  </div>
+                  <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/20">Coming Soon</Badge>
+                </div>
               </div>
             </ScrollReveal>
 

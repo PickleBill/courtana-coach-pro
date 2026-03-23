@@ -151,6 +151,24 @@ export default function Dashboard() {
               </div>
             </ScrollReveal>
 
+            {/* Review Next Video CTA */}
+            <ScrollReveal>
+              <div className="glass rounded-xl p-4 flex items-center justify-between mt-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/12 flex items-center justify-center">
+                    <Video size={18} className="text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">7 videos waiting for review</p>
+                    <p className="text-xs text-muted-foreground">~$595 pending revenue · Est. 28 min total</p>
+                  </div>
+                </div>
+                <Button size="sm" className="glow-sm active:scale-95 transition-transform gap-1" onClick={() => navigate('/ai-hub')}>
+                  Review Now <ArrowRight size={12} />
+                </Button>
+              </div>
+            </ScrollReveal>
+
             <div>
               <ScrollReveal>
                 <h2 className="font-display text-xl font-bold mb-5">Recent Reviews</h2>
