@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { toast } from '@/hooks/use-toast';
 import { coaches } from '@/data/mockData';
 import CoachCard from '@/components/CoachCard';
 import CoachMatchQuiz from '@/components/CoachMatchQuiz';
