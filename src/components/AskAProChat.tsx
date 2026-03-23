@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Crown, ShieldCheck, Brain, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-type Persona = 'ben' | 'marcus' | 'ai';
+type Persona = 'ben' | 'marcus' | 'ai' | 'chuck';
 
 const personas = {
   ben: { name: 'Ben Johns', icon: Crown, color: 'text-[hsl(var(--gold))]', bg: 'bg-[hsl(var(--gold))]/12', avatar: 'BJ', label: '👑' },
   marcus: { name: 'Marcus Chen', icon: ShieldCheck, color: 'text-primary', bg: 'bg-primary/12', avatar: 'MC', label: '✓' },
   ai: { name: 'AI Coach', icon: Brain, color: 'text-blue-400', bg: 'bg-blue-400/12', avatar: '🤖', label: '🤖' },
+  chuck: { name: 'Chuck Norris', icon: Sparkles, color: 'text-red-400', bg: 'bg-red-400/12', avatar: 'CN', label: '🥋' },
 };
 
 type Message = { role: 'user' | 'assistant'; content: string };
