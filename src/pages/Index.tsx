@@ -31,8 +31,8 @@ const audienceCards = [
 
 const seeItLiveCards = [
   { title: 'Smart Court in Action', desc: 'See how Courtana-powered courts capture and analyze every rally in real time.', url: 'https://courtana.com/highlight/LKXstelDDjZb', icon: Zap },
-  { title: 'Live Player Profile', desc: 'Real player profile with badges, XP progression, and competitive rank.', url: 'https://courtana.com/player/bGLx1SV3k1lT/', icon: Users },
-  { title: 'Session Highlights', desc: 'Actual highlight clips automatically generated from a live session.', url: 'https://courtana.com/session-highlights/J8UKbUJaBKxT', icon: Play },
+  { title: 'Live Player Profile', desc: 'Real player profile with badges, XP progression, and competitive rank.', url: 'https://courtana.com/highlight-group/wFaqzjLm0Ghg', icon: Users },
+  { title: 'Session Highlights', desc: 'Actual highlight clips automatically generated from a live session.', url: 'https://courtana.com/highlight/td7vCCWTXosp', icon: Play },
 ];
 
 const howItWorks = [

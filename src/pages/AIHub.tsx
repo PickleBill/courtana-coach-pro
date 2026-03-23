@@ -140,7 +140,7 @@ export default function AIHub() {
                   <Button size="sm" className="active:scale-95 transition-transform glow-sm gap-1.5" onClick={(e) => { e.stopPropagation(); setUploadOpen(true); }}>
                     <Upload size={12} /> Upload Video
                   </Button>
-                  <Button size="sm" variant="outline" className="active:scale-95 transition-transform gap-1.5 border-border/40" onClick={(e) => { e.stopPropagation(); window.open('https://courtana.com/ai-analysis/', '_blank'); }}>
+                  <Button size="sm" variant="outline" className="active:scale-95 transition-transform gap-1.5 border-border/40" onClick={(e) => { e.stopPropagation(); window.open('https://courtana.com/facility/3/courts/qgvE48pkCVOp/play-highlights/', '_blank'); }}>
                     <Wifi size={12} /> Connect Courtana
                   </Button>
                   <a href="https://courtana.com/highlight/td7vCCWTXosp" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-[10px] text-primary hover:underline flex items-center gap-1">
