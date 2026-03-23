@@ -33,7 +33,7 @@ export default function Coaches() {
     return list;
   }, [filter, search]);
 
-  const benJohns = coaches.find(c => c.name === 'Ben Johns')!;
+  const spotlightCoach = coaches.find(c => c.name === 'Annalee Waters')!;
 
   return (
     <div className="min-h-screen pt-24 pb-16">
