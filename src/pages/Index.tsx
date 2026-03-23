@@ -40,7 +40,7 @@ const howItWorks = [
 const partnerNames = [
   'Court Kings', 'PPA Tour', 'USA Pickleball', 'Pickleball Freakshow', 'DUPR', 'Black Barn Pickleball',
   'Major League Pickleball', 'Selkirk Sport', 'Courtana', 'Life Time', 'Chicken N Pickle', 'JOOLA',
-  'Franklin Sports', 'Engage Pickleball', 'Paddletek', 'Vulcan Sporting Goods',
+  'Centerline Athletics', 'Dink Dynamics', 'Dinkville Nashville', 'Cellutrex', 'Franklin Sports', 'Paddletek',
 ];
 
 const testimonials = [
