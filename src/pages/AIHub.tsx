@@ -347,9 +347,13 @@ export default function AIHub() {
                       <Wifi size={14} /> Connect Courtana Session
                     </Button>
                   </div>
-                  <a href="https://courtana.com/ai-analysis/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-primary/70 hover:text-primary mt-4 transition-colors">
-                    Try AI Analysis on Courtana <ExternalLink size={10} />
-                  </a>
+                   <a href="https://courtana.com/ai-analysis/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-primary/70 hover:text-primary mt-4 transition-colors">
+                     Try AI Analysis on Courtana <ExternalLink size={10} />
+                   </a>
+                   <span className="mx-2 text-border">·</span>
+                   <a href="https://courtana.com/facility/3/courts/qgvE48pkCVOp/play-highlights/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-primary mt-4 transition-colors">
+                     Sign up at a Courtana facility <ExternalLink size={10} />
+                   </a>
                 </div>
               </div>
             </ScrollReveal>
