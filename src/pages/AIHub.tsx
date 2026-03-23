@@ -97,7 +97,7 @@ export default function AIHub() {
 
             {/* 1. Analyze Your Own Session — HERO position */}
             <ScrollReveal>
-              <div className="glass rounded-2xl overflow-hidden relative group cursor-pointer border-primary/15 glow-sm" onClick={() => setUploadOpen(true)}>
+              <div className="glass rounded-2xl overflow-hidden relative group cursor-pointer border-primary/15 glow-pulse" onClick={() => setUploadOpen(true)}>
                 <div className="h-56 bg-gradient-to-br from-primary/8 via-secondary/40 to-blue-500/5 relative flex items-center justify-center overflow-hidden">
                   {/* Futuristic court background */}
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_50%,_hsla(145,100%,45%,0.08),transparent_60%)]" />
