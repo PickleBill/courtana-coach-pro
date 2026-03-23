@@ -12,6 +12,8 @@ export default function Scout() {
   usePageTitle('Scout & Draft — Courtana Coaching');
   const celebrities = coaches.filter((c) => c.tier === 'celebrity');
   const [showRevShare, setShowRevShare] = useState(true);
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const [waitlistCtx, setWaitlistCtx] = useState('');
 
   return (
     <div className="min-h-screen pt-24 pb-16">
