@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { curriculumItems } from '@/data/mockData';
 import { toast } from '@/hooks/use-toast';
 import ScrollReveal from '@/components/ScrollReveal';
+import VideoUploadModal from '@/components/VideoUploadModal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
