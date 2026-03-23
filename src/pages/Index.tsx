@@ -154,6 +154,7 @@ export default function Index() {
           <div className="absolute top-2/3 right-1/4 w-[400px] h-[300px] bg-[hsl(var(--gold))]/4 rounded-full blur-[120px]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_hsla(145,100%,45%,0.03)_0%,transparent_60%)]" />
         </div>
+        <NetworkBackground />
         <Particles />
 
         <div className="container mx-auto px-4 relative z-10">
