@@ -185,8 +185,8 @@ export default function Rewards() {
                       <div className="flex items-center gap-1 text-xs text-[hsl(var(--gold))]">
                         <Star size={11} /> {reward.spotsRemaining} {reward.spotsRemaining === 1 ? 'spot' : 'spots'} left
                       </div>
-                      <Button variant="outline" size="sm" className={`active:scale-95 transition-transform text-xs ${!isLocked ? 'border-primary/30 text-primary hover:bg-primary/10' : ''}`}>
-                        {isLocked ? 'View Details' : 'Claim'} <ArrowRight size={12} />
+                       <Button variant="outline" size="sm" className={`active:scale-95 transition-transform text-xs ${!isLocked ? 'border-primary/30 text-primary hover:bg-primary/10' : ''}`} onClick={() => toast({ title: isLocked ? '🔒 Reward locked' : '🎁 Reward details coming soon', description: isLocked ? `Earn ${reward.pointsRequired - playerProgress.points} more XP to unlock.` : 'Check back after the Court Kings pilot launch.' })}>
+                         {isLocked ? 'View Details' : 'Claim'} <ArrowRight size={12} />
                       </Button>
                     </div>
                   </div>
