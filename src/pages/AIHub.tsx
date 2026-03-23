@@ -287,7 +287,7 @@ export default function AIHub() {
                 <Button variant="outline" className="flex-1 gap-1.5 text-xs border-primary/20 text-primary hover:bg-primary/10 active:scale-95 transition-transform">
                   <Send size={12} /> Share with Coach
                 </Button>
-                <Button variant="outline" className="flex-1 gap-1.5 text-xs border-border/30 hover:border-primary/20 active:scale-95 transition-transform">
+                <Button variant="outline" className="flex-1 gap-1.5 text-xs border-border/30 hover:border-primary/20 active:scale-95 transition-transform" onClick={() => toast({ title: '📄 Report export coming soon', description: 'Request early access at partnerships@courtana.com' })}>
                   <ExternalLink size={12} /> Export Report
                 </Button>
               </div>
