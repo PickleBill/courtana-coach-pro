@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
+import WaitlistModal from '@/components/WaitlistModal';
 import { Button } from '@/components/ui/button';
 import ScrollReveal from '@/components/ScrollReveal';
 import ActivityTicker from '@/components/ActivityTicker';
