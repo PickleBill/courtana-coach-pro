@@ -22,7 +22,15 @@ export default function Coaches() {
   usePageTitle('Coach Marketplace — Courtana Coaching');
   const [filter, setFilter] = useState<typeof tiers[number]>('all');
   const [showQuiz, setShowQuiz] = useState(false);
-  const filtered = filter === 'all' ? coaches : coaches.filter((c) => c.tier === filter);
+  const [search, setSearch] = useState('');
+  const filtered = useMemo(() => {
+    let list = filter === 'all' ? coaches : coaches.filter((c) => c.tier === filter);
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      list = list.filter(c => c.name.toLowerCase().includes(q) || c.specialties.some(s => s.toLowerCase().includes(q)) || c.sport.toLowerCase().includes(q));
+    }
+    return list;
+  }, [filter, search]);
 
   const benJohns = coaches.find(c => c.name === 'Ben Johns')!;
 
