@@ -59,10 +59,10 @@ export default function Navbar() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/30">
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
           <Link to="/" className="flex items-center gap-2.5 group">
-            <CrownLogo />
+            <CKLogo />
             <div className="flex flex-col">
               <span className="font-display font-bold text-base sm:text-lg tracking-tight leading-none text-foreground">
-                Kings of The Court
+                CK Coach
               </span>
               <span className="text-[8px] tracking-[0.12em] uppercase text-primary/60 font-medium leading-none mt-0.5">
                 Coaching powered by Courtana
