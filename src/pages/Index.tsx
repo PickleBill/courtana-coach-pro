@@ -60,6 +60,69 @@ const coachStats = [
   { value: '89%', label: 'Student Retention Rate', icon: BarChart3 },
 ];
 
+// Network constellation background
+const networkNodes = Array.from({ length: 12 }, (_, i) => ({
+  id: i,
+  x: 10 + Math.random() * 80,
+  y: 10 + Math.random() * 80,
+}));
+
+const networkEdges = networkNodes.flatMap((n, i) =>
+  networkNodes.slice(i + 1).filter(() => Math.random() > 0.6).map(m => ({ from: n, to: m }))
+);
+
+const hudStats = [
+  '14,847 frames processed',
+  '312 shot events',
+  '89,201 tracking points',
+  '48 facilities connected',
+];
+
+function NetworkBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <svg className="absolute inset-0 w-full h-full opacity-20">
+        {networkEdges.map((e, i) => (
+          <motion.line
+            key={i}
+            x1={`${e.from.x}%`} y1={`${e.from.y}%`}
+            x2={`${e.to.x}%`} y2={`${e.to.y}%`}
+            stroke="hsl(145, 100%, 45%)"
+            strokeWidth="0.5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0.1, 0.4, 0.1] }}
+            transition={{ duration: 4 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 2 }}
+          />
+        ))}
+        {networkNodes.map((n) => (
+          <motion.circle
+            key={n.id}
+            cx={`${n.x}%`} cy={`${n.y}%`}
+            r="2"
+            fill="hsl(145, 100%, 45%)"
+            initial={{ opacity: 0.2 }}
+            animate={{ opacity: [0.2, 0.7, 0.2], cx: [`${n.x}%`, `${n.x + (Math.random() - 0.5) * 3}%`] }}
+            transition={{ duration: 5 + Math.random() * 4, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        ))}
+      </svg>
+      {/* HUD stat readouts */}
+      {hudStats.map((stat, i) => (
+        <motion.div
+          key={stat}
+          className="absolute text-[10px] font-mono text-primary/30 tracking-wider"
+          style={{ left: `${8 + i * 22}%`, top: `${75 + (i % 2) * 10}%` }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 0.5, 0] }}
+          transition={{ duration: 6, repeat: Infinity, delay: i * 1.5 + 2, ease: 'easeInOut' }}
+        >
+          {stat}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
 function Particles() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
