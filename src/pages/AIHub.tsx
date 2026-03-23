@@ -1,22 +1,20 @@
+import { useState } from 'react';
 import { aiAnalysisResult } from '@/data/mockData';
 import { toast } from '@/hooks/use-toast';
 import ScrollReveal from '@/components/ScrollReveal';
+import VideoUploadModal from '@/components/VideoUploadModal';
+import BookingModal from '@/components/BookingModal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Upload, Wifi, Send, CheckCircle, AlertTriangle, Lightbulb, Brain, User, Zap, Play, ExternalLink, Clock, ShieldCheck, Sparkles } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Upload, Wifi, Send, CheckCircle, AlertTriangle, Lightbulb, Brain, User, Zap, Play, ExternalLink, Clock, ShieldCheck, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { coaches } from '@/data/mockData';
 
 const gradeColors: Record<string, string> = {
   'A+': 'text-primary', 'A': 'text-primary', 'A-': 'text-primary',
   'B+': 'text-blue-400', 'B': 'text-blue-400', 'B-': 'text-blue-400',
   'C+': 'text-[hsl(var(--gold))]', 'C': 'text-[hsl(var(--gold))]',
-};
-
-const gradeBg: Record<string, string> = {
-  'A+': 'bg-primary/12', 'A': 'bg-primary/12', 'A-': 'bg-primary/12',
-  'B+': 'bg-blue-400/12', 'B': 'bg-blue-400/12', 'B-': 'bg-blue-400/12',
-  'C+': 'bg-[hsl(var(--gold))]/12', 'C': 'bg-[hsl(var(--gold))]/12',
 };
 
 const recentSessions = [
@@ -50,6 +48,11 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
 
 export default function AIHub() {
   usePageTitle('AI Analysis Hub — Courtana Coaching');
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<string | null>('strengths');
+
+  const selectedCoach = coaches.find(c => c.name.includes('Marcus')) || coaches[2];
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -75,7 +78,6 @@ export default function AIHub() {
               <ShieldCheck size={14} /> AI Confidence: 94.2%
             </Badge>
           </div>
-          {/* Data layer stats row */}
           <div className="flex flex-wrap gap-4 mb-10 text-xs text-muted-foreground">
             {[
               { label: 'Frames Processed', value: '14,847' },
@@ -90,174 +92,153 @@ export default function AIHub() {
           </div>
         </ScrollReveal>
 
-        {/* Analysis Complete heading */}
-        <ScrollReveal>
-          <div className="flex items-center gap-3 mb-6">
-            <Brain size={20} className="text-primary" />
-            <h2 className="font-display text-2xl lg:text-3xl font-bold">Analysis Complete</h2>
-            <Badge className="bg-primary/12 text-primary border-primary/25 text-xs gap-1">
-              <Zap size={10} /> AI Generated
-            </Badge>
-          </div>
-        </ScrollReveal>
-
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            {/* 1. Court analysis visualization — FIRST */}
+
+            {/* 1. Analyze Your Own Session — HERO position */}
             <ScrollReveal>
-              <div className="glass rounded-2xl overflow-hidden relative group cursor-pointer">
-                <div className="h-72 bg-gradient-to-br from-secondary/60 via-primary/5 to-secondary/40 relative flex items-center justify-center">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,_hsla(145,100%,45%,0.06),transparent_50%)]" />
-                  <svg className="absolute inset-4 w-[calc(100%-2rem)] h-[calc(100%-2rem)] opacity-20" viewBox="0 0 400 200" fill="none">
+              <div className="glass rounded-2xl overflow-hidden relative group cursor-pointer border-primary/15 glow-sm" onClick={() => setUploadOpen(true)}>
+                <div className="h-56 bg-gradient-to-br from-primary/8 via-secondary/40 to-blue-500/5 relative flex items-center justify-center overflow-hidden">
+                  {/* Futuristic court background */}
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_50%,_hsla(145,100%,45%,0.08),transparent_60%)]" />
+                  <svg className="absolute inset-4 w-[calc(100%-2rem)] h-[calc(100%-2rem)] opacity-15" viewBox="0 0 400 200" fill="none">
                     <rect x="20" y="10" width="360" height="180" rx="4" stroke="hsl(var(--primary))" strokeWidth="1" strokeDasharray="4 4" />
                     <line x1="200" y1="10" x2="200" y2="190" stroke="hsl(var(--primary))" strokeWidth="1.5" opacity="0.5" />
                     <line x1="130" y1="10" x2="130" y2="190" stroke="hsl(var(--primary))" strokeWidth="0.5" strokeDasharray="3 3" />
                     <line x1="270" y1="10" x2="270" y2="190" stroke="hsl(var(--primary))" strokeWidth="0.5" strokeDasharray="3 3" />
-                    <line x1="20" y1="100" x2="130" y2="100" stroke="hsl(var(--primary))" strokeWidth="0.5" strokeDasharray="3 3" />
-                    <line x1="270" y1="100" x2="380" y2="100" stroke="hsl(var(--primary))" strokeWidth="0.5" strokeDasharray="3 3" />
                   </svg>
-                  <div className="absolute left-[8%] top-[15%] w-[28%] h-[35%] rounded-lg bg-primary/10 border border-primary/20">
-                    <span className="absolute top-1 left-2 text-[9px] text-primary/60 font-medium">Strong Zone</span>
-                  </div>
-                  <div className="absolute left-[38%] top-[35%] w-[22%] h-[40%] rounded-lg bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))]/20">
-                    <span className="absolute top-1 left-2 text-[9px] text-[hsl(var(--gold))]/60 font-medium">Developing</span>
-                  </div>
-                  <div className="absolute right-[8%] top-[12%] w-[22%] h-[30%] rounded-lg bg-blue-400/10 border border-blue-400/20">
-                    <span className="absolute top-1 left-2 text-[9px] text-blue-400/60 font-medium">Consistent</span>
-                  </div>
+                  {/* Floating analysis badges */}
                   {[
-                    { x: '20%', y: '35%', label: 'Serve A-', color: 'text-primary' },
-                    { x: '55%', y: '55%', label: 'Drop B+', color: 'text-blue-400' },
-                    { x: '75%', y: '30%', label: 'Volley B-', color: 'text-blue-400' },
-                    { x: '40%', y: '70%', label: 'Kitchen A', color: 'text-primary' },
-                    { x: '65%', y: '65%', label: 'Lob C+', color: 'text-[hsl(var(--gold))]' },
-                  ].map((marker, i) => (
-                    <motion.div key={i} initial={{ scale: 0, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.12, type: 'spring', stiffness: 400 }} className="absolute" style={{ left: marker.x, top: marker.y }}>
-                      <div className={`px-2 py-0.5 rounded-md bg-card/80 border border-border/30 text-[10px] font-semibold ${marker.color} backdrop-blur-sm`}>
-                        {marker.label}
-                      </div>
+                    { x: '15%', y: '25%', label: 'Serve: A-', color: 'text-primary' },
+                    { x: '70%', y: '40%', label: 'Drop: B+', color: 'text-blue-400' },
+                    { x: '45%', y: '70%', label: 'Kitchen: A', color: 'text-primary' },
+                  ].map((m, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, scale: 0 }}
+                      whileInView={{ opacity: 0.7, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.5 + i * 0.2, type: 'spring' }}
+                      className="absolute"
+                      style={{ left: m.x, top: m.y }}
+                    >
+                      <div className={`px-2 py-0.5 rounded-md bg-card/60 border border-border/20 text-[9px] font-semibold ${m.color} backdrop-blur-sm`}>{m.label}</div>
                     </motion.div>
                   ))}
-                  <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform">
-                    <Play size={24} className="text-primary-foreground ml-1" />
+                  <div className="text-center relative z-10">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className="w-16 h-16 rounded-2xl bg-primary/90 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-primary/30 group-hover:shadow-primary/50 transition-shadow"
+                    >
+                      <Upload size={24} className="text-primary-foreground" />
+                    </motion.div>
+                    <h3 className="font-display text-xl font-bold text-foreground mb-1">Analyze Your Session</h3>
+                    <p className="text-sm text-muted-foreground">Drop a video or connect your Courtana session</p>
                   </div>
-                  <Badge variant="outline" className="absolute top-4 left-4 bg-card/80 text-foreground border-border/30 text-[10px] backdrop-blur-sm">
-                    Match Replay · 23:47 min
-                  </Badge>
-                  <Badge variant="outline" className="absolute top-4 right-4 bg-primary/10 text-primary border-primary/20 text-[10px]">
-                    47 rallies analyzed
-                  </Badge>
                 </div>
-                <div className="px-5 py-3 bg-card/80 border-t border-border/20 flex items-center gap-4 text-[10px] text-muted-foreground">
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-primary/20 border border-primary/30" /> Strong</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-blue-400/20 border border-blue-400/30" /> Consistent</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-[hsl(var(--gold))]/20 border border-[hsl(var(--gold))]/30" /> Developing</span>
-                </div>
-                {/* Live Court Feed placeholder */}
-                <div className="mt-3 p-3 rounded-lg bg-secondary/20 border border-border/15 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                    <span className="text-xs text-muted-foreground">Underground 50 — Live Court Feed</span>
-                  </div>
-                  <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/20">Coming Soon</Badge>
+                <div className="p-4 bg-card/80 border-t border-border/20 flex flex-wrap items-center justify-center gap-3">
+                  <Button size="sm" className="active:scale-95 transition-transform glow-sm gap-1.5" onClick={(e) => { e.stopPropagation(); setUploadOpen(true); }}>
+                    <Upload size={12} /> Upload Video
+                  </Button>
+                  <Button size="sm" variant="outline" className="active:scale-95 transition-transform gap-1.5 border-border/40" onClick={(e) => { e.stopPropagation(); window.open('https://courtana.com/ai-analysis/', '_blank'); }}>
+                    <Wifi size={12} /> Connect Courtana
+                  </Button>
+                  <a href="https://courtana.com/highlight/td7vCCWTXosp" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-[10px] text-primary hover:underline flex items-center gap-1">
+                    See Sample Analysis <ExternalLink size={9} />
+                  </a>
                 </div>
               </div>
             </ScrollReveal>
 
-            {/* 2. Shot grades grid with sparklines */}
+            {/* 2. Shot grades grid */}
             <ScrollReveal>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              <div className="flex items-center gap-3 mb-4">
+                <Brain size={18} className="text-primary" />
+                <h2 className="font-display text-xl font-bold">Shot Breakdown</h2>
+                <Badge className="bg-primary/12 text-primary border-primary/25 text-xs gap-1">
+                  <Zap size={10} /> AI Generated
+                </Badge>
+              </div>
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
                 {aiAnalysisResult.shotBreakdown.map((shot, i) => (
-                  <motion.div key={shot.shot} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="glass rounded-xl p-4 text-center glass-hover">
-                    <div className={`stat-number text-2xl ${gradeColors[shot.grade]}`}>{shot.grade}</div>
-                    <div className="text-[11px] text-muted-foreground mt-1 font-medium">{shot.shot}</div>
-                    <div className="text-[10px] text-muted-foreground/60 mt-0.5">{shot.score}/100</div>
-                    <div className="flex justify-center mt-2">
-                      <Sparkline data={sparklineData[shot.shot] || [50, 55, 60, 65, 70]} color={gradeColors[shot.grade]} />
+                  <motion.div key={shot.shot} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                    className="glass rounded-xl p-4 text-center glass-hover group cursor-pointer relative overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-b from-primary/0 to-primary/3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="relative z-10">
+                      <div className={`stat-number text-2xl ${gradeColors[shot.grade]}`}>{shot.grade}</div>
+                      <div className="text-[11px] text-muted-foreground mt-1 font-medium">{shot.shot}</div>
+                      <div className="text-[10px] text-muted-foreground/60 mt-0.5">{shot.score}/100</div>
+                      <div className="flex justify-center mt-2">
+                        <Sparkline data={sparklineData[shot.shot] || [50, 55, 60, 65, 70]} color={gradeColors[shot.grade]} />
+                      </div>
+                      <div className="text-[9px] text-primary/60 mt-0.5">5-session trend ↑</div>
                     </div>
-                    <div className="text-[9px] text-primary/60 mt-0.5">5-session trend ↑</div>
                   </motion.div>
                 ))}
               </div>
             </ScrollReveal>
 
-            {/* 3. Strengths & Weaknesses */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              <ScrollReveal delay={0.05}>
-                <div className="glass rounded-xl p-5 h-full border-primary/10">
-                  <h4 className="flex items-center gap-1.5 font-display font-semibold text-sm text-primary mb-3"><CheckCircle size={14} /> Strengths</h4>
-                  <ul className="space-y-2.5">
-                    {['Kitchen control is exceptional — top 20% percentile', 'Serve placement accuracy above average', 'Court positioning IQ in top 20% of analyzed players'].map((s) => (
-                      <li key={s} className="text-sm text-muted-foreground flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" /> {s}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </ScrollReveal>
-              <ScrollReveal delay={0.1}>
-                <div className="glass rounded-xl p-5 h-full border-[hsl(var(--gold))]/10">
-                  <h4 className="flex items-center gap-1.5 font-display font-semibold text-sm text-[hsl(var(--gold))] mb-3"><AlertTriangle size={14} /> Areas to Improve</h4>
-                  <ul className="space-y-2.5">
-                    {['Third shot drop consistency needs work — 62% success rate', 'Backhand return tends to float on 40% of attempts', 'Transition zone movement can be faster — split step timing late'].map((w) => (
-                      <li key={w} className="text-sm text-muted-foreground flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))] mt-1.5 shrink-0" /> {w}
-                      </li>
-                    ))}
-                  </ul>
-                  {/* Export Session Report CTA */}
-                  <div className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/15">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs font-semibold text-foreground">Export Session Report</p>
-                        <p className="text-[10px] text-muted-foreground">All alpha data from the Underground 50 — analyzed and packaged.</p>
-                      </div>
-                      <Button size="sm" variant="outline" className="text-xs border-primary/20 text-primary hover:bg-primary/10 gap-1 active:scale-95 transition-transform" onClick={() => toast({ title: '📄 Report export coming soon', description: 'Request early access at partnerships@courtana.com' })}>
-                        <ExternalLink size={11} /> Export PDF
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </ScrollReveal>
-            </div>
-
-            {/* Ask the Coaches — Multi-sport AI roster */}
-            <ScrollReveal delay={0.12}>
-              <div>
-                <h3 className="font-display text-xl font-bold mb-4 flex items-center gap-2">
-                  <Sparkles size={18} className="text-primary" /> Ask the Coaches
-                </h3>
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {/* 3. Strengths & Weaknesses — combined with toggle */}
+            <ScrollReveal>
+              <div className="glass rounded-2xl overflow-hidden">
+                <div className="flex border-b border-border/20">
                   {[
-                    { name: 'Anna Leigh Waters', avatar: 'ALW', accent: 'text-primary', border: 'border-primary/20', bg: 'bg-primary/8', sport: 'Pickleball', tagline: 'Net play, speed-ups, and competitive doubles strategy.' },
-                    { name: 'Carlos Alcaraz', avatar: 'CA', accent: 'text-blue-400', border: 'border-blue-400/20', bg: 'bg-blue-400/8', sport: 'Tennis', tagline: 'Groundstrokes, footwork, and match-level intensity.' },
-                    { name: 'Padel Pro TBD', avatar: 'PP', accent: 'text-[hsl(var(--gold))]', border: 'border-[hsl(var(--gold))]/20', bg: 'bg-[hsl(var(--gold))]/8', sport: 'Padel', tagline: 'Wall play, bandeja, and padel-specific positioning.', comingSoon: true },
-                    { name: 'Chuck Norris', avatar: 'CN', accent: 'text-red-400', border: 'border-red-400/20', bg: 'bg-red-400/8', sport: 'Wildcard', tagline: 'Ask Chuck anything. You might get a real answer. You might get a roundhouse kick.' },
-                  ].map((coach) => (
-                    <motion.div
-                      key={coach.name}
-                      whileHover={{ scale: 1.03, y: -2 }}
-                      className={`glass rounded-xl p-4 text-center glass-hover cursor-pointer relative ${coach.border}`}
-                      onClick={() => toast({ title: `${coach.name} is analyzing your session...`, description: 'AI synthesis in progress.' })}
+                    { id: 'strengths', label: 'Strengths', icon: CheckCircle, color: 'text-primary' },
+                    { id: 'improve', label: 'Areas to Improve', icon: AlertTriangle, color: 'text-[hsl(var(--gold))]' },
+                  ].map(tab => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setExpandedSection(expandedSection === tab.id ? null : tab.id)}
+                      className={`flex-1 p-4 flex items-center justify-center gap-2 text-sm font-medium transition-colors ${
+                        expandedSection === tab.id ? 'bg-secondary/20 text-foreground' : 'text-muted-foreground hover:text-foreground'
+                      }`}
                     >
-                      {(coach as any).comingSoon && (
-                        <Badge variant="outline" className="absolute top-2 right-2 text-[8px] bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/20">Coming Soon</Badge>
-                      )}
-                      <div className={`w-12 h-12 rounded-full ${coach.bg} border ${coach.border} flex items-center justify-center font-display font-bold text-sm ${coach.accent} mx-auto mb-2`}>
-                        {coach.avatar}
-                      </div>
-                      <p className="font-display font-semibold text-foreground text-sm">{coach.name}</p>
-                      <Badge variant="outline" className="text-[9px] mt-1 mb-2">{coach.sport}</Badge>
-                      <p className="text-[10px] text-muted-foreground leading-relaxed">{coach.tagline}</p>
-                    </motion.div>
+                      <tab.icon size={14} className={expandedSection === tab.id ? tab.color : ''} />
+                      {tab.label}
+                    </button>
                   ))}
                 </div>
-                <p className="text-xs text-muted-foreground mt-3 text-center">Ask one coach or crowdsource all four. AI synthesizes responses from every perspective.</p>
+                <AnimatePresence mode="wait">
+                  {expandedSection === 'strengths' && (
+                    <motion.div key="strengths" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="p-5">
+                      <ul className="space-y-2.5">
+                        {['Kitchen control is exceptional — top 20% percentile', 'Serve placement accuracy above average', 'Court positioning IQ in top 20% of analyzed players'].map((s) => (
+                          <li key={s} className="text-sm text-muted-foreground flex items-start gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" /> {s}
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  )}
+                  {expandedSection === 'improve' && (
+                    <motion.div key="improve" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="p-5">
+                      <ul className="space-y-2.5">
+                        {['Third shot drop consistency needs work — 62% success rate', 'Backhand return tends to float on 40% of attempts', 'Transition zone movement can be faster — split step timing late'].map((w) => (
+                          <li key={w} className="text-sm text-muted-foreground flex items-start gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))] mt-1.5 shrink-0" /> {w}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/15">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-xs font-semibold text-foreground">Export Session Report</p>
+                            <p className="text-[10px] text-muted-foreground">Underground 50 data — analyzed and packaged.</p>
+                          </div>
+                          <Button size="sm" variant="outline" className="text-xs border-primary/20 text-primary hover:bg-primary/10 gap-1 active:scale-95 transition-transform" onClick={() => toast({ title: '📄 Report export coming soon', description: 'Request early access at partnerships@courtana.com' })}>
+                            <ExternalLink size={11} /> Export PDF
+                          </Button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </ScrollReveal>
 
             {/* 4. AI + Human comparison */}
-            <ScrollReveal delay={0.15}>
+            <ScrollReveal delay={0.1}>
               <div className="glass rounded-2xl p-6 border-primary/10 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/3 to-transparent pointer-events-none" />
                 <div className="relative z-10">
@@ -281,17 +262,49 @@ export default function AIHub() {
                         <span className="text-xs font-semibold text-foreground">Coach Marcus</span>
                         <span className="text-[10px] text-muted-foreground/50">2h ago</span>
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">The AI is spot on — that third shot drop inconsistency is because you're dropping your paddle head too early. Try this drill: stand at the transition zone, partner feeds, focus on keeping the paddle face open until contact. I've added a footwork module to your curriculum.</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">The AI is spot on — that third shot drop inconsistency is because you're dropping your paddle head too early. Try this drill: stand at the transition zone, partner feeds, focus on keeping the paddle face open until contact.</p>
                     </div>
                   </div>
                 </div>
               </div>
             </ScrollReveal>
 
-            {/* 5. Share + Export buttons */}
-            <ScrollReveal delay={0.18}>
+            {/* 5. Ask the Coaches */}
+            <ScrollReveal delay={0.12}>
+              <div>
+                <h3 className="font-display text-xl font-bold mb-4 flex items-center gap-2">
+                  <Sparkles size={18} className="text-primary" /> Ask the Coaches
+                </h3>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                  {[
+                    { name: 'Anna Leigh Waters', avatar: 'ALW', accent: 'text-primary', border: 'border-primary/20', bg: 'bg-primary/8', sport: 'Pickleball', tagline: 'Net play, speed-ups, and competitive doubles strategy.' },
+                    { name: 'Carlos Alcaraz', avatar: 'CA', accent: 'text-blue-400', border: 'border-blue-400/20', bg: 'bg-blue-400/8', sport: 'Tennis', tagline: 'Groundstrokes, footwork, and match-level intensity.' },
+                    { name: 'Bryant', avatar: 'BP', accent: 'text-[hsl(var(--gold))]', border: 'border-[hsl(var(--gold))]/20', bg: 'bg-[hsl(var(--gold))]/8', sport: 'Padel', tagline: 'Wall play, bandeja, and padel-specific positioning.' },
+                    { name: 'Chuck Norris', avatar: 'CN', accent: 'text-red-400', border: 'border-red-400/20', bg: 'bg-red-400/8', sport: 'Wildcard', tagline: 'Ask Chuck anything. You might get a roundhouse kick.' },
+                  ].map((coach) => (
+                    <motion.div
+                      key={coach.name}
+                      whileHover={{ scale: 1.03, y: -2 }}
+                      className={`glass rounded-xl p-4 text-center glass-hover cursor-pointer ${coach.border}`}
+                      onClick={() => toast({ title: `${coach.name} is analyzing your session...`, description: 'Open the chat to continue the conversation.' })}
+                    >
+                      <div className={`w-12 h-12 rounded-full ${coach.bg} border ${coach.border} flex items-center justify-center font-display font-bold text-sm ${coach.accent} mx-auto mb-2`}>
+                        {coach.avatar}
+                      </div>
+                      <p className="font-display font-semibold text-foreground text-sm">{coach.name}</p>
+                      <Badge variant="outline" className="text-[9px] mt-1 mb-2">{coach.sport}</Badge>
+                      <p className="text-[10px] text-muted-foreground leading-relaxed">{coach.tagline}</p>
+                    </motion.div>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-3 text-center">Ask one coach or crowdsource all four. AI synthesizes responses from every perspective.</p>
+              </div>
+            </ScrollReveal>
+
+            {/* 6. Share + Export buttons */}
+            <ScrollReveal delay={0.15}>
               <div className="flex gap-3">
-                <Button variant="outline" className="flex-1 gap-1.5 text-xs border-primary/20 text-primary hover:bg-primary/10 active:scale-95 transition-transform">
+                <Button variant="outline" className="flex-1 gap-1.5 text-xs border-primary/20 text-primary hover:bg-primary/10 active:scale-95 transition-transform" onClick={() => setUploadOpen(true)}>
                   <Send size={12} /> Share with Coach
                 </Button>
                 <Button variant="outline" className="flex-1 gap-1.5 text-xs border-border/30 hover:border-primary/20 active:scale-95 transition-transform" onClick={() => toast({ title: '📄 Report export coming soon', description: 'Request early access at partnerships@courtana.com' })}>
@@ -300,8 +313,8 @@ export default function AIHub() {
               </div>
             </ScrollReveal>
 
-            {/* 6. CourtSense Data Layer (replaces Pickle DaaS) */}
-            <ScrollReveal delay={0.2}>
+            {/* 7. CourtSense Data Layer */}
+            <ScrollReveal delay={0.18}>
               <div className="glass rounded-xl p-5 border-blue-400/15 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-400/3 to-transparent pointer-events-none" />
                 <div className="relative z-10">
@@ -309,51 +322,20 @@ export default function AIHub() {
                     <Brain size={8} className="mr-0.5" /> CourtSense™ Data Layer
                   </Badge>
                   <h4 className="font-display font-bold text-foreground text-sm mb-1">Every Session Generates Facility Intelligence</h4>
-                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">Court utilization, peak hours, player engagement, coaching revenue per court — all captured automatically from the same cameras powering AI analysis.</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">Court utilization, peak hours, player engagement, coaching revenue per court — all captured automatically.</p>
                   <div className="grid grid-cols-3 gap-2">
-                    <div className="text-center p-2 rounded-lg bg-secondary/20">
-                      <div className="stat-number text-lg text-blue-400">87%</div>
-                      <div className="text-[9px] text-muted-foreground">Court Utilization</div>
-                    </div>
-                    <div className="text-center p-2 rounded-lg bg-secondary/20">
-                      <div className="stat-number text-lg text-blue-400">$340</div>
-                      <div className="text-[9px] text-muted-foreground">Revenue/Court/Mo</div>
-                    </div>
-                    <div className="text-center p-2 rounded-lg bg-secondary/20">
-                      <div className="stat-number text-lg text-blue-400">2.4x</div>
-                      <div className="text-[9px] text-muted-foreground">Player Retention</div>
-                    </div>
+                    {[
+                      { val: '87%', label: 'Court Utilization' },
+                      { val: '$340', label: 'Revenue/Court/Mo' },
+                      { val: '2.4x', label: 'Player Retention' },
+                    ].map(s => (
+                      <div key={s.label} className="text-center p-2 rounded-lg bg-secondary/20">
+                        <div className="stat-number text-lg text-blue-400">{s.val}</div>
+                        <div className="text-[9px] text-muted-foreground">{s.label}</div>
+                      </div>
+                    ))}
                   </div>
                   <p className="text-[10px] text-primary mt-3 font-medium">Alpha data from The Underground · 50 sessions analyzed</p>
-                </div>
-              </div>
-            </ScrollReveal>
-
-            {/* 7. Analyze Your Own Session (upload moved here) */}
-            <ScrollReveal>
-              <div className="glass rounded-2xl p-10 text-center border-dashed border-2 border-border/40 hover:border-primary/25 transition-all cursor-pointer group relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-b from-primary/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-4">
-                    <Upload size={28} className="text-primary" />
-                  </div>
-                  <h3 className="font-display text-xl font-bold text-foreground mb-1">Analyze Your Own Session</h3>
-                  <p className="text-sm text-muted-foreground mb-6">Drag & drop or click to upload. MP4, MOV up to 500MB.</p>
-                  <div className="flex justify-center gap-3">
-                    <Button className="active:scale-95 transition-transform glow-sm gap-1.5 px-6" onClick={() => { toast({ title: '📤 Video upload launches with your Courtana session.' }); setTimeout(() => window.open('https://courtana.com/ai-analysis/', '_blank'), 300); }}>
-                      <Upload size={14} /> Upload Video
-                    </Button>
-                    <Button variant="outline" className="active:scale-95 transition-transform gap-1.5 px-6 border-border/50 hover:border-primary/20" onClick={() => window.open('https://courtana.com/ai-analysis/', '_blank')}>
-                      <Wifi size={14} /> Connect Courtana Session
-                    </Button>
-                  </div>
-                   <a href="https://courtana.com/ai-analysis/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-primary/70 hover:text-primary mt-4 transition-colors">
-                     Try AI Analysis on Courtana <ExternalLink size={10} />
-                   </a>
-                   <span className="mx-2 text-border">·</span>
-                   <a href="https://courtana.com/facility/3/courts/qgvE48pkCVOp/play-highlights/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-primary mt-4 transition-colors">
-                     Sign up at a Courtana facility <ExternalLink size={10} />
-                   </a>
                 </div>
               </div>
             </ScrollReveal>
@@ -374,9 +356,9 @@ export default function AIHub() {
                   </div>
                   <p className="text-sm text-muted-foreground mb-1">Get expert eyes on this analysis</p>
                   <p className="text-xs text-muted-foreground mb-5">
-                    <span className="text-foreground font-medium">$75 one-time</span> or <span className="text-primary font-medium">Free with Gold subscription</span>
+                    <span className="text-foreground font-medium">$75 one-time</span> or <span className="text-primary font-medium">Free with Gold</span>
                   </p>
-                  <Button className="w-full active:scale-95 transition-transform glow-sm font-semibold gap-1.5 h-11">
+                  <Button className="w-full active:scale-95 transition-transform glow-sm font-semibold gap-1.5 h-11" onClick={() => setBookingOpen(true)}>
                     <Send size={14} /> Send to Coach
                   </Button>
                   <p className="text-[10px] text-muted-foreground/60 text-center mt-3">Avg response time: 2.4 hours · 94% satisfaction</p>
@@ -384,12 +366,12 @@ export default function AIHub() {
               </div>
             </ScrollReveal>
 
-            {/* Recent Sessions */}
+            {/* Recent Sessions with Courtana links */}
             <ScrollReveal delay={0.12}>
               <div className="glass rounded-2xl p-5">
                 <h4 className="font-display font-semibold text-sm text-foreground mb-4 flex items-center gap-1.5"><Clock size={13} /> Recent Analyses</h4>
                 <div className="space-y-2.5">
-                  {recentSessions.map((s, i) => (
+                  {recentSessions.slice(0, 2).map((s, i) => (
                     <div key={i} className="p-3 rounded-lg bg-secondary/20 border border-border/15 hover:border-primary/15 transition-colors cursor-pointer">
                       <div className="flex items-center justify-between mb-1">
                         <span className={`stat-number text-lg ${gradeColors[s.grade]}`}>{s.grade}</span>
@@ -399,6 +381,21 @@ export default function AIHub() {
                       <p className="text-[10px] text-muted-foreground/50">{s.rallies} rallies</p>
                     </div>
                   ))}
+                  {/* Real Courtana highlight links */}
+                  <a href="https://courtana.com/highlight/td7vCCWTXosp" target="_blank" rel="noopener noreferrer" className="block p-3 rounded-lg bg-primary/5 border border-primary/15 hover:border-primary/25 transition-colors">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                      <span className="text-xs font-medium text-primary">Live on Courtana</span>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground">Serve Analysis Highlight</p>
+                  </a>
+                  <a href="https://courtana.com/highlight-group/wFaqzjLm0Ghg" target="_blank" rel="noopener noreferrer" className="block p-3 rounded-lg bg-primary/5 border border-primary/15 hover:border-primary/25 transition-colors">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                      <span className="text-xs font-medium text-primary">Live on Courtana</span>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground">Full Match Highlight Group</p>
+                  </a>
                 </div>
               </div>
             </ScrollReveal>
@@ -420,6 +417,8 @@ export default function AIHub() {
           </div>
         </div>
       </div>
+      <VideoUploadModal open={uploadOpen} onClose={() => setUploadOpen(false)} />
+      <BookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} coach={selectedCoach} />
     </div>
   );
 }
