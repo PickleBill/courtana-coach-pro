@@ -235,8 +235,7 @@ export default function Index() {
       </section>
 
       {/* 3. Stats bar */}
-      <ScrollReveal>
-        <section className="border-y border-border/20 section-gradient-2">
+      <section className="border-y border-border/20 section-gradient-2">
           <div className="container mx-auto px-4 py-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8">
             {[
               { label: 'Alpha Sessions', value: 50, suffix: '+', decimals: 0 },
@@ -254,7 +253,6 @@ export default function Index() {
             ))}
           </div>
         </section>
-      </ScrollReveal>
 
       {/* 4. Your Role in the Kingdom */}
       <section className="py-20 lg:py-28 section-gradient-2">
