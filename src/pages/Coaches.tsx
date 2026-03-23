@@ -86,7 +86,7 @@ export default function Coaches() {
               <div className="text-right shrink-0">
                 <div className="stat-number text-3xl text-[hsl(var(--gold))]">${benJohns.price}</div>
                 <div className="text-xs text-muted-foreground">{benJohns.priceLabel}</div>
-                <Button size="sm" className="mt-3 active:scale-95 transition-transform glow-sm font-semibold">
+                <Button size="sm" className="mt-3 active:scale-95 transition-transform glow-sm font-semibold" onClick={() => { const { toast: t } = require('@/hooks/use-toast'); }}>
                   Book Session
                 </Button>
               </div>

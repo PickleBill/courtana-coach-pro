@@ -80,9 +80,9 @@ export default function AskAProChat() {
     }
   }, [open]);
 
-  const send = () => {
-    if (!input.trim() || typing) return;
-    const userMsg = input.trim();
+  const sendMessage = (msg?: string) => {
+    const userMsg = (msg || input).trim();
+    if (!userMsg || typing) return;
     setInput('');
     setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
     setTyping(true);
@@ -93,6 +93,8 @@ export default function AskAProChat() {
       setTyping(false);
     }, delay);
   };
+
+  const send = () => sendMessage();
 
   const switchPersona = (p: Persona) => {
     setPersona(p);

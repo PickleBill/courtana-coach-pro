@@ -160,7 +160,7 @@ export default function Navbar() {
                 ))}
                 <div className="pt-3 border-t border-border/30 flex gap-2">
                   <Button variant="ghost" size="sm" className="flex-1" onClick={() => { setMobileOpen(false); setSignInOpen(true); }}>Sign In</Button>
-                  <Button size="sm" className="flex-1" onClick={() => setMobileOpen(false)}>Join the Network</Button>
+                  <Button size="sm" className="flex-1" onClick={() => setMobileOpen(false)} asChild><Link to="/coaches">Join the Network</Link></Button>
                 </div>
               </div>
             </motion.div>

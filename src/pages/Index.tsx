@@ -451,7 +451,7 @@ export default function Index() {
               </div>
 
               <div className="flex justify-center gap-4">
-                <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm">Partner With Us</Button>
+                <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm" onClick={() => window.open('https://courtkings.com/partner-with-us/', '_blank')}>Partner With Us</Button>
                 <Button size="lg" variant="outline" className="active:scale-95 transition-transform px-8 h-12" asChild>
                   <Link to="/dashboard">See Coach Economics</Link>
                 </Button>
