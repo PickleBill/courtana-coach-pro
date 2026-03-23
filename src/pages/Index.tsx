@@ -162,7 +162,7 @@ export default function Index() {
       {/* Stats bar with count-up */}
       <ScrollReveal>
         <section className="border-y border-border/20 section-gradient-2">
-          <div className="container mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-5 gap-8">
+          <div className="container mx-auto px-4 py-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8">
             {[
               { label: 'Sessions Analyzed', value: 128, suffix: 'K+', decimals: 0 },
               { label: 'Certified Coaches', value: 342, suffix: '', decimals: 0 },
