@@ -65,7 +65,7 @@ export default function Coaches() {
             <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--gold))]/4 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center gap-6">
               <div className="w-20 h-20 rounded-2xl bg-[hsl(var(--gold))]/15 border border-[hsl(var(--gold))]/25 flex items-center justify-center font-display font-bold text-2xl text-[hsl(var(--gold))] shrink-0">
-                {benJohns.avatar}
+                {spotlightCoach.avatar}
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
