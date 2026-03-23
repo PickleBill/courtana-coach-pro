@@ -59,6 +59,7 @@ export default function AskAProChat() {
   const [typing, setTyping] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [hasShownWelcome, setHasShownWelcome] = useState(false);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -67,6 +68,12 @@ export default function AskAProChat() {
   useEffect(() => {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 300);
+      if (!hasShownWelcome && messages.length === 0) {
+        setHasShownWelcome(true);
+        setTimeout(() => {
+          setMessages([{ role: 'assistant', content: `Hey! I'm ${personas[persona].name}. Ask me anything about your game — technique, drills, strategy, or gear. Let's level up. 🏓` }]);
+        }, 600);
+      }
     }
   }, [open]);
 
