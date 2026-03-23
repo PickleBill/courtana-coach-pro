@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { risingStars, coaches } from '@/data/mockData';
+import WaitlistModal from '@/components/WaitlistModal';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Badge } from '@/components/ui/badge';
