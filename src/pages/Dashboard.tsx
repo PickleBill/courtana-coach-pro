@@ -1,11 +1,13 @@
+import { useNavigate } from 'react-router-dom';
 import { dashboardMetrics, coaches } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { DollarSign, Clock, Users, TrendingUp, CheckCircle, BarChart3, Crown, Timer, ArrowRight, Zap, Video, MessageSquare, UserPlus, Play, BookOpen, AlertCircle } from 'lucide-react';
+import { DollarSign, Clock, Users, TrendingUp, CheckCircle, BarChart3, Crown, Timer, ArrowRight, Zap, Video, MessageSquare, UserPlus, Play, BookOpen, AlertCircle, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { toast } from '@/hooks/use-toast';
 
 const metricCards = [
   { label: 'Monthly Earnings', value: `$${dashboardMetrics.monthlyEarnings.toLocaleString()}`, icon: DollarSign, delta: '+23% vs last month', highlight: true },
