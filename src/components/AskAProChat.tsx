@@ -1,9 +1,10 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, ExternalLink, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 
 type Persona = 'anna' | 'carlos' | 'bryant' | 'ai' | 'chuck' | 'all';
 
@@ -18,106 +19,193 @@ const personas: Record<Exclude<Persona, 'all'>, { name: string; sport: string; e
 type Message = { role: 'user' | 'assistant'; content: string; persona?: Exclude<Persona, 'all'>; ctas?: CTA[] };
 type CTA = { label: string; url?: string; route?: string; variant: 'primary' | 'outline' | 'rickroll' };
 
-const responseMap: Record<Exclude<Persona, 'all'>, Record<string, { text: string; ctas: CTA[] }>> = {
-  anna: {
-    'third shot drop': { text: "Soft hands are everything. I practice drops with ZERO backswing — just a push from the shoulder. Stand at the kitchen, drop 50 balls, then move back a foot at a time. Upload a video and I'll show you exactly where your paddle face opens too much.", ctas: [{ label: 'Upload Video →', route: '/ai-hub', variant: 'primary' }, { label: 'See My Sessions', url: 'https://courtana.com/player/bGLx1SV3k1lT/', variant: 'outline' }] },
-    'paddle': { text: "I use a control-first setup — lighter paddle, longer handle for two-handed backhand reach. For most players I'd say get something in the 7.8-8.1oz range with a 16mm core. Check out what's available in the Coach Pro shop!", ctas: [{ label: 'Browse Gear', route: '/rewards', variant: 'primary' }] },
-    'dupr': { text: "DUPR is how I track everyone in my network. Connect your Courtana profile and your DUPR auto-updates after every analyzed session — no manual input. It's a game changer for seeing real progress.", ctas: [{ label: 'Connect Courtana', url: 'https://courtana.com/signup/', variant: 'primary' }] },
-    'default': { text: "Great question! The thing I tell all my students — pick ONE thing to work on for two weeks. Don't try to fix everything at once. Upload a match video and I'll tell you exactly what that one thing should be. Let's go! 🏓", ctas: [{ label: 'Upload Video', route: '/ai-hub', variant: 'primary' }, { label: 'Find a Coach', route: '/coaches', variant: 'outline' }] },
-  },
-  carlos: {
-    'third shot drop': { text: "In tennis we call this a drop volley — same principle. Absorb the pace, don't add any. The key is relaxing your grip pressure at contact. Think of catching an egg. Record yourself from the side — paddle angle tells the whole story.", ctas: [{ label: 'AI Analysis →', route: '/ai-hub', variant: 'primary' }] },
-    'footwork': { text: "Footwork is everything. Split step before EVERY shot. Recovery step after. Most players take 3 steps when 2 would do. I have a whole footwork module — it crosses over perfectly between tennis and pickleball.", ctas: [{ label: 'View Curriculum', route: '/curriculum', variant: 'primary' }] },
-    'serve': { text: "Consistency beats power. In my matches, I win 75% of first-serve points with placement alone. Focus on deep to the backhand, low to the body, or short angles. The serve sets up the next shot — that's where you win.", ctas: [{ label: 'Practice Drills', route: '/curriculum', variant: 'primary' }] },
-    'default': { text: "¡Vamos! Whatever racquet sport you play, the fundamentals are the same — footwork, timing, shot selection. Upload a match video and the AI will break down where you're losing points. Then we layer in pro coaching on top. That's the magic combo. 🎾", ctas: [{ label: 'Try AI Analysis', route: '/ai-hub', variant: 'primary' }, { label: 'Book a Coach', route: '/coaches', variant: 'outline' }] },
-  },
-  bryant: {
-    'wall play': { text: "The wall is your best friend in padel. Learn to read the bounce angle — it's geometry, not guesswork. Start with simple back-wall returns: let the ball pass you, turn, and play off the bounce. 80% of padel points are won or lost on wall play.", ctas: [{ label: 'Follow Bryant', url: 'https://www.instagram.com/padelbryant/', variant: 'outline' }] },
-    'bandeja': { text: "The bandeja is THE padel shot. It's a controlled overhead that keeps you at the net. Key: continental grip, contact in front, follow through across your body. Don't try to smash it — the bandeja is about placement and pressure.", ctas: [{ label: 'Watch Padel Sessions', url: 'https://courtana.com/', variant: 'primary' }] },
-    'default': { text: "Padel is the fastest-growing racquet sport in the world and it's about to explode in the US. The wall play, the teamwork, the strategy — it's addicting. Whether you're crossing over from tennis or pickleball, I can help you adapt. 🏸", ctas: [{ label: 'Follow @padelbryant', url: 'https://www.instagram.com/padelbryant/', variant: 'primary' }, { label: 'Explore Coaching', route: '/coaches', variant: 'outline' }] },
-  },
-  ai: {
-    'third shot drop': { text: "Based on analysis of 12,000+ third shot drops across all skill levels:\n\n📊 Contact Point: Elite players hit 6-8\" below net height\n📊 Paddle Angle: 35-42° open face (most rec players are at 50°+)\n📊 Follow-through: 8-12 inches (shorter = more control)\n\nWant a custom drill plan based on your data?", ctas: [{ label: 'Run AI Analysis', route: '/ai-hub', variant: 'primary' }, { label: 'View Your Stats', route: '/dashboard', variant: 'outline' }] },
-    'dupr': { text: "DUPR integration is built into Courtana. After every analyzed session, your rating auto-recalculates based on shot quality, rally win rate, and opponent strength. Players using Courtana improve their DUPR by 0.4 points in 90 days on average.", ctas: [{ label: 'Connect Courtana', url: 'https://courtana.com/signup/', variant: 'primary' }] },
-    'default': { text: "I've analyzed patterns across thousands of coaching sessions. To give you the most targeted advice:\n\n1. Upload a match video → instant shot grades\n2. Run AI Analysis → 6 skill categories scored\n3. Request a Pro Review → personalized insights\n\nThis 3-step process improves ratings by 0.4 DUPR points in 90 days.", ctas: [{ label: 'Start Analysis', route: '/ai-hub', variant: 'primary' }, { label: 'Browse Coaches', route: '/coaches', variant: 'outline' }] },
-  },
-  chuck: {
-    'third shot drop': { text: "Chuck Norris doesn't drop third shots. The third shot drops itself out of respect. But for YOU, try keeping your paddle face open at 35-40° and let gravity do the work. Even gravity listens to Chuck Norris.", ctas: [{ label: '🎵 Chuck\'s Secret Training Video', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', variant: 'rickroll' }, { label: 'Actually Learn This →', route: '/curriculum', variant: 'outline' }] },
-    'paddle': { text: "Chuck Norris doesn't need a paddle. He once won a tournament with a cutting board. But since you're not Chuck Norris, I'd recommend something with a wide sweet spot. Check the Partner Store.", ctas: [{ label: '🎵 Chuck\'s Paddle Review', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', variant: 'rickroll' }, { label: 'Browse Real Gear', route: '/rewards', variant: 'outline' }] },
-    'serve': { text: "Chuck Norris served once. The ball is still in orbit. For mortals: focus on placement over power. Deep serves to the backhand win more points than aces. Consistency is king — even Chuck respects consistency.", ctas: [{ label: '🎵 Watch Chuck\'s Serve', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', variant: 'rickroll' }, { label: 'Sign Up Free', url: 'https://courtana.com/signup/', variant: 'outline' }] },
-    'dupr': { text: "Chuck Norris's DUPR rating crashed the algorithm — they had to add a new tier called 'Chuck.' But DUPR is great for tracking YOUR progress. Connect your Courtana profile and it auto-syncs.", ctas: [{ label: '🎵 Chuck\'s DUPR Reveal', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', variant: 'rickroll' }, { label: 'Connect Courtana', url: 'https://courtana.com/signup/', variant: 'outline' }] },
-    'default': { text: "Chuck Norris once won a game of pickleball using only his stare. While I can't teach you THAT, here's my advice: footwork, timing, and the confidence to go for your shots. Upload a video and the AI will tell you where to improve. Even Chuck uses data... sometimes.", ctas: [{ label: '🎵 Chuck\'s Masterclass', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', variant: 'rickroll' }, { label: 'Try Free', url: 'https://courtana.com/signup/', variant: 'outline' }] },
-  },
+// Post-response CTAs based on persona
+const personaCTAs: Record<Exclude<Persona, 'all'>, CTA[]> = {
+  anna: [{ label: 'Upload Video', route: '/ai-hub', variant: 'primary' }, { label: 'See Highlights', url: 'https://courtana.com/highlight/td7vCCWTXosp', variant: 'outline' }],
+  carlos: [{ label: 'View Curriculum', route: '/curriculum', variant: 'primary' }, { label: 'Book a Coach', route: '/coaches', variant: 'outline' }],
+  bryant: [{ label: 'Follow @padelbryant', url: 'https://www.instagram.com/padelbryant/', variant: 'primary' }, { label: 'Explore Coaching', route: '/coaches', variant: 'outline' }],
+  ai: [{ label: 'Run AI Analysis', route: '/ai-hub', variant: 'primary' }, { label: 'View Your Stats', route: '/dashboard', variant: 'outline' }],
+  chuck: [{ label: '🎵 Chuck\'s Secret Video', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', variant: 'rickroll' }, { label: 'Try Free', url: 'https://courtana.com/signup/', variant: 'outline' }],
 };
-
-function getResponse(persona: Exclude<Persona, 'all'>, input: string): { text: string; ctas: CTA[] } {
-  const lower = input.toLowerCase();
-  const map = responseMap[persona];
-  for (const [key, val] of Object.entries(map)) {
-    if (key !== 'default' && lower.includes(key)) return val;
-  }
-  return map.default;
-}
-
-function getAllResponses(input: string): Message[] {
-  const soloPersonas: Exclude<Persona, 'all'>[] = ['anna', 'carlos', 'bryant', 'ai', 'chuck'];
-  return soloPersonas.map(p => {
-    const resp = getResponse(p, input);
-    return { role: 'assistant' as const, content: resp.text, persona: p, ctas: resp.ctas };
-  });
-}
 
 export default function AskAProChat() {
   const [open, setOpen] = useState(false);
   const [persona, setPersona] = useState<Persona>('anna');
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
-  const [typing, setTyping] = useState(false);
+  const [streaming, setStreaming] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, typing]);
+  }, [messages, streaming]);
 
   useEffect(() => {
     if (open) setTimeout(() => inputRef.current?.focus(), 300);
   }, [open]);
 
-  const sendMessage = (msg?: string) => {
+  const streamFromEdge = useCallback(async (
+    userMessages: { role: string; content: string }[],
+    targetPersona: Exclude<Persona, 'all'>,
+    onToken: (token: string) => void,
+    onDone: () => void,
+  ) => {
+    try {
+      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+      const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      const url = `https://${projectId}.supabase.co/functions/v1/ask-a-pro`;
+
+      const controller = new AbortController();
+      abortRef.current = controller;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': anonKey,
+          'Authorization': `Bearer ${anonKey}`,
+        },
+        body: JSON.stringify({
+          messages: userMessages,
+          persona: targetPersona,
+        }),
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`Edge function error: ${errText}`);
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error('No response body');
+
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6).trim();
+            if (data === '[DONE]') continue;
+            try {
+              const parsed = JSON.parse(data);
+              const token = parsed.choices?.[0]?.delta?.content;
+              if (token) onToken(token);
+            } catch {}
+          }
+        }
+      }
+
+      onDone();
+    } catch (err: any) {
+      if (err.name === 'AbortError') return;
+      console.error('Stream error:', err);
+      onToken('\n\n_[Connection issue — try again]_');
+      onDone();
+    }
+  }, []);
+
+  const sendMessage = useCallback(async (msg?: string) => {
     const userMsg = (msg || input).trim();
-    if (!userMsg || typing) return;
+    if (!userMsg || streaming) return;
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
-    setTyping(true);
+
+    const newUserMessage: Message = { role: 'user', content: userMsg };
+    setMessages(prev => [...prev, newUserMessage]);
+    setStreaming(true);
+
+    const conversationHistory = [...messages, newUserMessage]
+      .filter(m => m.role === 'user' || m.role === 'assistant')
+      .map(m => ({ role: m.role, content: m.content }));
 
     if (persona === 'all') {
-      // Stagger responses from all personas
-      const allResps = getAllResponses(userMsg);
-      let delay = 600;
-      allResps.forEach((resp, i) => {
-        setTimeout(() => {
-          setMessages(prev => [...prev, resp]);
-          if (i === allResps.length - 1) setTyping(false);
-        }, delay);
-        delay += 800 + Math.random() * 600;
-      });
+      // Stream from all personas sequentially
+      const soloKeys: Exclude<Persona, 'all'>[] = ['anna', 'carlos', 'bryant', 'ai', 'chuck'];
+      for (const key of soloKeys) {
+        const msgIdx = { current: -1 };
+        await new Promise<void>((resolve) => {
+          streamFromEdge(
+            conversationHistory,
+            key,
+            (token) => {
+              setMessages(prev => {
+                const updated = [...prev];
+                if (msgIdx.current === -1) {
+                  msgIdx.current = updated.length;
+                  updated.push({ role: 'assistant', content: token, persona: key });
+                } else {
+                  updated[msgIdx.current] = { ...updated[msgIdx.current], content: updated[msgIdx.current].content + token };
+                }
+                return updated;
+              });
+            },
+            () => {
+              // Add CTAs after streaming completes
+              setMessages(prev => {
+                const updated = [...prev];
+                if (msgIdx.current >= 0 && updated[msgIdx.current]) {
+                  updated[msgIdx.current] = { ...updated[msgIdx.current], ctas: personaCTAs[key] };
+                }
+                return updated;
+              });
+              resolve();
+            },
+          );
+        });
+      }
+      setStreaming(false);
     } else {
-      const delay = 800 + Math.random() * 1200;
-      setTimeout(() => {
-        const resp = getResponse(persona, userMsg);
-        setMessages(prev => [...prev, { role: 'assistant', content: resp.text, persona, ctas: resp.ctas }]);
-        setTyping(false);
-      }, delay);
+      // Single persona streaming
+      let streamContent = '';
+      const assistantIdx = messages.length + 1; // +1 for the user message we just added
+
+      setMessages(prev => [...prev, { role: 'assistant', content: '', persona: persona }]);
+
+      await streamFromEdge(
+        conversationHistory,
+        persona,
+        (token) => {
+          streamContent += token;
+          setMessages(prev => {
+            const updated = [...prev];
+            const lastIdx = updated.length - 1;
+            if (updated[lastIdx]?.role === 'assistant') {
+              updated[lastIdx] = { ...updated[lastIdx], content: streamContent };
+            }
+            return updated;
+          });
+        },
+        () => {
+          setMessages(prev => {
+            const updated = [...prev];
+            const lastIdx = updated.length - 1;
+            if (updated[lastIdx]?.role === 'assistant') {
+              updated[lastIdx] = { ...updated[lastIdx], ctas: personaCTAs[persona as Exclude<Persona, 'all'>] };
+            }
+            return updated;
+          });
+          setStreaming(false);
+        },
+      );
     }
-  };
+  }, [input, messages, persona, streaming, streamFromEdge]);
 
   const switchPersona = (p: Persona) => {
+    if (abortRef.current) abortRef.current.abort();
     setPersona(p);
     setMessages([]);
+    setStreaming(false);
   };
-
-  const activeSoloPersona = persona !== 'all' ? personas[persona] : null;
 
   const soloKeys: Exclude<Persona, 'all'>[] = ['anna', 'carlos', 'bryant', 'ai', 'chuck'];
 
@@ -163,11 +251,11 @@ export default function AskAProChat() {
                     </span>
                     <div className="flex items-center gap-1 text-[10px] text-primary">
                       <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                      {persona === 'all' ? '5 coaches ready' : `${personas[persona].sport} · Online`}
+                      {persona === 'all' ? '5 coaches · AI powered' : `${personas[persona].sport} · AI powered`}
                     </div>
                   </div>
                 </div>
-                <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg hover:bg-secondary/50 text-muted-foreground transition-colors">
+                <button onClick={() => { setOpen(false); if (abortRef.current) abortRef.current.abort(); }} className="p-1.5 rounded-lg hover:bg-secondary/50 text-muted-foreground transition-colors">
                   <X size={16} />
                 </button>
               </div>
@@ -232,7 +320,7 @@ export default function AskAProChat() {
                     {persona === 'all' ? 'Ask all coaches at once' : `Chat with ${personas[persona as Exclude<Persona, 'all'>].name}`}
                   </p>
                   <p className="text-xs text-muted-foreground mb-4">
-                    {persona === 'all' ? 'Get perspectives from every coach in one thread' : personas[persona as Exclude<Persona, 'all'>].tagline}
+                    {persona === 'all' ? 'Get AI-powered perspectives from every coach' : personas[persona as Exclude<Persona, 'all'>].tagline}
                   </p>
                   <div className="space-y-1.5">
                     {['How do I improve my third shot drop?', 'What paddle should I use?', 'Help with my footwork'].map(q => (
@@ -256,8 +344,7 @@ export default function AskAProChat() {
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div className="max-w-[90%]">
-                    {/* Show persona badge for multi-response */}
-                    {msg.role === 'assistant' && msg.persona && (persona === 'all' || msg.persona) && (
+                    {msg.role === 'assistant' && msg.persona && (
                       <div className="flex items-center gap-1.5 mb-1">
                         <span className="text-sm">{personas[msg.persona].emoji}</span>
                         <span className={`text-[10px] font-semibold ${personas[msg.persona].color}`}>
@@ -266,21 +353,12 @@ export default function AskAProChat() {
                         <Badge variant="outline" className="text-[8px] px-1 py-0 h-3.5">{personas[msg.persona].sport}</Badge>
                       </div>
                     )}
-                    <div className={`px-3.5 py-2.5 rounded-xl text-sm leading-relaxed ${
+                    <div className={`px-3.5 py-2.5 rounded-xl text-sm leading-relaxed whitespace-pre-wrap ${
                       msg.role === 'user'
                         ? 'bg-primary text-primary-foreground rounded-br-md'
                         : 'bg-secondary/50 text-foreground border border-border/20 rounded-bl-md'
                     }`}>
-                      {msg.content.split('\n').map((line, li) => (
-                        <span key={li}>
-                          {line.startsWith('📊') || line.startsWith('🎯') ? (
-                            <span className="block mt-1">{line}</span>
-                          ) : (
-                            line
-                          )}
-                          {li < msg.content.split('\n').length - 1 && <br />}
-                        </span>
-                      ))}
+                      {msg.content || (streaming ? '...' : '')}
                     </div>
                     {/* CTAs after response */}
                     {msg.role === 'assistant' && msg.ctas && msg.ctas.length > 0 && (
@@ -329,7 +407,7 @@ export default function AskAProChat() {
                 </motion.div>
               ))}
 
-              {typing && (
+              {streaming && messages[messages.length - 1]?.role !== 'assistant' && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-1.5 px-3.5 py-2.5">
                   <span className="text-sm">{persona === 'all' ? '🌐' : personas[persona as Exclude<Persona, 'all'>]?.emoji}</span>
                   <div className="flex gap-1">
@@ -352,7 +430,7 @@ export default function AskAProChat() {
                   placeholder={persona === 'all' ? 'Ask all coaches...' : `Ask ${persona === 'ai' ? 'AI Coach' : personas[persona as Exclude<Persona, 'all'>]?.name?.split(' ')[0]}...`}
                   className="flex-1 bg-secondary/40 border border-border/30 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/30 transition-colors"
                 />
-                <Button type="submit" size="icon" className="shrink-0 w-9 h-9 active:scale-90 transition-transform" disabled={!input.trim() || typing}>
+                <Button type="submit" size="icon" className="shrink-0 w-9 h-9 active:scale-90 transition-transform" disabled={!input.trim() || streaming}>
                   <Send size={14} />
                 </Button>
               </form>
