@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import ScrollReveal from '@/components/ScrollReveal';
 import ActivityTicker from '@/components/ActivityTicker';
+import CourtAvailabilityBar from '@/components/CourtAvailabilityBar';
 import CountUp from '@/components/CountUp';
 import LiveCounter from '@/components/LiveCounter';
 import { ecosystemStats, coaches } from '@/data/mockData';
