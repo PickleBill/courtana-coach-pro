@@ -1,79 +1,97 @@
+# UX Overhaul — Make It Real, Fix Dead Ends, Prioritize Action
+
+## What's Wrong (from your feedback)
+
+1. **Dead buttons everywhere** — "Confirm Booking" just animates and toasts, no actual checkout. "Request Pro Review" does nothing. "Review Now" just navigates to AI Hub with no context. "Offer Contract" opens a waitlist modal instead of something dynamic.
+2. **AI Hub layout is wrong** — the cool stuff (shot grades, drills, strengths) is buried below a giant SVG court visualization that looks fake. Upload/action should be prominent, analysis should be condensed.
+3. **Coach Match Quiz is too many steps** — 4 steps including budget (awkward). Should be 2-3 steps max, personality-driven, single-pane feel.
+4. **Curriculum is static** — no real interactivity beyond viewing. Reply input does nothing useful, no sense of progression or coach interaction loop.
+5. **Dashboard "7 videos waiting" loops to AI Hub** which doesn't show pending reviews — circular dead end.
+6. **Demo banner is unnecessary** — remove it.
+7. **Double AskAProChat** still possible — need to verify single instance.
+8. **Checkout doesn't exist** — booking modal shows "Confirm Booking" but never goes to payment.
+9. **"See It Live" card on homepage links to main courtana.com** — should link to something more specific like the highlights.
+
+## Execution Plan (3 passes)
+
+### Pass 1: Fix Every Dead Button + Remove Cruft (~8 changes)
+
+**Dashboard.tsx:**
+
+- Remove demo banner entirely
+- "Review Now" → instead of navigating to `/ai-hub`, open the ReviewModal directly with the first pending review pre-selected
+- "Message Student" → open a simple chat-style toast or inline panel, not just a generic toast
+
+**AIHub.tsx:**
+
+- "Request Pro Review" / "Send to Coach" button → wire to BookingModal or VideoUploadModal with coach pre-selected, or show a real action toast with next step
+- "Share with Coach" button → open VideoUploadModal
+- Consolidate the 4 redundant upload/connect/try/signup links into 2 clear CTAs: "Upload Video" and "See Sample Analysis" (links to `https://courtana.com/highlight/td7vCCWTXosp`)
+
+**BookingModal.tsx:**
+
+- "Confirm Booking" → show payment summary step with "Pay with Stripe" button (uses Stripe payment link or shows toast that Stripe checkout is loading). Even if Stripe secret key isn't set, show the UI flow.
+
+**Scout.tsx:**
+
+- "Offer Contract" → replace WaitlistModal with a slider-style offer card: show a contract value slider ($500-$5000/mo), term selector (3mo/6mo/12mo), and "Send Offer" button that toasts confirmation. Much more dynamic than a waitlist form.
+
+### Pass 2: Redesign Coach Match Quiz + AI Hub Layout (~6 changes)
+
+**CoachMatchQuiz.tsx — Complete rewrite to 2-step personality quiz:**
+
+- Step 1: Single pane with 6 clickable personality cards (not a dropdown): "I want to compete 🏆", "I just want to have fun 🎉", "I'm obsessed with technique 🔬", "I need accountability 💪", "I want to go pro 🌟", "I'm brand new 🌱" - yea maybe use emoji's but either make the questions more playful and funny or use the emoji to lighten or punny iy up.
+- Step 2: Show a quick "matching..." animation (1.5s), then reveal 3 coach matches with match %, personality fit reason, and a "Book Intro Session" button on each
+- No budget question. No learning style question. Fast, fun, personality-first.
+
+**AIHub.tsx — Reorder for action-first layout:**
+
+- Move "Analyze Your Own Session" (upload zone) to position 1, right after header. Make it more visual — show a court thumbnail background with the upload overlay.   you can put some future did connected court looking almost like a maybe even the good light peak into like the AI analysis ecosystem as of the background image of that which I think would get the point across in that big panel
+- Move shot grades grid to position 2 (condensed, horizontal scroll on mobile)
+- Move strengths/weaknesses to position 3 (combine into a single card with tabs or toggle, not two separate cards)
+- Move AI + Human comparison to position 4
+- Move "Ask the Coaches" roster to position 5
+
+AND--> MAKE ALL THESE DYNAMIC, use glow effects  Halo, animated subtle animations. Think about ways to click through. Maybe you don't click to a full separate page, but a subtle little thing that, like, this thing is going to, like, you're going to learn more and hint somewhere. I know you can do really good stuff with this if you've done it in other apps.
+
+What I'm trying to get at is that we want this thing to be interactive, and there are opportunities to use design aesthetic, copy called actions, and just different flows, even inside this hub where one thing affects the other. You just have this dynamic, visually appealing thing. You're almost there, but again just want to make it less basic. A good way to do that is to provide light contrast between the separate sections, so think through that and implement as best as you can. 
+
+- Push the court SVG visualization down to position 6 or remove it — it looks fake and isn't actionable
+- Remove the "Coming Soon" live court feed placeholder
+- Keep CourtSense Data Layer section but move to bottom
+
+### Pass 3: Curriculum Interactivity + Flow Connections (~5 changes)
+
+**Curriculum.tsx:**
+
+- Make the reply input functional: typing + Send button → shows a mock coach response after 2 seconds (pre-written, contextual to the module)
+- Add "Mark as Complete" button on the current module → animates the checkmark, advances progress bar, shows confetti toast, unlocks next module
+- Upload zone click → VideoUploadModal (already wired, verify it works)
+- Great also think about like a simple like ad you know curriculum or add a simple drill right like you can like pre-populate it and make it like you know they don't have to type out a whole bunch of stuff but like like show the coaches that they could do this and like, maybe even move the panels up and down in order or dragon drop. You've got a lot of creative latitude here and I know you can make it fun engaging.... and then use like sporadic opportunities to like create a nice CTA within that and all of these different animations, visuals and models
+
+**Dashboard.tsx → AI Hub flow fix:**
+
+- Instead of "Review Now" navigating away, show an inline expandable review panel right on the dashboard with the video preview, grade selector, and feedback textarea (reuse ReviewModal content but inline)
+
+**Rewards.tsx:**
+
+- "Claim" buttons → for items with a price, open a simple checkout confirmation: "Claim for 500 XP" → "Confirm" → animated success. For Court Kings gear, show a shipping info toast.
+-  for anything clicked on here, it should have some sort of action. The gear should show a shipping information toast, I think, to confirm. What about all the exclusive events? That's like schedule, right, like "Book your slot". Give them a call to action that's real. Again, we said we integrated Stripe, and I want to actually get people to enter email addresses and do stuff with us. I think this is another opportunity to do it 
+
+**Index.tsx:**
+
+- Change "Smart Court in Action" link from `https://courtana.com/` to `https://courtana.com/highlight/LKXstelDDjZb` (actual highlight, not homepage)
+
+## Files Impacted
 
 
-# V8: Phase 2 Completion + Phase 3 Stripe + Phase 4 Live Links
-
-## Phase 2 Status Check
-
-Phase 1 (Auth + Waitlist + Cloud) is complete. Phase 2 is **partially done** — the coaching calculator, quick actions, and basic toast interactions exist, but the **interactive modals** planned for Phase 2 are missing:
-
-- No video upload modal (Curriculum upload just has a drag-zone placeholder)
-- No booking modal on coach cards (just toasts)
-- No review video modal on Dashboard (pending reviews are static)
-- No message student modal
-- WaitlistModal exists but isn't wired to most CTAs (Book Session, Offer Contract, etc.)
-
-## Plan
-
-### Step 1: Phase 2 Completion — Interactive Modals & Flows (~6 changes)
-
-**A. Video Upload Modal (Curriculum):** When clicking "Upload Practice Video" zone, open a modal showing: a placeholder court thumbnail, "Sending to Coach Marcus" with avatar, estimated response time (48 hrs standard), and an "⚡ Expedite Review — $5 for 2-hour response" option. Confirm button shows animated checkmark + toast.
-
-**B. Coach Booking Flow (Coaches):** Replace the toast-only "Book Session" on CoachCard with a real booking modal: session type picker (Video Review / Live Drill / Curriculum), date preference (this week / next week / flexible), payment preview showing coach price, and a "Confirm Booking" button that either opens WaitlistModal (for unauthenticated) or shows a success confirmation.
-
-**C. Dashboard Review Modal:** Clicking a pending review row opens a modal with: mock video frame (placeholder), text area for feedback, grade selector (A through C), "Submit Review" button → toast: "Tyler R. just received your feedback!"
-
-**D. Wire WaitlistModal to remaining CTAs:** "Offer Contract" on Scout page, "Book Session" on coach cards (for non-authenticated users), "Claim" buttons on Rewards page — all open WaitlistModal with contextual text.
-
-### Step 2: Phase 3 — Stripe Integration (~4 changes)
-
-First, enable Stripe via the tool. The publishable key provided (`pk_test_51TE...`) is a test-mode key — we'll need the **secret key** for the backend. I'll enable Stripe which will prompt for the secret key.
-
-**Checkout flows to build:**
-- **Coach session booking:** After the booking modal confirms, route to a Stripe checkout for the coach's price ($35-$750)
-- **Expedited review:** $5 one-click payment from the video upload modal
-- **Basic subscription page:** A simple `/pricing` page with 3 tiers (Player Basic $35/mo, Pro $99/mo, Elite $249/mo) — mostly shell UI, wired to Stripe checkout when keys are ready
-
-The publishable key goes in the codebase. The secret key is needed for the edge function that creates checkout sessions.
-
-### Step 3: Phase 4 — Live Integration Links (~3 changes)
-
-**Add to Index.tsx:**
-- "Tune In Live" section with 2 cards:
-  - "Live at Seven Oaks (Outdoor)" → `https://courtana.com/display/3AELvCgGmzas/`
-  - "Live at The Underground" → `https://courtana.com/display/Sy6gIO44K3MG/`
-  - Each card: green pulse dot, "LIVE" badge, opens in new tab
-
-**Add Courtana signup bridge:**
-- "Try Courtana Free" CTA that links to `https://courtana.com/signup/`
-- On the AI Hub "Upload Video" flow, after the upload modal, offer: "Or sign up at a Courtana facility" → `https://courtana.com/facility/3/courts/qgvE48pkCVOp/play-highlights/`
-
-### Step 4: Mobile Polish (concurrent)
-
-- Fix Curriculum page slider (upload zone → modal instead)
-- Ensure all new modals use full-screen sheet style on mobile (`max-h-[90vh] overflow-y-auto` on small screens)
-- CoachCard booking modal responsive stacking
-
-## File Impact
-
-| File | Changes |
-|---|---|
-| New: `src/components/VideoUploadModal.tsx` | Upload + expedite review modal |
-| New: `src/components/BookingModal.tsx` | Coach session booking flow |
-| New: `src/components/ReviewModal.tsx` | Dashboard video review modal |
-| `src/pages/Curriculum.tsx` | Wire upload zone → VideoUploadModal |
-| `src/components/CoachCard.tsx` | Wire Book Session → BookingModal |
-| `src/pages/Dashboard.tsx` | Wire pending reviews → ReviewModal |
-| `src/pages/Scout.tsx` | Wire Offer Contract → WaitlistModal |
-| `src/pages/Rewards.tsx` | Wire Claim → WaitlistModal |
-| `src/pages/Index.tsx` | Add Tune In Live section + Courtana signup link |
-| `src/pages/AIHub.tsx` | Add Courtana facility signup bridge |
-| New: `supabase/functions/create-checkout/index.ts` | Stripe checkout session creator |
-
-## Sequence
-
-1. Enable Stripe (tool call — will prompt you for the secret key)
-2. Build all 3 modals + wire them
-3. Add Stripe checkout edge function
-4. Add live feed links + Courtana signup bridge
-5. Mobile polish pass on all new modals
-
+| File                                | Changes                                                 |
+| ----------------------------------- | ------------------------------------------------------- |
+| `src/pages/Dashboard.tsx`           | Remove banner, fix Review Now flow, inline review panel |
+| `src/pages/AIHub.tsx`               | Reorder sections, consolidate CTAs, wire buttons        |
+| `src/components/CoachMatchQuiz.tsx` | Complete rewrite to 2-step personality quiz             |
+| `src/components/BookingModal.tsx`   | Add payment step with Stripe UI                         |
+| `src/pages/Scout.tsx`               | Replace waitlist with contract offer slider             |
+| `src/pages/Curriculum.tsx`          | Functional reply, mark complete, verify upload          |
+| `src/pages/Rewards.tsx`             | Wire claim buttons with XP/checkout flow                |
+| `src/pages/Index.tsx`               | Fix See It Live link                                    |
