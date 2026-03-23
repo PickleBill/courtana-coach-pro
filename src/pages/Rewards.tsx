@@ -101,7 +101,7 @@ export default function Rewards() {
           </div>
         </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Partner reward card */}
           <ScrollReveal delay={0}>
             <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className="glass rounded-2xl overflow-hidden glass-hover border border-[hsl(var(--gold))]/25 glow-gold relative">

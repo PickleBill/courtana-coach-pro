@@ -136,7 +136,7 @@ export default function AIHub() {
           </div>
         </ScrollReveal>
 
-        <div className="grid lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
             {/* Video thumbnail + court SVG overlay */}
             <ScrollReveal>

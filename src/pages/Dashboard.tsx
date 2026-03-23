@@ -106,7 +106,7 @@ export default function Dashboard() {
 
         {/* Quick Actions */}
         <ScrollReveal>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
             {[
               { label: 'Review Next Video', icon: Play, color: 'text-primary', action: () => { navigate('/ai-hub'); toast({ title: 'Opening AI Hub', description: 'Navigate to review pending videos.' }); } },
               { label: 'Message Student', icon: MessageSquare, color: 'text-blue-400', action: () => toast({ title: 'Messages', description: 'Opening student messages...' }) },

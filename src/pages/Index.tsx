@@ -410,7 +410,7 @@ export default function Index() {
               </div>
 
               {/* Partnership value exchange (V4d) */}
-              <div className="grid sm:grid-cols-2 gap-5 mb-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
                 <div className="glass rounded-2xl p-6 border-[hsl(var(--gold))]/15">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-8 h-8 rounded-lg bg-[hsl(var(--gold))]/12 flex items-center justify-center">

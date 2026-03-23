@@ -147,7 +147,7 @@ export default function Coaches() {
               </div>
               <h2 className="font-display text-2xl lg:text-3xl font-bold mb-2">The Coaching Network Model</h2>
               <p className="text-muted-foreground mb-8 max-w-lg">How revenue flows through the tiered coaching ecosystem.</p>
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
                   { tier: 'Celebrity Pro', cut: '40%', desc: 'Approves network coaches, brief high-value reviews, brand & trust', color: 'text-[hsl(var(--gold))]', bg: 'bg-[hsl(var(--gold))]/8', border: 'border-[hsl(var(--gold))]/15', icon: Crown },
                   { tier: 'Certified Coach', cut: '45%', desc: 'Does the heavy lifting — detailed async reviews, curriculum building', color: 'text-primary', bg: 'bg-primary/8', border: 'border-primary/15', icon: ShieldCheck },
