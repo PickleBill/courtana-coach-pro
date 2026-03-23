@@ -76,7 +76,7 @@ export default function Coaches() {
                     {benJohns.slotsRemaining} slots remaining
                   </Badge>
                 </div>
-                <h3 className="font-display text-xl font-bold text-foreground mb-1">{benJohns.name}</h3>
+                <h3 className="font-display text-xl font-bold text-foreground mb-1">{spotlightCoach.name}</h3>
                 <div className="flex items-start gap-2 mt-2">
                   <Quote size={14} className="text-[hsl(var(--gold))]/50 shrink-0 mt-0.5" />
                   <p className="text-sm text-muted-foreground italic leading-relaxed">
