@@ -33,7 +33,7 @@ export default function Coaches() {
     return list;
   }, [filter, search]);
 
-  const benJohns = coaches.find(c => c.name === 'Ben Johns')!;
+  const spotlightCoach = coaches.find(c => c.name === 'Annalee Waters')!;
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -65,7 +65,7 @@ export default function Coaches() {
             <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--gold))]/4 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center gap-6">
               <div className="w-20 h-20 rounded-2xl bg-[hsl(var(--gold))]/15 border border-[hsl(var(--gold))]/25 flex items-center justify-center font-display font-bold text-2xl text-[hsl(var(--gold))] shrink-0">
-                {benJohns.avatar}
+                {spotlightCoach.avatar}
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
@@ -73,10 +73,10 @@ export default function Coaches() {
                     <Crown size={10} className="mr-1" /> Featured Coach
                   </Badge>
                   <Badge variant="outline" className="text-[10px] text-muted-foreground">
-                    {benJohns.slotsRemaining} slots remaining
+                    {spotlightCoach.slotsRemaining} slots remaining
                   </Badge>
                 </div>
-                <h3 className="font-display text-xl font-bold text-foreground mb-1">{benJohns.name}</h3>
+                <h3 className="font-display text-xl font-bold text-foreground mb-1">{spotlightCoach.name}</h3>
                 <div className="flex items-start gap-2 mt-2">
                   <Quote size={14} className="text-[hsl(var(--gold))]/50 shrink-0 mt-0.5" />
                   <p className="text-sm text-muted-foreground italic leading-relaxed">
@@ -85,9 +85,9 @@ export default function Coaches() {
                 </div>
               </div>
               <div className="text-right shrink-0">
-                <div className="stat-number text-3xl text-[hsl(var(--gold))]">${benJohns.price}</div>
-                <div className="text-xs text-muted-foreground">{benJohns.priceLabel}</div>
-                <Button size="sm" className="mt-3 active:scale-95 transition-transform glow-sm font-semibold" onClick={() => toast({ title: '🎾 Session request sent to Ben Johns!', description: "You'll hear back within 2 hours." })}>
+                <div className="stat-number text-3xl text-[hsl(var(--gold))]">${spotlightCoach.price}</div>
+                <div className="text-xs text-muted-foreground">{spotlightCoach.priceLabel}</div>
+                <Button size="sm" className="mt-3 active:scale-95 transition-transform glow-sm font-semibold" onClick={() => toast({ title: `🎾 Session request sent to ${spotlightCoach.name}!`, description: "You'll hear back within 2 hours." })}>
                   Book Session
                 </Button>
               </div>

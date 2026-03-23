@@ -320,6 +320,39 @@ export const risingStars: Player[] = [
     highlights: ['SoCal Open Champion', '4.0 → 5.5 in 18 months', 'CrossFit Athlete'],
     avatar: 'JM',
   },
+  {
+    id: '4',
+    name: 'Kira Tanaka',
+    dupr: 5.3,
+    age: 21,
+    location: 'Portland, OR',
+    sport: 'Pickleball',
+    seeking: 'Coaching certification & brand partnerships',
+    highlights: ['Pacific NW Open Semifinalist', 'D1 Badminton Convert', 'Instagram 45K followers'],
+    avatar: 'KT',
+  },
+  {
+    id: '5',
+    name: 'Darius Cole',
+    dupr: 5.5,
+    age: 24,
+    location: 'Miami, FL',
+    sport: 'Pickleball',
+    seeking: 'Pro tour pathway & coaching network placement',
+    highlights: ['Florida State Champion', 'Former ATP Challenger Tennis', 'Bilingual Coach (EN/ES)'],
+    avatar: 'DC',
+  },
+  {
+    id: '6',
+    name: 'Anya Petrova',
+    dupr: 5.0,
+    age: 20,
+    location: 'Denver, CO',
+    sport: 'Pickleball',
+    seeking: 'Rising star sponsorship & mentorship',
+    highlights: ['Rocky Mountain Junior Champion', 'Fastest 3.0→5.0 in Colorado', 'Studying Sports Science'],
+    avatar: 'AP',
+  },
 ];
 
 export const curriculumItems: CurriculumItem[] = [
@@ -329,6 +362,8 @@ export const curriculumItems: CurriculumItem[] = [
   { id: '4', title: 'Session Analysis: Serve & Return', description: 'Upload a match for AI + coach analysis of your serve game', type: 'analysis', completed: false },
   { id: '5', title: 'Speed-up Decision Making', description: 'When to attack vs reset — live drill scenarios', type: 'drill', completed: false },
   { id: '6', title: 'Final Assessment: Full Match Review', description: 'Complete match uploaded for comprehensive coach feedback', type: 'analysis', completed: false },
+  { id: '7', title: 'AI Drill Assignment: Kitchen Reset Combo', description: 'AI-generated drill sequence based on your last 3 sessions. Complete on court, upload video.', type: 'drill', completed: false },
+  { id: '8', title: 'Play a Competitive Match', description: 'Enter a DUPR-rated match. Your performance is auto-analyzed and added to your curriculum progress.', type: 'analysis', completed: false },
 ];
 
 export const rewards: Reward[] = [

@@ -1,4 +1,5 @@
 import { curriculumItems } from '@/data/mockData';
+import { toast } from '@/hooks/use-toast';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Progress } from '@/components/ui/progress';
@@ -133,7 +134,7 @@ export default function Curriculum() {
                                 placeholder="Reply to Coach Marcus..."
                                 className="flex-1 bg-secondary/30 border border-border/20 rounded-lg px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/25"
                               />
-                              <Button size="icon" variant="ghost" className="shrink-0 w-8 h-8 text-primary">
+                              <Button size="icon" variant="ghost" className="shrink-0 w-8 h-8 text-primary" onClick={() => toast({ title: 'Video sent to Coach Marcus', description: "You'll get feedback within 2-4 hours. Average response time: 2.4 hours." })}>
                                 <Send size={12} />
                               </Button>
                             </div>

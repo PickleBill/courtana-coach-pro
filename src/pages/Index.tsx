@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import ScrollReveal from '@/components/ScrollReveal';
 import ActivityTicker from '@/components/ActivityTicker';
@@ -406,7 +407,7 @@ export default function Index() {
               </div>
 
               <div className="flex justify-center gap-4">
-                <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm" onClick={() => window.open('https://courtkings.com/partner-with-us/', '_blank')}>Partner With Us</Button>
+                <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm" onClick={() => { toast({ title: "You're on the list!", description: "We'll notify you when early access opens." }); }}>Join the Ecosystem — Early Access</Button>
                 <Button size="lg" variant="outline" className="active:scale-95 transition-transform px-8 h-12" asChild>
                   <Link to="/dashboard">See Coach Economics</Link>
                 </Button>

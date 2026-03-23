@@ -47,6 +47,7 @@ export default function Scout() {
                         <span className="flex items-center gap-1"><Users size={10} /> 12 in network</span>
                         <span className="flex items-center gap-1 text-[hsl(var(--gold))]"><DollarSign size={10} /> $24,750/mo shared</span>
                       </div>
+                      <span className="text-primary text-[10px] hover:underline cursor-pointer mt-0.5 inline-block">View full network →</span>
                     </div>
                     <Badge variant="outline" className="bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/25 text-[10px] badge-glow shrink-0">
                       <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))] mr-1 animate-pulse" />
@@ -63,7 +64,7 @@ export default function Scout() {
         <ScrollReveal>
           <div className="flex items-center gap-2 mb-6">
             <Sparkles size={16} className="text-blue-400" />
-            <h2 className="font-display text-2xl font-bold">Rising Stars Draft Board</h2>
+            <h2 className="font-display text-2xl font-bold">Draft2Network</h2>
           </div>
         </ScrollReveal>
 
@@ -116,7 +117,7 @@ export default function Scout() {
                   </div>
                   <div className="flex gap-2">
                     <Button className="flex-1 active:scale-95 transition-transform glow-sm font-semibold gap-1.5 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
-                      Draft to Network <ArrowRight size={14} />
+                      Offer Contract <ArrowRight size={14} />
                     </Button>
                     <Button variant="outline" size="icon" className="shrink-0 border-blue-400/20 text-blue-400 hover:bg-blue-400/10">
                       <Eye size={14} />

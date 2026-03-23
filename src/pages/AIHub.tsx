@@ -153,6 +153,14 @@ export default function AIHub() {
                   <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-blue-400/20 border border-blue-400/30" /> Consistent</span>
                   <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-[hsl(var(--gold))]/20 border border-[hsl(var(--gold))]/30" /> Developing</span>
                 </div>
+                {/* Live Court Feed placeholder */}
+                <div className="mt-3 p-3 rounded-lg bg-secondary/20 border border-border/15 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                    <span className="text-xs text-muted-foreground">Underground 50 — Live Court Feed</span>
+                  </div>
+                  <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/20">Coming Soon</Badge>
+                </div>
               </div>
             </ScrollReveal>
 
@@ -197,9 +205,56 @@ export default function AIHub() {
                       </li>
                     ))}
                   </ul>
+                  {/* Export Session Report CTA */}
+                  <div className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/15">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs font-semibold text-foreground">Export Session Report</p>
+                        <p className="text-[10px] text-muted-foreground">All alpha data from the Underground 50 — analyzed and packaged.</p>
+                      </div>
+                      <Button size="sm" variant="outline" className="text-xs border-primary/20 text-primary hover:bg-primary/10 gap-1 active:scale-95 transition-transform" onClick={() => toast({ title: '📄 Report export coming soon', description: 'Request early access at partnerships@courtana.com' })}>
+                        <ExternalLink size={11} /> Export PDF
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </ScrollReveal>
             </div>
+
+            {/* Ask the Coaches — Multi-sport AI roster */}
+            <ScrollReveal delay={0.12}>
+              <div>
+                <h3 className="font-display text-xl font-bold mb-4 flex items-center gap-2">
+                  <Sparkles size={18} className="text-primary" /> Ask the Coaches
+                </h3>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                  {[
+                    { name: 'Anna Leigh Waters', avatar: 'ALW', accent: 'text-primary', border: 'border-primary/20', bg: 'bg-primary/8', sport: 'Pickleball', tagline: 'Net play, speed-ups, and competitive doubles strategy.' },
+                    { name: 'Carlos Alcaraz', avatar: 'CA', accent: 'text-blue-400', border: 'border-blue-400/20', bg: 'bg-blue-400/8', sport: 'Tennis', tagline: 'Groundstrokes, footwork, and match-level intensity.' },
+                    { name: 'Padel Pro TBD', avatar: 'PP', accent: 'text-[hsl(var(--gold))]', border: 'border-[hsl(var(--gold))]/20', bg: 'bg-[hsl(var(--gold))]/8', sport: 'Padel', tagline: 'Wall play, bandeja, and padel-specific positioning.', comingSoon: true },
+                    { name: 'Chuck Norris', avatar: 'CN', accent: 'text-red-400', border: 'border-red-400/20', bg: 'bg-red-400/8', sport: 'Wildcard', tagline: 'Ask Chuck anything. You might get a real answer. You might get a roundhouse kick.' },
+                  ].map((coach) => (
+                    <motion.div
+                      key={coach.name}
+                      whileHover={{ scale: 1.03, y: -2 }}
+                      className={`glass rounded-xl p-4 text-center glass-hover cursor-pointer relative ${coach.border}`}
+                      onClick={() => toast({ title: `${coach.name} is analyzing your session...`, description: 'AI synthesis in progress.' })}
+                    >
+                      {(coach as any).comingSoon && (
+                        <Badge variant="outline" className="absolute top-2 right-2 text-[8px] bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/20">Coming Soon</Badge>
+                      )}
+                      <div className={`w-12 h-12 rounded-full ${coach.bg} border ${coach.border} flex items-center justify-center font-display font-bold text-sm ${coach.accent} mx-auto mb-2`}>
+                        {coach.avatar}
+                      </div>
+                      <p className="font-display font-semibold text-foreground text-sm">{coach.name}</p>
+                      <Badge variant="outline" className="text-[9px] mt-1 mb-2">{coach.sport}</Badge>
+                      <p className="text-[10px] text-muted-foreground leading-relaxed">{coach.tagline}</p>
+                    </motion.div>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-3 text-center">Ask one coach or crowdsource all four. AI synthesizes responses from every perspective.</p>
+              </div>
+            </ScrollReveal>
 
             {/* 4. AI + Human comparison */}
             <ScrollReveal delay={0.15}>
