@@ -150,7 +150,7 @@ export default function Rewards() {
                   </div>
                   <Progress value={100} className="h-2" />
                 </div>
-                <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs border-primary/30 text-primary hover:bg-primary/10 gap-1">
+                <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs border-primary/30 text-primary hover:bg-primary/10 gap-1" onClick={() => toast({ title: '👑 Court Kings gear claim submitted!', description: 'Shipping details within 24 hours.' })}>
                   Claim <ArrowRight size={11} />
                 </Button>
               </div>
