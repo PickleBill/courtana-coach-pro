@@ -179,7 +179,7 @@ export default function Dashboard() {
               <div className="space-y-2">
                 {recentReviews.map((r, i) => (
                   <ScrollReveal key={i} delay={i * 0.06}>
-                    <motion.div whileHover={{ scale: 1.01 }} className="glass rounded-xl p-4 flex items-center justify-between glass-hover cursor-pointer">
+                    <motion.div whileHover={{ scale: 1.01 }} className="glass rounded-xl p-4 flex items-center justify-between glass-hover cursor-pointer" onClick={() => { setSelectedReview(r); setReviewOpen(true); }}>
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-secondary/60 border border-border/30 flex items-center justify-center text-xs font-bold text-foreground">
                           {r.student.charAt(0)}{r.student.split(' ')[1]?.charAt(0)}
