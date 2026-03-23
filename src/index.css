@@ -126,4 +126,29 @@
     @apply font-display font-bold tabular-nums;
     letter-spacing: -0.02em;
   }
+  @keyframes glow-pulse-border {
+    0%, 100% { border-color: hsla(145, 100%, 45%, 0.15); box-shadow: 0 0 15px -5px hsla(145, 100%, 45%, 0.1); }
+    50% { border-color: hsla(145, 100%, 45%, 0.35); box-shadow: 0 0 25px -5px hsla(145, 100%, 45%, 0.25); }
+  }
+  .glow-pulse {
+    animation: glow-pulse-border 3s ease-in-out infinite;
+  }
+  @keyframes gradient-border-spin {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .animated-gradient-border {
+    background: linear-gradient(90deg, hsla(145,100%,45%,0.1), hsla(200,100%,60%,0.1), hsla(43,96%,56%,0.1), hsla(145,100%,45%,0.1));
+    background-size: 300% 100%;
+    animation: gradient-border-spin 6s ease infinite;
+  }
+
+  /* Mobile slider thumbs */
+  @media (max-width: 768px) {
+    [role="slider"] {
+      width: 24px !important;
+      height: 24px !important;
+    }
+  }
 }

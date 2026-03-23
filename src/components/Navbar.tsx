@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Crown, ChevronDown, LogOut, User } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, ChevronDown, LogOut, User, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import SignInModal from '@/components/SignInModal';
 import { useAuth } from '@/hooks/useAuth';
+import { useNotifications } from '@/hooks/useNotifications';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,12 +30,34 @@ const moreLinks = [
 
 const allLinks = [...mainLinks, ...moreLinks];
 
+function PickleballCrownLogo() {
+  return (
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-200 group-hover:scale-95 group-active:scale-90">
+      {/* Crown */}
+      <path d="M8 14L11 8L18 12L25 8L28 14" stroke="hsl(43, 96%, 56%)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="hsl(43, 96%, 56%)" fillOpacity="0.15" />
+      <circle cx="11" cy="7.5" r="1.5" fill="hsl(43, 96%, 56%)" />
+      <circle cx="18" cy="11.5" r="1.5" fill="hsl(43, 96%, 56%)" />
+      <circle cx="25" cy="7.5" r="1.5" fill="hsl(43, 96%, 56%)" />
+      {/* Pickleball */}
+      <circle cx="18" cy="23" r="9" stroke="hsl(145, 100%, 45%)" strokeWidth="1.5" fill="hsl(145, 100%, 45%)" fillOpacity="0.12" />
+      {/* Holes */}
+      <circle cx="15" cy="21" r="1.2" fill="hsl(145, 100%, 45%)" fillOpacity="0.4" />
+      <circle cx="21" cy="21" r="1.2" fill="hsl(145, 100%, 45%)" fillOpacity="0.4" />
+      <circle cx="18" cy="26" r="1.2" fill="hsl(145, 100%, 45%)" fillOpacity="0.4" />
+      <circle cx="15" cy="25.5" r="0.8" fill="hsl(145, 100%, 45%)" fillOpacity="0.3" />
+      <circle cx="21" cy="25.5" r="0.8" fill="hsl(145, 100%, 45%)" fillOpacity="0.3" />
+    </svg>
+  );
+}
+
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [signInOpen, setSignInOpen] = useState(false);
   const [signInMode, setSignInMode] = useState<'signin' | 'signup'>('signin');
   const location = useLocation();
+  const navigate = useNavigate();
   const { user, profile, signOut, loading } = useAuth();
+  const { notifications, unreadCount, markAsRead, markAllRead } = useNotifications();
 
   const isMoreActive = moreLinks.some(l => l.path === location.pathname);
 
@@ -46,16 +70,14 @@ export default function Navbar() {
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/30">
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-lg bg-primary/15 border border-primary/25 flex items-center justify-center text-primary transition-all duration-200 group-hover:scale-95 group-hover:bg-primary/20 group-active:scale-90">
-              <Crown size={18} />
-            </div>
+          <Link to="/" className="flex items-center gap-2 group">
+            <PickleballCrownLogo />
             <div className="flex flex-col">
-              <span className="font-display font-bold text-lg tracking-tight leading-none text-foreground">
-                Courtana
+              <span className="font-display font-bold text-base sm:text-lg tracking-tight leading-none text-foreground">
+                King of the Courtana
               </span>
-              <span className="text-[9px] tracking-[0.15em] uppercase text-primary/70 font-medium leading-none mt-0.5">
-                Coaching
+              <span className="text-[8px] tracking-[0.12em] uppercase text-primary/60 font-medium leading-none mt-0.5">
+                Powered by Courtana
               </span>
             </div>
           </Link>
@@ -123,7 +145,58 @@ export default function Navbar() {
             </DropdownMenu>
           </div>
 
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-2">
+            {/* Notification bell */}
+            {!loading && user && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="relative p-2 rounded-lg hover:bg-secondary/50 transition-colors text-muted-foreground hover:text-foreground">
+                    <Bell size={18} />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 min-w-[18px] rounded-full bg-primary text-primary-foreground text-[9px] font-bold flex items-center justify-center shadow-sm shadow-primary/30">
+                        {unreadCount}
+                      </span>
+                    )}
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-80 bg-card border-border/40 backdrop-blur-xl p-0">
+                  <div className="p-3 border-b border-border/20 flex items-center justify-between">
+                    <span className="text-sm font-semibold text-foreground">Notifications</span>
+                    {unreadCount > 0 && (
+                      <button onClick={markAllRead} className="text-[10px] text-primary hover:underline">Mark all read</button>
+                    )}
+                  </div>
+                  <div className="max-h-72 overflow-y-auto">
+                    {notifications.length === 0 ? (
+                      <div className="p-6 text-center text-xs text-muted-foreground">No notifications yet</div>
+                    ) : (
+                      notifications.slice(0, 5).map((n) => (
+                        <button
+                          key={n.id}
+                          onClick={() => {
+                            markAsRead(n.id);
+                            if (n.link) navigate(n.link);
+                          }}
+                          className={`w-full text-left p-3 hover:bg-secondary/30 transition-colors border-b border-border/10 last:border-0 ${!n.read ? 'bg-primary/3' : ''}`}
+                        >
+                          <div className="flex items-start gap-2">
+                            {!n.read && <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />}
+                            <div className={!n.read ? '' : 'ml-3.5'}>
+                              <p className="text-xs font-medium text-foreground leading-tight">{n.title}</p>
+                              <p className="text-[10px] text-muted-foreground mt-0.5 leading-relaxed">{n.message}</p>
+                              <p className="text-[9px] text-muted-foreground/50 mt-1">
+                                {new Date(n.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                              </p>
+                            </div>
+                          </div>
+                        </button>
+                      ))
+                    )}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+
             {!loading && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -162,12 +235,48 @@ export default function Navbar() {
           </div>
 
           {/* Mobile hamburger */}
-          <button
-            className="lg:hidden p-2 text-muted-foreground hover:text-foreground"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+          <div className="lg:hidden flex items-center gap-1">
+            {!loading && user && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="relative p-2 text-muted-foreground hover:text-foreground">
+                    <Bell size={18} />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 rounded-full bg-primary text-primary-foreground text-[8px] font-bold flex items-center justify-center">
+                        {unreadCount}
+                      </span>
+                    )}
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-72 bg-card border-border/40 backdrop-blur-xl p-0">
+                  <div className="p-3 border-b border-border/20 flex items-center justify-between">
+                    <span className="text-sm font-semibold">Notifications</span>
+                    {unreadCount > 0 && <button onClick={markAllRead} className="text-[10px] text-primary">Mark all read</button>}
+                  </div>
+                  <div className="max-h-60 overflow-y-auto">
+                    {notifications.length === 0 ? (
+                      <div className="p-4 text-center text-xs text-muted-foreground">No notifications</div>
+                    ) : notifications.slice(0, 4).map((n) => (
+                      <button
+                        key={n.id}
+                        onClick={() => { markAsRead(n.id); if (n.link) navigate(n.link); }}
+                        className={`w-full text-left p-3 hover:bg-secondary/30 border-b border-border/10 last:border-0 ${!n.read ? 'bg-primary/3' : ''}`}
+                      >
+                        <p className="text-xs font-medium text-foreground">{n.title}</p>
+                        <p className="text-[10px] text-muted-foreground mt-0.5">{n.message}</p>
+                      </button>
+                    ))}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+            <button
+              className="p-2 text-muted-foreground hover:text-foreground"
+              onClick={() => setMobileOpen(!mobileOpen)}
+            >
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile menu */}
@@ -180,6 +289,21 @@ export default function Navbar() {
               className="lg:hidden bg-card/95 backdrop-blur-xl border-t border-border/30 overflow-hidden"
             >
               <div className="px-4 py-4 space-y-1">
+                {user && (
+                  <div className="flex items-center gap-3 mb-3 p-3 rounded-lg bg-secondary/20 border border-border/20">
+                    {profile?.avatar_url ? (
+                      <img src={profile.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center text-primary text-xs font-bold">
+                        {(profile?.display_name || user.email || '?').charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-sm font-medium text-foreground">{profile?.display_name || user.email?.split('@')[0]}</p>
+                      <p className="text-[10px] text-muted-foreground">{user.email}</p>
+                    </div>
+                  </div>
+                )}
                 {allLinks.map((link) => (
                   <Link
                     key={link.path}
