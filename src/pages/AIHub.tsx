@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { aiAnalysisResult } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Upload, Wifi, Send, CheckCircle, AlertTriangle, Lightbulb, Brain, ArrowRight, User, Zap, Play, ExternalLink, Clock, ShieldCheck } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Upload, Wifi, Send, CheckCircle, AlertTriangle, Lightbulb, Brain, ArrowRight, User, Zap, Play, ExternalLink, Clock, ShieldCheck, Users, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import TournamentFeed from '@/components/TournamentFeed';
+import MatchmakingModal from '@/components/MatchmakingModal';
 
 const gradeColors: Record<string, string> = {
   'A+': 'text-primary', 'A': 'text-primary', 'A-': 'text-primary',
