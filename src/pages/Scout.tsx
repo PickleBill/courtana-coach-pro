@@ -63,7 +63,7 @@ export default function Scout() {
         <ScrollReveal>
           <div className="flex items-center gap-2 mb-6">
             <Sparkles size={16} className="text-blue-400" />
-            <h2 className="font-display text-2xl font-bold">Rising Stars Draft Board</h2>
+            <h2 className="font-display text-2xl font-bold">Draft2Network</h2>
           </div>
         </ScrollReveal>
 
