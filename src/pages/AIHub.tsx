@@ -340,9 +340,19 @@ export default function AIHub() {
                 </ul>
               </div>
             </ScrollReveal>
+
+            {/* Tournament Feed (V5b) */}
+            <ScrollReveal delay={0.18}>
+              <TournamentFeed />
+            </ScrollReveal>
           </div>
         </div>
       </div>
+
+      {/* Matchmaking Modal (V5b) */}
+      <AnimatePresence>
+        {matchOpen && <MatchmakingModal onClose={() => setMatchOpen(false)} />}
+      </AnimatePresence>
     </div>
   );
 }
