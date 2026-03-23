@@ -4,7 +4,7 @@ import usePageTitle from '@/hooks/usePageTitle';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Lock, Trophy, Star, ArrowRight, ExternalLink, ShoppingBag, Crown, Ticket } from 'lucide-react';
+import { Lock, Trophy, Star, ArrowRight, ExternalLink, ShoppingBag, Crown, Ticket, Wrench } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const tierStyles = {
@@ -21,6 +21,14 @@ const partnerReward = {
   tier: 'gold' as const,
   partner: 'Pickleball Freakshow × Courtana',
   link: 'https://freak-flow-hub.lovable.app/',
+};
+
+// Court Kings gear reward (V4c)
+const courtKingsReward = {
+  title: 'Court Kings Pro Builder Cap + Gear Kit',
+  description: 'Exclusive branded gear from the #1 pickleball court builder. Includes pro cap, training towel, and facility access pass.',
+  tier: 'silver' as const,
+  partner: 'Court Kings × Courtana',
 };
 
 const experienceRewards = [
@@ -78,7 +86,7 @@ export default function Rewards() {
           <div className="flex gap-6 mb-10">
             {(['silver', 'gold', 'platinum'] as const).map((tier) => {
               const style = tierStyles[tier];
-              const count = rewards.filter((r) => r.tier === tier).length + (tier === 'gold' ? 1 : 0) + (tier === 'platinum' ? 2 : 0);
+              const count = rewards.filter((r) => r.tier === tier).length + (tier === 'gold' ? 1 : 0) + (tier === 'platinum' ? 2 : 0) + (tier === 'silver' ? 1 : 0);
               return (
                 <div key={tier} className="flex items-center gap-2 text-sm">
                   <div className={`w-4 h-4 rounded-full ${style.bg} ${style.border} border`} />
@@ -115,11 +123,42 @@ export default function Rewards() {
             </motion.div>
           </ScrollReveal>
 
+          {/* Court Kings gear card (V4c) */}
+          <ScrollReveal delay={0.05}>
+            <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className="glass rounded-2xl overflow-hidden glass-hover border border-slate-400/20 relative">
+              <div className="absolute inset-0 rounded-2xl pointer-events-none overflow-hidden">
+                <div className={`absolute inset-0 bg-gradient-to-r ${tierStyles.silver.shimmer} opacity-20`} />
+              </div>
+              <div className="h-28 bg-slate-400/8 relative flex items-center justify-center">
+                <span className="text-5xl">🧢</span>
+                <Badge variant="outline" className="absolute top-3 right-3 text-[10px] bg-slate-400/10 text-slate-300 border-slate-400/25">Silver</Badge>
+                <Badge variant="outline" className="absolute top-3 left-3 text-[10px] bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/20">
+                  <Wrench size={8} className="mr-0.5" /> Court Kings
+                </Badge>
+              </div>
+              <div className="p-5 relative z-10">
+                <h3 className="font-display font-bold text-foreground mb-1">{courtKingsReward.title}</h3>
+                <p className="text-sm text-muted-foreground mb-2 leading-relaxed">{courtKingsReward.description}</p>
+                <p className="text-[10px] text-slate-300 font-medium mb-4">{courtKingsReward.partner}</p>
+                <div className="mb-3">
+                  <div className="flex items-center justify-between text-xs mb-1.5">
+                    <span className="text-muted-foreground">500 / 500 pts</span>
+                    <span className="font-semibold text-primary">Unlocked</span>
+                  </div>
+                  <Progress value={100} className="h-2" />
+                </div>
+                <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs border-primary/30 text-primary hover:bg-primary/10 gap-1">
+                  Claim <ArrowRight size={11} />
+                </Button>
+              </div>
+            </motion.div>
+          </ScrollReveal>
+
           {rewards.map((reward, i) => {
             const style = tierStyles[reward.tier];
             const isLocked = playerProgress.points < reward.pointsRequired;
             return (
-              <ScrollReveal key={reward.id} delay={(i + 1) * 0.08}>
+              <ScrollReveal key={reward.id} delay={(i + 2) * 0.08}>
                 <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className={`glass rounded-2xl overflow-hidden glass-hover border ${style.border} ${style.glow} relative`}>
                   <div className="absolute inset-0 rounded-2xl pointer-events-none overflow-hidden">
                     <div className={`absolute inset-0 bg-gradient-to-r ${style.shimmer} opacity-20`} />
@@ -157,7 +196,7 @@ export default function Rewards() {
           {experienceRewards.map((exp, i) => {
             const style = tierStyles[exp.tier];
             return (
-              <ScrollReveal key={exp.title} delay={(rewards.length + i + 1) * 0.08}>
+              <ScrollReveal key={exp.title} delay={(rewards.length + i + 2) * 0.08}>
                 <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className={`glass rounded-2xl overflow-hidden glass-hover border ${style.border} ${style.glow} relative`}>
                   <div className="absolute inset-0 rounded-2xl pointer-events-none overflow-hidden">
                     <div className={`absolute inset-0 bg-gradient-to-r ${style.shimmer} opacity-20`} />

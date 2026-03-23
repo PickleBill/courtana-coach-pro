@@ -7,7 +7,7 @@ import LiveCounter from '@/components/LiveCounter';
 import { ecosystemStats, coaches } from '@/data/mockData';
 import CoachCard from '@/components/CoachCard';
 import usePageTitle from '@/hooks/usePageTitle';
-import { ArrowRight, Zap, Users, Trophy, Brain, TrendingUp, Shield, Crown, Gamepad2, Activity, ExternalLink, Play, Globe, Camera, Sparkles } from 'lucide-react';
+import { ArrowRight, Zap, Users, Trophy, Brain, TrendingUp, Shield, Crown, Gamepad2, Activity, ExternalLink, Play, Globe, Camera, Sparkles, Quote, DollarSign, Clock, BarChart3 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 
@@ -21,7 +21,7 @@ const flywheelSteps = [
 
 const audienceCards = [
   { title: "I'm a Player", desc: 'Get coached by the best — from AI analysis to personalized pro feedback. Level up on any court, on your time.', cta: 'Find Your Coach', link: '/coaches', icon: Gamepad2, gradient: 'from-primary/20 to-primary/5' },
-  { title: "I'm a Coach", desc: 'Review sessions in minutes, not hours. Grow your student base globally. Earn 4x more with less time.', cta: 'Join the Network', link: '/dashboard', icon: Shield, gradient: 'from-blue-500/20 to-blue-500/5' },
+  { title: "I'm a Coach", desc: 'Review sessions in minutes, not hours. Grow your student base globally. Earn 4x more with less time.', cta: 'Explore Coaching', link: '/coaches', icon: Shield, gradient: 'from-blue-500/20 to-blue-500/5' },
   { title: "I'm a Pro / Celebrity", desc: 'Build your coaching empire. Approve vetted networks, earn revenue share, create once-in-a-lifetime fan experiences.', cta: 'Scout Talent', link: '/scout', icon: Crown, gradient: 'from-[hsl(var(--gold))]/20 to-[hsl(var(--gold))]/5' },
 ];
 
@@ -37,7 +37,24 @@ const howItWorks = [
   { icon: TrendingUp, title: 'Improve', desc: 'Connect with coaches who review your AI analysis and build your curriculum' },
 ];
 
-const partnerCategories = ['Equipment Partners', 'Brand Partners', 'Wellness Partners', 'Facility Partners', 'Media Partners', 'Tech Partners', 'Event Partners', 'Apparel Partners'];
+const partnerNames = [
+  'Court Kings', 'PPA Tour', 'USA Pickleball', 'Pickleball Freakshow', 'DUPR', 'Black Barn Pickleball',
+  'Major League Pickleball', 'Selkirk Sport', 'Courtana', 'Life Time', 'Chicken N Pickle', 'JOOLA',
+  'Franklin Sports', 'Engage Pickleball', 'Paddletek', 'Vulcan Sporting Goods',
+];
+
+const testimonials = [
+  { quote: "I went from a 3.8 to 4.5 DUPR in three months. The AI catches things I'd never notice on my own, and Coach Marcus's feedback made it click.", name: 'Tyler R.', role: 'Recreational Player', location: 'Austin, TX' },
+  { quote: "I review 6x more sessions than I could in person, and my students improve faster. The AI does the heavy lifting, I add the insight.", name: 'Sarah K.', role: 'Certified Coach', location: 'Nashville, TN' },
+  { quote: "This is what the sport needs. A scalable coaching layer that brings pro-level insight to every player at every facility.", name: 'Bryan P.', role: 'Industry Executive', location: 'Court Kings' },
+];
+
+const coachStats = [
+  { value: '$4,200', label: 'Avg Monthly Earnings', icon: DollarSign },
+  { value: '4.2 min', label: 'Avg Review Time', icon: Clock },
+  { value: '14x', label: 'Time Leverage vs In-Person', icon: TrendingUp },
+  { value: '89%', label: 'Student Retention Rate', icon: BarChart3 },
+];
 
 function Particles() {
   return (
@@ -120,7 +137,6 @@ export default function Index() {
             </div>
           </ScrollReveal>
           <div className="max-w-4xl mx-auto relative">
-            {/* Connector line */}
             <div className="hidden md:block absolute top-1/2 left-[16%] right-[16%] h-px bg-gradient-to-r from-primary/20 via-primary/30 to-primary/20 -translate-y-1/2" />
             <div className="grid md:grid-cols-3 gap-6">
               {howItWorks.map((step, i) => (
@@ -201,6 +217,39 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Audience entry — MOVED ABOVE FLYWHEEL */}
+      <section className="py-20 lg:py-28 section-gradient-2">
+        <div className="container mx-auto px-4">
+          <ScrollReveal>
+            <div className="text-center mb-14">
+              <h2 className="font-display text-3xl lg:text-5xl font-bold mb-4" style={{ textWrap: 'balance' }}>Your Role in the Kingdom</h2>
+              <p className="text-muted-foreground text-lg max-w-lg mx-auto">Three doors into the ecosystem. Every role benefits from the network effect.</p>
+            </div>
+          </ScrollReveal>
+          <div className="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+            {audienceCards.map((card, i) => (
+              <ScrollReveal key={card.title} delay={i * 0.12}>
+                <Link to={card.link} className="block h-full">
+                  <motion.div whileHover={{ scale: 1.03, y: -6 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className="glass rounded-2xl p-8 glass-hover group active:scale-[0.97] transition-transform h-full relative overflow-hidden">
+                    <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                    <div className="relative z-10">
+                      <div className="w-14 h-14 rounded-2xl bg-secondary/60 border border-border/40 flex items-center justify-center mb-5 group-hover:border-primary/20 transition-colors">
+                        <card.icon size={24} className="text-foreground" />
+                      </div>
+                      <h3 className="font-display text-xl font-bold text-foreground mb-2">{card.title}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-6">{card.desc}</p>
+                      <span className="text-sm text-primary font-semibold flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                        {card.cta} <ArrowRight size={14} />
+                      </span>
+                    </div>
+                  </motion.div>
+                </Link>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Flywheel */}
       <section className="py-24 lg:py-32 relative">
         <div className="absolute inset-0 pointer-events-none">
@@ -246,41 +295,75 @@ export default function Index() {
       {/* Activity ticker */}
       <ActivityTicker />
 
-      {/* Audience entry */}
+      {/* Why Coaches Love This (V4d) */}
       <section className="py-20 lg:py-28 section-gradient-1">
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <div className="text-center mb-14">
-              <h2 className="font-display text-3xl lg:text-5xl font-bold mb-4" style={{ textWrap: 'balance' }}>Your Role in the Kingdom</h2>
-              <p className="text-muted-foreground text-lg max-w-lg mx-auto">Three doors into the ecosystem. Every role benefits from the network effect.</p>
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs mb-4">
+                <TrendingUp size={10} className="mr-1" /> Coach Economics
+              </Badge>
+              <h2 className="font-display text-3xl lg:text-4xl font-bold mb-3" style={{ textWrap: 'balance' }}>Why Coaches Love This</h2>
+              <p className="text-muted-foreground max-w-md mx-auto">Leverage AI to review more sessions, earn more, and help more players — without burning out.</p>
             </div>
           </ScrollReveal>
-          <div className="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
-            {audienceCards.map((card, i) => (
-              <ScrollReveal key={card.title} delay={i * 0.12}>
-                <Link to={card.link} className="block h-full">
-                  <motion.div whileHover={{ scale: 1.03, y: -6 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className="glass rounded-2xl p-8 glass-hover group active:scale-[0.97] transition-transform h-full relative overflow-hidden">
-                    <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                    <div className="relative z-10">
-                      <div className="w-14 h-14 rounded-2xl bg-secondary/60 border border-border/40 flex items-center justify-center mb-5 group-hover:border-primary/20 transition-colors">
-                        <card.icon size={24} className="text-foreground" />
-                      </div>
-                      <h3 className="font-display text-xl font-bold text-foreground mb-2">{card.title}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed mb-6">{card.desc}</p>
-                      <span className="text-sm text-primary font-semibold flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                        {card.cta} <ArrowRight size={14} />
-                      </span>
-                    </div>
-                  </motion.div>
-                </Link>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 max-w-4xl mx-auto">
+            {coachStats.map((stat, i) => (
+              <ScrollReveal key={stat.label} delay={i * 0.1}>
+                <div className="glass rounded-2xl p-6 text-center glass-hover">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-4">
+                    <stat.icon size={20} className="text-primary" />
+                  </div>
+                  <div className="stat-number text-2xl lg:text-3xl text-primary mb-1">{stat.value}</div>
+                  <div className="text-xs text-muted-foreground">{stat.label}</div>
+                </div>
               </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Featured coaches */}
+      {/* Testimonials (V4d) */}
       <section className="py-20 lg:py-28">
+        <div className="container mx-auto px-4">
+          <ScrollReveal>
+            <div className="text-center mb-14">
+              <h2 className="font-display text-3xl lg:text-4xl font-bold mb-3" style={{ textWrap: 'balance' }}>What People Are Saying</h2>
+            </div>
+          </ScrollReveal>
+          <div className="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+            {testimonials.map((t, i) => (
+              <ScrollReveal key={t.name} delay={i * 0.12}>
+                <div className="glass rounded-2xl p-6 glass-hover h-full flex flex-col">
+                  <Quote size={20} className="text-primary/30 mb-4" />
+                  <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-5">{t.quote}</p>
+                  <div className="pt-4 border-t border-border/20">
+                    <div className="font-display font-semibold text-foreground text-sm">{t.name}</div>
+                    <div className="text-xs text-muted-foreground">{t.role} · {t.location}</div>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+
+          {/* Pricing teaser (V4d stakeholder gap) */}
+          <ScrollReveal delay={0.3}>
+            <div className="text-center mt-12">
+              <p className="text-sm text-muted-foreground">
+                Coaching starts at <span className="text-primary font-semibold">$35/session</span> for rising stars, 
+                <span className="text-foreground font-medium"> $85–150</span> for certified coaches, 
+                and <span className="text-[hsl(var(--gold))] font-semibold">$500+</span> for celebrity pro reviews.
+              </p>
+              <Button variant="ghost" className="mt-3 text-primary text-sm" asChild>
+                <Link to="/coaches">Browse All Coaches <ArrowRight size={12} /></Link>
+              </Button>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Featured coaches */}
+      <section className="py-20 lg:py-28 section-gradient-2">
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <div className="flex items-end justify-between mb-12">
@@ -310,19 +393,56 @@ export default function Index() {
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] bg-[hsl(var(--gold))]/5 rounded-full blur-[150px]" />
           </div>
-          <div className="container mx-auto px-4 text-center max-w-2xl relative z-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))]/20 text-[hsl(var(--gold))] text-xs font-medium mb-6">
-              <Crown size={12} /> Strategic Partnership
-            </div>
-            <h2 className="font-display text-3xl lg:text-5xl font-bold mb-5" style={{ textWrap: 'balance' }}>Court Kings × Courtana</h2>
-            <p className="text-muted-foreground leading-relaxed mb-10 text-lg">
-              Building the coaching infrastructure layer for every racquet sport facility in America. Court Kings brings the courts, pros, and nationwide distribution. Courtana brings AI, smart court tech, and the player ecosystem.
-            </p>
-            <div className="flex justify-center gap-4">
-              <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm">Partner With Us</Button>
-              <Button size="lg" variant="outline" className="active:scale-95 transition-transform px-8 h-12" asChild>
-                <Link to="/dashboard">See Coach Economics</Link>
-              </Button>
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-10">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))]/20 text-[hsl(var(--gold))] text-xs font-medium mb-6">
+                  <Crown size={12} /> Strategic Partnership
+                </div>
+                <h2 className="font-display text-3xl lg:text-5xl font-bold mb-5" style={{ textWrap: 'balance' }}>Court Kings × Courtana</h2>
+                <p className="text-muted-foreground leading-relaxed mb-10 text-lg max-w-2xl mx-auto">
+                  Building the coaching infrastructure layer for every racquet sport facility in America. Court Kings brings the courts, pros, and nationwide distribution. Courtana brings AI, smart court tech, and the player ecosystem.
+                </p>
+              </div>
+
+              {/* Partnership value exchange (V4d) */}
+              <div className="grid sm:grid-cols-2 gap-5 mb-10">
+                <div className="glass rounded-2xl p-6 border-[hsl(var(--gold))]/15">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-8 h-8 rounded-lg bg-[hsl(var(--gold))]/12 flex items-center justify-center">
+                      <Crown size={14} className="text-[hsl(var(--gold))]" />
+                    </div>
+                    <span className="font-display font-bold text-foreground text-sm">Court Kings Brings</span>
+                  </div>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))] mt-1.5 shrink-0" /> 48+ facilities nationwide</li>
+                    <li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))] mt-1.5 shrink-0" /> Pro player relationships (Ben Johns, Annalee Waters)</li>
+                    <li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))] mt-1.5 shrink-0" /> USA Pickleball official partner status</li>
+                    <li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))] mt-1.5 shrink-0" /> National distribution & brand recognition</li>
+                  </ul>
+                </div>
+                <div className="glass rounded-2xl p-6 border-primary/15">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-8 h-8 rounded-lg bg-primary/12 flex items-center justify-center">
+                      <Zap size={14} className="text-primary" />
+                    </div>
+                    <span className="font-display font-bold text-foreground text-sm">Courtana Brings</span>
+                  </div>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" /> AI video analysis engine</li>
+                    <li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" /> Smart court hardware & camera tech</li>
+                    <li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" /> Coaching marketplace platform</li>
+                    <li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" /> Gamification, XP, and rewards engine</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="flex justify-center gap-4">
+                <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm">Partner With Us</Button>
+                <Button size="lg" variant="outline" className="active:scale-95 transition-transform px-8 h-12" asChild>
+                  <Link to="/dashboard">See Coach Economics</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </section>
@@ -341,13 +461,13 @@ export default function Index() {
           <div className="overflow-hidden relative">
             <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
             <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
-            <motion.div animate={{ x: [0, -800] }} transition={{ duration: 30, repeat: Infinity, ease: 'linear' }} className="flex gap-8 whitespace-nowrap">
-              {[...partnerCategories, ...partnerCategories].map((cat, i) => (
+            <motion.div animate={{ x: [0, -1200] }} transition={{ duration: 40, repeat: Infinity, ease: 'linear' }} className="flex gap-6 whitespace-nowrap">
+              {[...partnerNames, ...partnerNames].map((name, i) => (
                 <div key={i} className="flex items-center gap-3 px-5 py-3 rounded-xl bg-secondary/20 border border-border/15 shrink-0">
                   <div className="w-8 h-8 rounded-lg bg-primary/8 border border-primary/10 flex items-center justify-center">
-                    <Globe size={14} className="text-primary/60" />
+                    <span className="text-xs font-bold text-primary/60">{name.charAt(0)}</span>
                   </div>
-                  <span className="text-sm text-muted-foreground font-medium">{cat}</span>
+                  <span className="text-sm text-muted-foreground font-medium">{name}</span>
                 </div>
               ))}
             </motion.div>

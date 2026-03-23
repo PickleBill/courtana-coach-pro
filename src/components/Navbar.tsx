@@ -1,24 +1,37 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Crown } from 'lucide-react';
+import { Menu, X, Crown, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import SignInModal from '@/components/SignInModal';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
-const navLinks = [
+const mainLinks = [
   { label: 'Ecosystem', path: '/' },
   { label: 'Coaches', path: '/coaches' },
   { label: 'Scout', path: '/scout' },
-  { label: 'Curriculum', path: '/curriculum' },
   { label: 'AI Analysis', path: '/ai-hub' },
+];
+
+const moreLinks = [
+  { label: 'Curriculum', path: '/curriculum' },
   { label: 'Rewards', path: '/rewards' },
   { label: 'Dashboard', path: '/dashboard' },
 ];
+
+const allLinks = [...mainLinks, ...moreLinks];
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [signInOpen, setSignInOpen] = useState(false);
   const location = useLocation();
+
+  const isMoreActive = moreLinks.some(l => l.path === location.pathname);
 
   const scrollToPartner = () => {
     const el = document.getElementById('court-kings-partnership');
@@ -46,7 +59,7 @@ export default function Navbar() {
 
           {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-0.5">
-            {navLinks.map((link) => {
+            {mainLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
                 <Link
@@ -69,6 +82,42 @@ export default function Navbar() {
                 </Link>
               );
             })}
+
+            {/* More dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className={`relative px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-1 ${
+                    isMoreActive
+                      ? 'text-primary bg-primary/10'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                  }`}
+                >
+                  More <ChevronDown size={12} />
+                  {isMoreActive && (
+                    <motion.div
+                      layoutId="nav-underline"
+                      className="absolute bottom-0 left-2 right-2 h-[2px] bg-primary rounded-full"
+                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-card border-border/40 backdrop-blur-xl">
+                {moreLinks.map((link) => (
+                  <DropdownMenuItem key={link.path} asChild>
+                    <Link
+                      to={link.path}
+                      className={`w-full cursor-pointer ${
+                        location.pathname === link.path ? 'text-primary' : ''
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           <div className="hidden lg:flex items-center gap-3">
@@ -99,7 +148,7 @@ export default function Navbar() {
               className="lg:hidden bg-card/95 backdrop-blur-xl border-t border-border/30 overflow-hidden"
             >
               <div className="px-4 py-4 space-y-1">
-                {navLinks.map((link) => (
+                {allLinks.map((link) => (
                   <Link
                     key={link.path}
                     to={link.path}

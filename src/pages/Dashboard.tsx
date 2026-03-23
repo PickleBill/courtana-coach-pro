@@ -4,12 +4,12 @@ import usePageTitle from '@/hooks/usePageTitle';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { DollarSign, Clock, Users, TrendingUp, CheckCircle, BarChart3, Crown, Timer, ArrowRight, Zap, Video, MessageSquare, UserPlus, Play, BookOpen } from 'lucide-react';
+import { DollarSign, Clock, Users, TrendingUp, CheckCircle, BarChart3, Crown, Timer, ArrowRight, Zap, Video, MessageSquare, UserPlus, Play, BookOpen, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const metricCards = [
   { label: 'Monthly Earnings', value: `$${dashboardMetrics.monthlyEarnings.toLocaleString()}`, icon: DollarSign, delta: '+23% vs last month', highlight: true },
-  { label: 'Pending Reviews', value: dashboardMetrics.pendingReviews.toString(), icon: Clock, delta: '~$595 pending revenue', highlight: false },
+  { label: 'Pending Reviews', value: dashboardMetrics.pendingReviews.toString(), icon: Clock, delta: '~$595 pending revenue', highlight: false, urgent: true },
   { label: 'Active Students', value: `${dashboardMetrics.activeStudents}/${dashboardMetrics.totalStudents}`, icon: Users, delta: '+4 this month', highlight: false },
   { label: 'Avg Review Time', value: dashboardMetrics.avgReviewTime, icon: Timer, delta: '-18s improvement', highlight: false },
   { label: 'Retention Rate', value: `${dashboardMetrics.studentRetention}%`, icon: TrendingUp, delta: '+2.1% this quarter', highlight: false },
@@ -31,6 +31,18 @@ const recentActivity = [
   { icon: UserPlus, text: 'New rising star applied to your network', time: '3 hrs ago', color: 'text-[hsl(var(--gold))]' },
   { icon: DollarSign, text: 'Revenue share payout of $1,280 from Ben Johns processed', time: '6 hrs ago', color: 'text-primary' },
 ];
+
+// Weekly earnings data (V4c)
+const weeklyEarnings = [
+  { day: 'Mon', amount: 280 },
+  { day: 'Tue', amount: 420 },
+  { day: 'Wed', amount: 350 },
+  { day: 'Thu', amount: 510 },
+  { day: 'Fri', amount: 180 },
+  { day: 'Sat', amount: 54 },
+  { day: 'Sun', amount: 0 },
+];
+const maxEarning = Math.max(...weeklyEarnings.map(d => d.amount));
 
 export default function Dashboard() {
   usePageTitle('Coach Dashboard — Courtana Coaching');
@@ -98,16 +110,19 @@ export default function Dashboard() {
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
           {metricCards.map((m, i) => (
             <ScrollReveal key={m.label} delay={i * 0.06}>
-              <Card className={`glass border-border/30 ${m.highlight ? 'border-primary/20 glow-sm' : ''}`}>
+              <Card className={`glass border-border/30 ${m.highlight ? 'border-primary/20 glow-sm' : ''} ${(m as any).urgent ? 'border-[hsl(var(--gold))]/25' : ''}`}>
                 <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
                   <CardTitle className="text-xs font-medium text-muted-foreground">{m.label}</CardTitle>
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${m.highlight ? 'bg-primary/12' : 'bg-secondary/40'}`}>
-                    <m.icon size={14} className={m.highlight ? 'text-primary' : 'text-muted-foreground'} />
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${m.highlight ? 'bg-primary/12' : (m as any).urgent ? 'bg-[hsl(var(--gold))]/12' : 'bg-secondary/40'}`}>
+                    <m.icon size={14} className={m.highlight ? 'text-primary' : (m as any).urgent ? 'text-[hsl(var(--gold))]' : 'text-muted-foreground'} />
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className={`stat-number text-2xl ${m.highlight ? 'text-primary' : 'text-foreground'}`}>{m.value}</div>
-                  {m.delta && <p className="text-xs text-primary/80 mt-1.5">{m.delta}</p>}
+                  {m.delta && <p className={`text-xs mt-1.5 ${(m as any).urgent ? 'text-[hsl(var(--gold))]' : 'text-primary/80'}`}>
+                    {(m as any).urgent && <AlertCircle size={10} className="inline mr-1" />}
+                    {m.delta}
+                  </p>}
                 </CardContent>
               </Card>
             </ScrollReveal>
@@ -116,6 +131,31 @@ export default function Dashboard() {
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
+            {/* Weekly Earnings Chart (V4c) */}
+            <ScrollReveal>
+              <div className="glass rounded-2xl p-6">
+                <div className="flex items-center justify-between mb-5">
+                  <h2 className="font-display text-xl font-bold">Weekly Earnings</h2>
+                  <span className="text-xs text-muted-foreground">Platform Growth: +23% MoM</span>
+                </div>
+                <div className="flex items-end gap-3 h-32">
+                  {weeklyEarnings.map((d, i) => (
+                    <div key={d.day} className="flex-1 flex flex-col items-center gap-1.5">
+                      <span className="text-[10px] text-muted-foreground tabular-nums">${d.amount}</span>
+                      <motion.div
+                        initial={{ height: 0 }}
+                        whileInView={{ height: `${Math.max((d.amount / maxEarning) * 100, 4)}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                        className={`w-full rounded-t-md ${d.amount > 0 ? 'bg-primary/60' : 'bg-secondary/30'}`}
+                      />
+                      <span className="text-[10px] text-muted-foreground">{d.day}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </ScrollReveal>
+
             <div>
               <ScrollReveal>
                 <h2 className="font-display text-xl font-bold mb-5">Recent Reviews</h2>
