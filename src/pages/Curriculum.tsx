@@ -2,7 +2,7 @@ import { curriculumItems } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Circle, BookOpen, Video, BarChart3, Lock, Trophy, MessageSquare, User } from 'lucide-react';
+import { CheckCircle, Circle, BookOpen, Video, BarChart3, Lock, Trophy, MessageSquare, User, Gift } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const typeIcons = { drill: BookOpen, video: Video, analysis: BarChart3 };
@@ -66,7 +66,6 @@ export default function Curriculum() {
                       item.completed ? 'border-primary/15' : isCurrent ? 'border-primary/30 glow-sm' : 'opacity-60'
                     }`}
                   >
-                    {/* Timeline connector */}
                     {i < curriculumItems.length - 1 && (
                       <div className="absolute left-[29px] top-full w-px h-3 bg-border/30 z-10" />
                     )}
@@ -78,7 +77,16 @@ export default function Curriculum() {
                           ? 'bg-primary/10 text-primary animate-pulse'
                           : 'bg-secondary/40 text-muted-foreground/40'
                       }`}>
-                        {item.completed ? <CheckCircle size={18} /> : isCurrent ? <Circle size={18} /> : <Lock size={14} />}
+                        {item.completed ? (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            whileInView={{ scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ type: 'spring', stiffness: 500, damping: 20, delay: 0.2 }}
+                          >
+                            <CheckCircle size={18} />
+                          </motion.div>
+                        ) : isCurrent ? <Circle size={18} /> : <Lock size={14} />}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
@@ -105,6 +113,22 @@ export default function Curriculum() {
                               <span className="text-[10px] text-muted-foreground/50">2d ago</span>
                             </div>
                             <p className="text-xs text-muted-foreground leading-relaxed">{item.coachFeedback}</p>
+                          </div>
+                        )}
+
+                        {/* Coach Notes for current module */}
+                        {isCurrent && (
+                          <div className="mt-3 p-3 rounded-lg bg-blue-500/5 border border-blue-500/10">
+                            <div className="flex items-center gap-1.5 mb-1.5">
+                              <div className="w-5 h-5 rounded-md bg-blue-500/15 flex items-center justify-center">
+                                <MessageSquare size={10} className="text-blue-400" />
+                              </div>
+                              <span className="text-[10px] text-blue-400 font-semibold">Coach Notes</span>
+                              <span className="text-[10px] text-muted-foreground/50">Just now</span>
+                            </div>
+                            <p className="text-xs text-muted-foreground leading-relaxed">
+                              Great progress on your kitchen positioning! For this module, I want you to focus on the approach shot — record yourself from the side angle and upload here. Pay attention to your split-step timing.
+                            </p>
                           </div>
                         )}
                       </div>
@@ -158,6 +182,17 @@ export default function Curriculum() {
                       <p className="text-[10px] text-muted-foreground">{m.label} · {m.progress}</p>
                     </div>
                   ))}
+                </div>
+
+                {/* Next Reward Unlock */}
+                <div className="mt-5 p-4 rounded-xl bg-gradient-to-br from-primary/8 to-primary/3 border border-primary/15">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Gift size={14} className="text-primary" />
+                    <span className="text-xs font-bold text-foreground">Next Reward Unlock</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-3">Complete 2 more modules → <span className="text-primary font-medium">Signed Pro Paddle 🏓</span></p>
+                  <Progress value={(completedCount / 4) * 100} className="h-2" />
+                  <p className="text-[10px] text-muted-foreground mt-1.5">{completedCount}/4 modules complete</p>
                 </div>
               </div>
             </ScrollReveal>

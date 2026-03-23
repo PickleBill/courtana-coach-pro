@@ -1,32 +1,39 @@
 import { Coach } from '@/data/mockData';
-import { Star, Users, Clock, Crown, ShieldCheck, Sparkles } from 'lucide-react';
+import { Star, Users, Clock, Crown, ShieldCheck, Sparkles, Play } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { motion } from 'framer-motion';
 
 const tierConfig = {
   celebrity: {
     border: 'border-[hsl(var(--gold))]/30',
+    hoverBorder: 'hover:border-[hsl(var(--gold))]/50',
     badge: 'bg-[hsl(var(--gold))]/15 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/30',
     label: 'Celebrity Pro',
     icon: Crown,
     glow: 'glow-gold',
+    hoverGlow: 'hover:shadow-[0_0_50px_-10px_hsla(43,96%,56%,0.3)]',
     avatarBg: 'bg-[hsl(var(--gold))]/15',
     avatarText: 'text-[hsl(var(--gold))]',
   },
   certified: {
     border: 'border-primary/20',
+    hoverBorder: 'hover:border-primary/40',
     badge: 'bg-primary/12 text-primary border-primary/25',
     label: 'Pro Verified',
     icon: ShieldCheck,
     glow: '',
+    hoverGlow: 'hover:shadow-[0_0_40px_-10px_hsla(145,100%,45%,0.2)]',
     avatarBg: 'bg-primary/10',
     avatarText: 'text-primary',
   },
   rising: {
     border: 'border-blue-400/20',
+    hoverBorder: 'hover:border-blue-400/40',
     badge: 'bg-blue-500/12 text-blue-400 border-blue-500/25',
     label: 'Draft Pick',
     icon: Sparkles,
     glow: '',
+    hoverGlow: 'hover:shadow-[0_0_40px_-10px_hsla(210,100%,60%,0.2)]',
     avatarBg: 'bg-blue-500/10',
     avatarText: 'text-blue-400',
   },
@@ -37,10 +44,16 @@ export default function CoachCard({ coach }: { coach: Coach }) {
   const TierIcon = config.icon;
 
   return (
-    <div className={`glass rounded-xl p-5 glass-hover card-shine group cursor-pointer active:scale-[0.97] transition-all duration-300 ${config.border} ${config.glow} hover:scale-[1.02]`}>
+    <div className={`glass rounded-xl p-5 glass-hover card-shine group cursor-pointer active:scale-[0.97] transition-all duration-300 ${config.border} ${config.glow} ${config.hoverBorder} ${config.hoverGlow} hover:scale-[1.02]`}>
       <div className="flex items-start gap-4">
-        <div className={`w-14 h-14 rounded-xl ${config.avatarBg} flex items-center justify-center font-display font-bold text-lg ${config.avatarText} shrink-0 ring-1 ring-white/5`}>
+        <div className={`w-14 h-14 rounded-xl ${config.avatarBg} flex items-center justify-center font-display font-bold text-lg ${config.avatarText} shrink-0 ring-1 ring-white/5 relative`}>
           {coach.avatar}
+          {/* Video message indicator for celebrities */}
+          {coach.tier === 'celebrity' && (
+            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-primary flex items-center justify-center shadow-sm">
+              <Play size={8} className="text-primary-foreground ml-px" />
+            </div>
+          )}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
@@ -64,6 +77,15 @@ export default function CoachCard({ coach }: { coach: Coach }) {
             {s}
           </span>
         ))}
+      </div>
+
+      {/* Hover reveal info */}
+      <div className="h-0 group-hover:h-6 overflow-hidden transition-all duration-300 mt-0 group-hover:mt-2">
+        <p className="text-[10px] text-muted-foreground flex items-center gap-3">
+          <span>Avg response: 2.4 hrs</span>
+          <span>·</span>
+          <span>Last review: 12 min ago</span>
+        </p>
       </div>
 
       <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/30">

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -28,13 +29,26 @@ export default function Footer() {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link to="/scout" className="hover:text-foreground transition-colors">Scout & Draft</Link></li>
               <li><Link to="/dashboard" className="hover:text-foreground transition-colors">Coach Dashboard</Link></li>
-              <li><a href="https://courtana.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Courtana.com</a></li>
+              <li>
+                <a href="https://courtana.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors flex items-center gap-1">
+                  Courtana.com <ExternalLink size={10} />
+                </a>
+              </li>
             </ul>
           </div>
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-3">Partners</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="https://courtkings.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Court Kings</a></li>
+              <li>
+                <a href="https://courtkings.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors flex items-center gap-1">
+                  Court Kings <ExternalLink size={10} />
+                </a>
+              </li>
+              <li>
+                <a href="https://courtkings.com/community-partners/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors flex items-center gap-1">
+                  Court Kings Partners <ExternalLink size={10} />
+                </a>
+              </li>
               <li><span>PPA Tour</span></li>
               <li><span>USA Pickleball</span></li>
             </ul>
@@ -42,7 +56,9 @@ export default function Footer() {
         </div>
         <div className="mt-10 pt-6 border-t border-border/30 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
           <span>© 2026 Courtana. All rights reserved.</span>
-          <span>Powered by Courtana Smart Court Technology</span>
+          <a href="https://courtana.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-foreground transition-colors">
+            Powered by Courtana Smart Court Technology <ExternalLink size={10} />
+          </a>
         </div>
       </div>
     </footer>

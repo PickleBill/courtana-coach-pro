@@ -2,7 +2,7 @@ import { dashboardMetrics, coaches } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { DollarSign, Clock, Users, TrendingUp, CheckCircle, BarChart3, Crown, Timer, ArrowRight, Zap } from 'lucide-react';
+import { DollarSign, Clock, Users, TrendingUp, CheckCircle, BarChart3, Crown, Timer, ArrowRight, Zap, Video, MessageSquare, UserPlus } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const metricCards = [
@@ -20,6 +20,14 @@ const recentReviews = [
   { student: 'Sam K.', type: 'Serve Breakdown', time: '4.5 min', earned: '$95', status: 'completed' },
   { student: 'Pat W.', type: 'Match Analysis', time: '—', earned: '$120', status: 'pending' },
   { student: 'Casey L.', type: 'Curriculum Check-in', time: '—', earned: '$65', status: 'pending' },
+];
+
+const recentActivity = [
+  { icon: Video, text: 'Tyler R. submitted a new video for review', time: '4 min ago', color: 'text-primary' },
+  { icon: CheckCircle, text: 'Maya O. completed Module 3 of her curriculum', time: '1 hr ago', color: 'text-primary' },
+  { icon: UserPlus, text: 'New rising star applied to your network', time: '2 hrs ago', color: 'text-blue-400' },
+  { icon: MessageSquare, text: 'Alex T. replied to your feedback on serve analysis', time: '3 hrs ago', color: 'text-[hsl(var(--gold))]' },
+  { icon: DollarSign, text: 'Revenue share payout of $1,280 from Ben Johns processed', time: '6 hrs ago', color: 'text-primary' },
 ];
 
 export default function Dashboard() {
@@ -41,23 +49,27 @@ export default function Dashboard() {
           </div>
         </ScrollReveal>
 
-        {/* Time leverage highlight */}
+        {/* Time leverage highlight — LARGE AND PROMINENT */}
         <ScrollReveal>
-          <div className="glass rounded-2xl p-6 mb-8 relative overflow-hidden glow-sm">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/4 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-primary/12 border border-primary/15 flex items-center justify-center">
-                  <Zap size={24} className="text-primary" />
+          <div className="glass rounded-2xl p-8 mb-8 relative overflow-hidden glow-sm">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent pointer-events-none" />
+            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+              <div className="flex items-center gap-5">
+                <div className="w-16 h-16 rounded-2xl bg-primary/12 border border-primary/15 flex items-center justify-center">
+                  <Zap size={28} className="text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-display font-bold text-foreground text-lg">Time Leverage This Week</h3>
-                  <p className="text-sm text-muted-foreground">You reviewed <span className="text-primary font-semibold">{dashboardMetrics.completedThisWeek} sessions</span>, earning <span className="text-primary font-semibold">${(dashboardMetrics.completedThisWeek * 78).toLocaleString()}</span> in <span className="text-primary font-semibold">~1.6 hours</span></p>
+                  <h3 className="font-display font-bold text-foreground text-xl mb-1">Time Leverage This Week</h3>
+                  <p className="text-muted-foreground">
+                    You reviewed <span className="text-primary font-semibold">{dashboardMetrics.completedThisWeek} sessions</span>, earning <span className="text-primary font-semibold">${(dashboardMetrics.completedThisWeek * 78).toLocaleString()}</span> in <span className="text-primary font-semibold">~1.6 hours</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">Traditional 1:1 coaching would take ~{dashboardMetrics.completedThisWeek} hours for the same revenue</p>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="stat-number text-2xl text-primary">$1,122/hr</div>
-                <div className="text-xs text-muted-foreground">effective rate</div>
+              <div className="text-right lg:text-right">
+                <div className="stat-number text-4xl text-primary">$1,122/hr</div>
+                <div className="text-xs text-muted-foreground">effective hourly rate</div>
+                <div className="text-[10px] text-primary mt-1">14x traditional coaching rate</div>
               </div>
             </div>
           </div>
@@ -85,55 +97,100 @@ export default function Dashboard() {
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Recent reviews */}
-          <div className="lg:col-span-2">
-            <ScrollReveal>
-              <h2 className="font-display text-xl font-bold mb-5">Recent Reviews</h2>
-            </ScrollReveal>
-            <div className="space-y-2">
-              {recentReviews.map((r, i) => (
-                <ScrollReveal key={i} delay={i * 0.06}>
-                  <motion.div
-                    whileHover={{ scale: 1.01 }}
-                    className="glass rounded-xl p-4 flex items-center justify-between glass-hover cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-secondary/60 border border-border/30 flex items-center justify-center text-xs font-bold text-foreground">
-                        {r.student.charAt(0)}{r.student.split(' ')[1]?.charAt(0)}
+          <div className="lg:col-span-2 space-y-8">
+            <div>
+              <ScrollReveal>
+                <h2 className="font-display text-xl font-bold mb-5">Recent Reviews</h2>
+              </ScrollReveal>
+              <div className="space-y-2">
+                {recentReviews.map((r, i) => (
+                  <ScrollReveal key={i} delay={i * 0.06}>
+                    <motion.div
+                      whileHover={{ scale: 1.01 }}
+                      className="glass rounded-xl p-4 flex items-center justify-between glass-hover cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-secondary/60 border border-border/30 flex items-center justify-center text-xs font-bold text-foreground">
+                          {r.student.charAt(0)}{r.student.split(' ')[1]?.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-foreground">{r.student}</p>
+                          <p className="text-xs text-muted-foreground">{r.type}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-semibold text-foreground">{r.student}</p>
-                        <p className="text-xs text-muted-foreground">{r.type}</p>
+                      <div className="flex items-center gap-4">
+                        {r.time !== '—' && <span className="text-xs text-muted-foreground hidden sm:block">{r.time}</span>}
+                        <span className="stat-number text-base text-foreground">{r.earned}</span>
+                        <Badge variant="outline" className={`text-[10px] ${
+                          r.status === 'completed'
+                            ? 'text-primary border-primary/25 bg-primary/8'
+                            : 'text-[hsl(var(--gold))] border-[hsl(var(--gold))]/25 bg-[hsl(var(--gold))]/8'
+                        }`}>
+                          {r.status === 'completed' ? <CheckCircle size={9} className="mr-0.5" /> : <Clock size={9} className="mr-0.5" />}
+                          {r.status}
+                        </Badge>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      {r.time !== '—' && <span className="text-xs text-muted-foreground hidden sm:block">{r.time}</span>}
-                      <span className="stat-number text-base text-foreground">{r.earned}</span>
-                      <Badge variant="outline" className={`text-[10px] ${
-                        r.status === 'completed'
-                          ? 'text-primary border-primary/25 bg-primary/8'
-                          : 'text-[hsl(var(--gold))] border-[hsl(var(--gold))]/25 bg-[hsl(var(--gold))]/8'
-                      }`}>
-                        {r.status === 'completed' ? <CheckCircle size={9} className="mr-0.5" /> : <Clock size={9} className="mr-0.5" />}
-                        {r.status}
-                      </Badge>
-                    </div>
-                  </motion.div>
-                </ScrollReveal>
-              ))}
+                    </motion.div>
+                  </ScrollReveal>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Network sidebar */}
+          {/* Sidebar */}
           <div className="space-y-5">
+            {/* Recent Activity Feed */}
+            <ScrollReveal delay={0.05}>
+              <div className="glass rounded-2xl p-5">
+                <h3 className="font-display font-bold text-foreground mb-4">Recent Activity</h3>
+                <div className="space-y-3">
+                  {recentActivity.map((activity, i) => {
+                    const ActivityIcon = activity.icon;
+                    return (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className={`w-7 h-7 rounded-lg bg-secondary/40 flex items-center justify-center shrink-0 mt-0.5`}>
+                          <ActivityIcon size={12} className={activity.color} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs text-foreground leading-relaxed">{activity.text}</p>
+                          <p className="text-[10px] text-muted-foreground/50 mt-0.5">{activity.time}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </ScrollReveal>
+
+            {/* Network Overview */}
             <ScrollReveal delay={0.1}>
               <div className="glass rounded-2xl p-5 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--gold))]/3 to-transparent pointer-events-none" />
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-4">
                     <Crown size={14} className="text-[hsl(var(--gold))]" />
-                    <h3 className="font-display font-bold text-foreground">Your Network</h3>
+                    <h3 className="font-display font-bold text-foreground">Network Overview</h3>
                   </div>
                   <p className="text-xs text-muted-foreground mb-4">You are part of the <span className="text-[hsl(var(--gold))] font-semibold">Ben Johns</span> coaching network</p>
+
+                  {/* Rev share chain */}
+                  <div className="space-y-2 mb-4 p-3 rounded-lg bg-secondary/20 border border-border/15">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-[hsl(var(--gold))] font-medium">Ben Johns (Celebrity)</span>
+                      <span className="text-[hsl(var(--gold))] font-semibold">40%</span>
+                    </div>
+                    <div className="text-center text-muted-foreground/30 text-xs">↓</div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-primary font-medium">You (Certified)</span>
+                      <span className="text-primary font-semibold">45%</span>
+                    </div>
+                    <div className="text-center text-muted-foreground/30 text-xs">↓</div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-muted-foreground font-medium">Platform</span>
+                      <span className="text-muted-foreground font-semibold">15%</span>
+                    </div>
+                  </div>
+
                   <div className="space-y-2">
                     {certifiedCoaches.map((c) => (
                       <div key={c.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/30 transition-colors cursor-pointer">
@@ -149,6 +206,7 @@ export default function Dashboard() {
               </div>
             </ScrollReveal>
 
+            {/* Revenue Share */}
             <ScrollReveal delay={0.15}>
               <div className="glass rounded-2xl p-5">
                 <h3 className="font-display font-bold text-foreground mb-4">Revenue Share</h3>
