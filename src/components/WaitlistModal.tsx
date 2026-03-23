@@ -52,7 +52,7 @@ export default function WaitlistModal({ open, onClose, context }: Props) {
             initial={{ scale: 0.95, y: 20 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.95, y: 20 }}
-            className="w-full max-w-sm bg-card border border-border/40 rounded-2xl overflow-hidden shadow-2xl"
+            className="w-full max-w-sm bg-card border border-border/40 rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
           >
             <div className="p-5 border-b border-border/30 flex items-center justify-between">
               <h3 className="font-display font-bold text-foreground flex items-center gap-2">
