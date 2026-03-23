@@ -110,10 +110,10 @@ export default function AIHub() {
               <h3 className="font-display text-xl font-bold text-foreground mb-1">Upload Match Video</h3>
               <p className="text-sm text-muted-foreground mb-6">Drag & drop or click to upload. MP4, MOV up to 500MB.</p>
               <div className="flex justify-center gap-3">
-                <Button className="active:scale-95 transition-transform glow-sm gap-1.5 px-6">
+                <Button className="active:scale-95 transition-transform glow-sm gap-1.5 px-6" onClick={() => { toast({ title: '📤 Video upload launches with your Courtana session.' }); setTimeout(() => window.open('https://courtana.com/ai-analysis/', '_blank'), 300); }}>
                   <Upload size={14} /> Upload Video
                 </Button>
-                <Button variant="outline" className="active:scale-95 transition-transform gap-1.5 px-6 border-border/50 hover:border-primary/20">
+                <Button variant="outline" className="active:scale-95 transition-transform gap-1.5 px-6 border-border/50 hover:border-primary/20" onClick={() => window.open('https://courtana.com/ai-analysis/', '_blank')}>
                   <Wifi size={14} /> Connect Courtana Session
                 </Button>
               </div>
