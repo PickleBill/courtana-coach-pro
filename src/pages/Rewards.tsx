@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import { rewards } from '@/data/mockData';
@@ -6,8 +7,8 @@ import usePageTitle from '@/hooks/usePageTitle';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Lock, Trophy, Star, ArrowRight, ExternalLink, ShoppingBag, Crown, Ticket, Wrench, Zap } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Lock, Trophy, Star, ArrowRight, ExternalLink, ShoppingBag, Crown, Ticket, Wrench, Zap, CheckCircle, Calendar, Gift } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import CourtKingsShop from '@/components/CourtKingsShop';
 
 const tierStyles = {
@@ -26,7 +27,6 @@ const partnerReward = {
   link: 'https://freak-flow-hub.lovable.app/',
 };
 
-// Court Kings gear reward (V4c)
 const courtKingsReward = {
   title: 'Court Kings Pro Builder Cap + Gear Kit',
   description: 'Exclusive branded gear from the #1 pickleball court builder. Includes pro cap, training towel, and facility access pass.',
@@ -35,12 +35,18 @@ const courtKingsReward = {
 };
 
 const experienceRewards = [
-  { title: 'VIP Court Kings Facility Tour', desc: 'Behind-the-scenes tour of a flagship Court Kings facility with the construction team.', tier: 'platinum' as const, icon: '🏗️' },
-  { title: 'Pro Practice Session with Ben Johns', desc: '60-minute practice session. 500 XP to unlock.', tier: 'platinum' as const, icon: '👑' },
+  { title: 'VIP Court Kings Facility Tour', desc: 'Behind-the-scenes tour of a flagship Court Kings facility with the construction team.', tier: 'platinum' as const, icon: '🏗️', action: 'schedule' },
+  { title: 'Pro Practice Session with Ben Johns', desc: '60-minute practice session. 500 XP to unlock.', tier: 'platinum' as const, icon: '👑', action: 'book' },
 ];
 
 export default function Rewards() {
   usePageTitle('Rewards — Courtana Coaching');
+  const [claimed, setClaimed] = useState<Set<string>>(new Set());
+
+  const handleClaim = (id: string, title: string) => {
+    setClaimed(prev => new Set(prev).add(id));
+    toast({ title: '🎉 Claimed!', description: `${title} — you'll receive details within 24 hours.` });
+  };
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -121,14 +127,43 @@ export default function Rewards() {
                   <div className="p-5 relative z-10">
                     <h3 className="font-display font-bold text-foreground mb-1">{exp.title}</h3>
                     <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{exp.desc}</p>
-                    <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs" onClick={() => toast({ title: exp.title === 'Pro Practice Session with Ben Johns' ? 'Play With a Pro' : '🎁 Reward details coming soon', description: exp.title === 'Pro Practice Session with Ben Johns' ? 'Limited to 8 spots. Book your experience at a Court Kings facility near you.' : 'Check back after the Court Kings pilot launch.' })}>
-                      View Details <ArrowRight size={12} />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full active:scale-95 transition-transform text-xs gap-1.5"
+                      onClick={() => toast({
+                        title: exp.action === 'book' ? '🎾 Play With a Pro' : '🏗️ VIP Facility Tour',
+                        description: exp.action === 'book'
+                          ? 'Limited to 8 spots. Book your experience at a Court Kings facility near you.'
+                          : 'Schedule a private tour with the Court Kings construction team. Available Q2 2026.'
+                      })}
+                    >
+                      {exp.action === 'book' ? <><Calendar size={11} /> Book Your Slot</> : <><Calendar size={11} /> Schedule Tour</>}
                     </Button>
                   </div>
                 </motion.div>
               </ScrollReveal>
             );
           })}
+
+          {/* Courtana Badge reward */}
+          <ScrollReveal delay={0.12}>
+            <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className="glass rounded-2xl overflow-hidden glass-hover border border-primary/20 relative">
+              <div className="h-28 bg-primary/8 relative flex items-center justify-center">
+                <span className="text-5xl">🏅</span>
+                <Badge variant="outline" className="absolute top-3 right-3 text-[10px] bg-primary/10 text-primary border-primary/20">Courtana</Badge>
+              </div>
+              <div className="p-5 relative z-10">
+                <h3 className="font-display font-bold text-foreground mb-1">Earn Your First Courtana Badge</h3>
+                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">Complete a session on a Courtana-powered court and earn your first achievement badge.</p>
+                <a href="https://courtana.com/badge/WA5jqyzL64ga/" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs border-primary/30 text-primary hover:bg-primary/10 gap-1">
+                    View Badge <ExternalLink size={11} />
+                  </Button>
+                </a>
+              </div>
+            </motion.div>
+          </ScrollReveal>
 
           {/* Partner reward card */}
           <ScrollReveal delay={0}>
@@ -154,7 +189,7 @@ export default function Rewards() {
             </motion.div>
           </ScrollReveal>
 
-          {/* Court Kings gear card (V4c) */}
+          {/* Court Kings gear card */}
           <ScrollReveal delay={0.05}>
             <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className="glass rounded-2xl overflow-hidden glass-hover border border-slate-400/20 relative">
               <div className="absolute inset-0 rounded-2xl pointer-events-none overflow-hidden">
@@ -178,8 +213,14 @@ export default function Rewards() {
                   </div>
                   <Progress value={100} className="h-2" />
                 </div>
-                <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs border-primary/30 text-primary hover:bg-primary/10 gap-1" onClick={() => toast({ title: '👑 Court Kings gear claim submitted!', description: 'Shipping details within 24 hours.' })}>
-                  Claim <ArrowRight size={11} />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`w-full active:scale-95 transition-transform text-xs gap-1 ${claimed.has('ck-gear') ? 'border-primary/30 text-primary bg-primary/5' : 'border-primary/30 text-primary hover:bg-primary/10'}`}
+                  onClick={() => handleClaim('ck-gear', courtKingsReward.title)}
+                  disabled={claimed.has('ck-gear')}
+                >
+                  {claimed.has('ck-gear') ? <><CheckCircle size={11} /> Claimed!</> : <>Claim <ArrowRight size={11} /></>}
                 </Button>
               </div>
             </motion.div>
@@ -188,6 +229,7 @@ export default function Rewards() {
           {rewards.map((reward, i) => {
             const style = tierStyles[reward.tier];
             const isLocked = playerProgress.points < reward.pointsRequired;
+            const isClaimed = claimed.has(reward.id);
             return (
               <ScrollReveal key={reward.id} delay={(i + 2) * 0.08}>
                 <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className={`glass rounded-2xl overflow-hidden glass-hover border ${style.border} ${style.glow} relative`}>
@@ -213,8 +255,22 @@ export default function Rewards() {
                       <div className="flex items-center gap-1 text-xs text-[hsl(var(--gold))]">
                         <Star size={11} /> {reward.spotsRemaining} {reward.spotsRemaining === 1 ? 'spot' : 'spots'} left
                       </div>
-                       <Button variant="outline" size="sm" className={`active:scale-95 transition-transform text-xs ${!isLocked ? 'border-primary/30 text-primary hover:bg-primary/10' : ''}`} onClick={() => toast({ title: isLocked ? '🔒 Reward locked' : '🎁 Reward details coming soon', description: isLocked ? `Earn ${reward.pointsRequired - playerProgress.points} more XP to unlock.` : 'Check back after the Court Kings pilot launch.' })}>
-                         {isLocked ? 'View Details' : 'Claim'} <ArrowRight size={12} />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className={`active:scale-95 transition-transform text-xs gap-1 ${!isLocked && !isClaimed ? 'border-primary/30 text-primary hover:bg-primary/10' : ''}`}
+                        onClick={() => {
+                          if (isLocked) {
+                            toast({ title: '🔒 Reward locked', description: `Earn ${reward.pointsRequired - playerProgress.points} more XP to unlock.` });
+                          } else if (isClaimed) {
+                            return;
+                          } else {
+                            handleClaim(reward.id, reward.title);
+                          }
+                        }}
+                        disabled={isClaimed}
+                      >
+                        {isClaimed ? <><CheckCircle size={11} /> Claimed</> : isLocked ? <>View Details <ArrowRight size={12} /></> : <>Claim for {reward.pointsRequired} XP <ArrowRight size={12} /></>}
                       </Button>
                     </div>
                   </div>
@@ -222,10 +278,9 @@ export default function Rewards() {
               </ScrollReveal>
             );
           })}
-
         </div>
 
-        {/* Earn XP at Court Kings (V5c) */}
+        {/* Earn XP at Court Kings */}
         <ScrollReveal>
           <div className="glass rounded-2xl p-6 mt-10 relative overflow-hidden glow border-primary/15">
             <div className="absolute inset-0 bg-gradient-to-r from-primary/4 to-transparent pointer-events-none" />
@@ -235,7 +290,7 @@ export default function Rewards() {
                   <Zap size={16} className="text-primary" />
                   <span className="font-display font-bold text-foreground">Earn XP at Court Kings Facilities</span>
                 </div>
-                <p className="text-sm text-muted-foreground">Play on a Courtana-powered Court Kings court and automatically earn 2x XP on every session. Your progress syncs in real time.</p>
+                <p className="text-sm text-muted-foreground">Play on a Courtana-powered Court Kings court and automatically earn 2x XP on every session.</p>
               </div>
               <Button className="shrink-0 gap-1.5 glow-sm active:scale-95 transition-transform" asChild>
                 <Link to="/ai-hub">Find a Court <ArrowRight size={14} /></Link>
@@ -244,7 +299,6 @@ export default function Rewards() {
           </div>
         </ScrollReveal>
 
-        {/* Court Kings Shop (V5c) */}
         <CourtKingsShop />
       </div>
     </div>
