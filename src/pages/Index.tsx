@@ -293,6 +293,9 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Court Availability Marquee (V5c) */}
+      <CourtAvailabilityBar />
+
       {/* Activity ticker */}
       <ActivityTicker />
 
