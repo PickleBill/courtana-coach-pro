@@ -60,17 +60,42 @@ export default function AIHub() {
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4">
         <ScrollReveal>
-          <div className="flex items-start justify-between flex-wrap gap-4 mb-10">
+          <div className="flex items-start justify-between flex-wrap gap-4 mb-4">
             <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs gap-1 badge-glow">
+                  <Sparkles size={10} /> CourtSense™ Shot Analysis
+                </Badge>
+                <Badge variant="outline" className="bg-blue-400/10 text-blue-400 border-blue-400/20 text-[10px] gap-1 animate-pulse">
+                  <Zap size={8} /> Analyzing
+                </Badge>
+              </div>
               <h1 className="font-display text-4xl lg:text-5xl font-bold mb-2">AI Coaching Hub</h1>
               <p className="text-muted-foreground max-w-lg text-lg">
                 Upload a video or connect your Courtana session. Our AI breaks down every shot — then a pro adds the human touch.
               </p>
             </div>
-            {/* AI Confidence badge (V4c/V4d) */}
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-sm px-4 py-2 badge-glow gap-1.5">
-              <ShieldCheck size={14} /> AI Confidence: 94.2%
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" className="gap-1.5 border-primary/25 text-primary hover:bg-primary/10 active:scale-95 transition-transform" onClick={() => setMatchOpen(true)}>
+                <Users size={14} /> Find Players
+              </Button>
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-sm px-4 py-2 badge-glow gap-1.5">
+                <ShieldCheck size={14} /> AI Confidence: 94.2%
+              </Badge>
+            </div>
+          </div>
+          {/* Data layer stats row */}
+          <div className="flex flex-wrap gap-4 mb-10 text-xs text-muted-foreground">
+            {[
+              { label: 'Frames Processed', value: '14,847' },
+              { label: 'Shot Events Detected', value: '312' },
+              { label: 'Player Tracking Points', value: '89,201' },
+              { label: 'Model Version', value: 'CourtSense v3.2' },
+            ].map((d) => (
+              <span key={d.label} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary/20 border border-border/15">
+                <span className="text-foreground font-medium">{d.value}</span> {d.label}
+              </span>
+            ))}
           </div>
         </ScrollReveal>
 
