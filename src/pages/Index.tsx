@@ -79,6 +79,8 @@ function Particles() {
 
 export default function Index() {
   usePageTitle('Courtana Coaching — King of the Court');
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const [waitlistContext, setWaitlistContext] = useState('');
 
   return (
     <div className="min-h-screen">
