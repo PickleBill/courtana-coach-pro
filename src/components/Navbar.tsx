@@ -33,11 +33,7 @@ export default function Navbar() {
 
   const isMoreActive = moreLinks.some(l => l.path === location.pathname);
 
-  const scrollToPartner = () => {
-    const el = document.getElementById('court-kings-partnership');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-    else window.location.href = '/#court-kings-partnership';
-  };
+  // No-op — CTA now navigates via Link
 
   return (
     <>
