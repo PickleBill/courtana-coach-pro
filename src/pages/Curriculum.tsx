@@ -30,6 +30,7 @@ const milestones = [
 
 export default function Curriculum() {
   usePageTitle('Your Curriculum — Courtana Coaching');
+  const [uploadOpen, setUploadOpen] = useState(false);
 
   return (
     <div className="min-h-screen pt-24 pb-16">
