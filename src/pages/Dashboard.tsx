@@ -122,7 +122,7 @@ export default function Dashboard() {
         </ScrollReveal>
 
         {/* Metric cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
           {metricCards.map((m, i) => (
             <ScrollReveal key={m.label} delay={i * 0.06}>
               <Card className={`glass border-border/30 ${m.highlight ? 'border-primary/20 glow-sm' : ''} ${(m as any).urgent ? 'border-[hsl(var(--gold))]/25' : ''}`}>
