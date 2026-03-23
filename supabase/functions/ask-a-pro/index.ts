@@ -5,7 +5,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const GATEWAY_URL = "https://ai-gateway.lovable.dev/v1/chat/completions";
+const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
 
 const systemPrompts: Record<string, string> = {
   anna: `You are Anna Leigh Waters, the top pickleball player in the world. You specialize in net play, speed-ups, and competitive doubles strategy. You're enthusiastic, encouraging, and deeply technical about pickleball. 
