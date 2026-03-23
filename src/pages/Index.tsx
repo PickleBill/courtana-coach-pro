@@ -11,7 +11,7 @@ import LiveCounter from '@/components/LiveCounter';
 import { coaches } from '@/data/mockData';
 import CoachCard from '@/components/CoachCard';
 import usePageTitle from '@/hooks/usePageTitle';
-import { ArrowRight, Zap, Users, Trophy, Brain, TrendingUp, Shield, Crown, Gamepad2, Activity, ExternalLink, Play, Globe, Camera, Sparkles, Quote, DollarSign, Clock, BarChart3 } from 'lucide-react';
+import { ArrowRight, Zap, Users, Trophy, Brain, TrendingUp, Shield, Crown, Gamepad2, Activity, ExternalLink, Play, Globe, Camera, Sparkles, Quote, DollarSign, Clock, BarChart3, Radio } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 
@@ -459,6 +459,52 @@ export default function Index() {
                 </div>
               </div>
             </ScrollReveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Tune In Live */}
+      <section className="py-20 lg:py-24">
+        <div className="container mx-auto px-4">
+          <ScrollReveal>
+            <div className="text-center mb-12">
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs mb-4 badge-glow">
+                <Radio size={10} className="mr-1" /> Live Now
+              </Badge>
+              <h2 className="font-display text-3xl lg:text-4xl font-bold mb-3" style={{ textWrap: 'balance' as any }}>Tune In Live</h2>
+              <p className="text-muted-foreground max-w-md mx-auto">Watch real sessions happening right now on Courtana-powered courts.</p>
+            </div>
+          </ScrollReveal>
+          <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
+            {[
+              { title: 'Live at Seven Oaks (Outdoor)', desc: 'Watch outdoor sessions in real-time from our Seven Oaks facility.', url: 'https://courtana.com/display/3AELvCgGmzas/', location: 'Seven Oaks, TN' },
+              { title: 'Live at The Underground', desc: 'Indoor sessions from our flagship Underground facility.', url: 'https://courtana.com/display/Sy6gIO44K3MG/', location: 'Nashville, TN' },
+            ].map((feed, i) => (
+              <ScrollReveal key={feed.title} delay={i * 0.1}>
+                <a href={feed.url} target="_blank" rel="noopener noreferrer" className="block h-full">
+                  <motion.div whileHover={{ scale: 1.03, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className="glass rounded-2xl p-6 glass-hover group h-full relative overflow-hidden">
+                    <div className="absolute top-4 right-4 flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                      <span className="text-[10px] text-red-400 font-semibold uppercase tracking-wider">Live</span>
+                    </div>
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center mb-4">
+                      <Radio size={20} className="text-primary" />
+                    </div>
+                    <h3 className="font-display font-bold text-foreground mb-1">{feed.title}</h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed mb-3">{feed.desc}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] text-muted-foreground">{feed.location}</span>
+                      <span className="text-xs text-primary font-medium flex items-center gap-1 group-hover:gap-2 transition-all">Watch <ExternalLink size={11} /></span>
+                    </div>
+                  </motion.div>
+                </a>
+              </ScrollReveal>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <a href="https://courtana.com/signup/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline font-medium">
+              Try Courtana Free — Sign Up <ExternalLink size={12} />
+            </a>
           </div>
         </div>
       </section>

@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { Coach } from '@/data/mockData';
 import { Star, Users, Clock, Crown, ShieldCheck, Sparkles, Play } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import BookingModal from '@/components/BookingModal';
 import { motion } from 'framer-motion';
 
 const tierConfig = {
@@ -42,8 +45,10 @@ const tierConfig = {
 export default function CoachCard({ coach }: { coach: Coach }) {
   const config = tierConfig[coach.tier];
   const TierIcon = config.icon;
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   return (
+    <>
     <div className={`glass rounded-xl p-5 glass-hover card-shine group cursor-pointer active:scale-[0.97] transition-all duration-300 ${config.border} ${config.glow} ${config.hoverBorder} ${config.hoverGlow} hover:scale-[1.02]`}>
       <div className="flex items-start gap-4">
         <div className={`w-14 h-14 rounded-xl ${config.avatarBg} flex items-center justify-center font-display font-bold text-lg ${config.avatarText} shrink-0 ring-1 ring-white/5 relative`}>
@@ -98,10 +103,17 @@ export default function CoachCard({ coach }: { coach: Coach }) {
             </span>
           )}
         </div>
-        <span className="font-display font-bold text-foreground text-lg">
-          ${coach.price}<span className="text-xs text-muted-foreground font-normal ml-1">{coach.priceLabel}</span>
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="font-display font-bold text-foreground text-lg">
+            ${coach.price}<span className="text-xs text-muted-foreground font-normal ml-1">{coach.priceLabel}</span>
+          </span>
+          <Button size="sm" className="glow-sm active:scale-95 transition-transform text-xs h-8 px-3" onClick={(e) => { e.stopPropagation(); setBookingOpen(true); }}>
+            Book
+          </Button>
+        </div>
       </div>
     </div>
+    <BookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} coach={coach} />
+    </>
   );
 }

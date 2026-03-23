@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { curriculumItems } from '@/data/mockData';
 import { toast } from '@/hooks/use-toast';
 import ScrollReveal from '@/components/ScrollReveal';
+import VideoUploadModal from '@/components/VideoUploadModal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -28,6 +30,7 @@ const milestones = [
 
 export default function Curriculum() {
   usePageTitle('Your Curriculum — Courtana Coaching');
+  const [uploadOpen, setUploadOpen] = useState(false);
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -139,7 +142,7 @@ export default function Curriculum() {
                               </Button>
                             </div>
                             {/* Upload zone */}
-                            <div className="mt-3 p-4 rounded-lg border-2 border-dashed border-border/30 hover:border-primary/20 transition-colors cursor-pointer text-center group">
+                            <div onClick={() => setUploadOpen(true)} className="mt-3 p-4 rounded-lg border-2 border-dashed border-border/30 hover:border-primary/20 transition-colors cursor-pointer text-center group">
                               <Upload size={18} className="mx-auto text-muted-foreground/40 group-hover:text-primary/60 transition-colors mb-1" />
                               <p className="text-[10px] text-muted-foreground">Upload Practice Video · MP4, MOV up to 500MB</p>
                             </div>
@@ -206,6 +209,7 @@ export default function Curriculum() {
           </div>
         </div>
       </div>
+      <VideoUploadModal open={uploadOpen} onClose={() => setUploadOpen(false)} />
     </div>
   );
 }

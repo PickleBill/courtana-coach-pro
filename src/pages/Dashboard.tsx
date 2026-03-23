@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReviewModal from '@/components/ReviewModal';
 import { dashboardMetrics, coaches } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
 import CoachingCalculator from '@/components/CoachingCalculator';
@@ -50,6 +51,8 @@ const maxEarning = Math.max(...weeklyEarnings.map(d => d.amount));
 
 export default function Dashboard() {
   const [showBanner, setShowBanner] = useState(true);
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [selectedReview, setSelectedReview] = useState<typeof recentReviews[0] | null>(null);
   usePageTitle('Coach Dashboard — Courtana Coaching');
   const navigate = useNavigate();
   const certifiedCoaches = coaches.filter((c) => c.tier === 'certified');
@@ -176,7 +179,7 @@ export default function Dashboard() {
               <div className="space-y-2">
                 {recentReviews.map((r, i) => (
                   <ScrollReveal key={i} delay={i * 0.06}>
-                    <motion.div whileHover={{ scale: 1.01 }} className="glass rounded-xl p-4 flex items-center justify-between glass-hover cursor-pointer">
+                    <motion.div whileHover={{ scale: 1.01 }} className="glass rounded-xl p-4 flex items-center justify-between glass-hover cursor-pointer" onClick={() => { setSelectedReview(r); setReviewOpen(true); }}>
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-secondary/60 border border-border/30 flex items-center justify-center text-xs font-bold text-foreground">
                           {r.student.charAt(0)}{r.student.split(' ')[1]?.charAt(0)}
@@ -300,6 +303,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      <ReviewModal open={reviewOpen} onClose={() => setReviewOpen(false)} review={selectedReview} />
     </div>
   );
 }

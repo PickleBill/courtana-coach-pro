@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { risingStars, coaches } from '@/data/mockData';
+import WaitlistModal from '@/components/WaitlistModal';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +12,8 @@ export default function Scout() {
   usePageTitle('Scout & Draft — Courtana Coaching');
   const celebrities = coaches.filter((c) => c.tier === 'celebrity');
   const [showRevShare, setShowRevShare] = useState(true);
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const [waitlistCtx, setWaitlistCtx] = useState('');
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -116,9 +119,9 @@ export default function Scout() {
                     ))}
                   </div>
                   <div className="flex gap-2">
-                    <Button className="flex-1 active:scale-95 transition-transform glow-sm font-semibold gap-1.5 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
-                      Offer Contract <ArrowRight size={14} />
-                    </Button>
+                     <Button className="flex-1 active:scale-95 transition-transform glow-sm font-semibold gap-1.5 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70" onClick={() => { setWaitlistCtx(`Offer Contract — ${player.name}`); setWaitlistOpen(true); }}>
+                       Offer Contract <ArrowRight size={14} />
+                     </Button>
                     <Button variant="outline" size="icon" className="shrink-0 border-blue-400/20 text-blue-400 hover:bg-blue-400/10">
                       <Eye size={14} />
                     </Button>
@@ -178,6 +181,7 @@ export default function Scout() {
             )}
           </div>
         </ScrollReveal>
+        <WaitlistModal open={waitlistOpen} onClose={() => setWaitlistOpen(false)} context={waitlistCtx} />
       </div>
     </div>
   );
