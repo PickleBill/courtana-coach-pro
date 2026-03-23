@@ -60,6 +60,69 @@ const coachStats = [
   { value: '89%', label: 'Student Retention Rate', icon: BarChart3 },
 ];
 
+// Network constellation background
+const networkNodes = Array.from({ length: 12 }, (_, i) => ({
+  id: i,
+  x: 10 + Math.random() * 80,
+  y: 10 + Math.random() * 80,
+}));
+
+const networkEdges = networkNodes.flatMap((n, i) =>
+  networkNodes.slice(i + 1).filter(() => Math.random() > 0.6).map(m => ({ from: n, to: m }))
+);
+
+const hudStats = [
+  '14,847 frames processed',
+  '312 shot events',
+  '89,201 tracking points',
+  '48 facilities connected',
+];
+
+function NetworkBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <svg className="absolute inset-0 w-full h-full opacity-20">
+        {networkEdges.map((e, i) => (
+          <motion.line
+            key={i}
+            x1={`${e.from.x}%`} y1={`${e.from.y}%`}
+            x2={`${e.to.x}%`} y2={`${e.to.y}%`}
+            stroke="hsl(145, 100%, 45%)"
+            strokeWidth="0.5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0.1, 0.4, 0.1] }}
+            transition={{ duration: 4 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 2 }}
+          />
+        ))}
+        {networkNodes.map((n) => (
+          <motion.circle
+            key={n.id}
+            cx={`${n.x}%`} cy={`${n.y}%`}
+            r="2"
+            fill="hsl(145, 100%, 45%)"
+            initial={{ opacity: 0.2 }}
+            animate={{ opacity: [0.2, 0.7, 0.2], cx: [`${n.x}%`, `${n.x + (Math.random() - 0.5) * 3}%`] }}
+            transition={{ duration: 5 + Math.random() * 4, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        ))}
+      </svg>
+      {/* HUD stat readouts */}
+      {hudStats.map((stat, i) => (
+        <motion.div
+          key={stat}
+          className="absolute text-[10px] font-mono text-primary/30 tracking-wider"
+          style={{ left: `${8 + i * 22}%`, top: `${75 + (i % 2) * 10}%` }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 0.5, 0] }}
+          transition={{ duration: 6, repeat: Infinity, delay: i * 1.5 + 2, ease: 'easeInOut' }}
+        >
+          {stat}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
 function Particles() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -78,7 +141,7 @@ function Particles() {
 }
 
 export default function Index() {
-  usePageTitle('Courtana Coaching — King of the Court');
+  usePageTitle('King of the Courtana — AI Coaching Ecosystem');
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [waitlistContext, setWaitlistContext] = useState('');
 
@@ -91,6 +154,7 @@ export default function Index() {
           <div className="absolute top-2/3 right-1/4 w-[400px] h-[300px] bg-[hsl(var(--gold))]/4 rounded-full blur-[120px]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_hsla(145,100%,45%,0.03)_0%,transparent_60%)]" />
         </div>
+        <NetworkBackground />
         <Particles />
 
         <div className="container mx-auto px-4 relative z-10">
@@ -103,7 +167,7 @@ export default function Index() {
 
             <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.9] tracking-tight text-foreground" style={{ textWrap: 'balance' }}>
               King of the<br />
-              <span className="text-gradient">Court</span>
+              <span className="text-gradient">Courtana</span>
             </h1>
             <p className="mt-6 text-lg lg:text-xl text-muted-foreground max-w-2xl leading-relaxed" style={{ textWrap: 'pretty' }}>
               AI-powered courts meet elite coaching networks. Every session captured, analyzed, and coached — from anywhere.
@@ -171,8 +235,7 @@ export default function Index() {
       </section>
 
       {/* 3. Stats bar */}
-      <ScrollReveal>
-        <section className="border-y border-border/20 section-gradient-2">
+      <section className="border-y border-border/20 section-gradient-2">
           <div className="container mx-auto px-4 py-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8">
             {[
               { label: 'Alpha Sessions', value: 50, suffix: '+', decimals: 0 },
@@ -190,7 +253,6 @@ export default function Index() {
             ))}
           </div>
         </section>
-      </ScrollReveal>
 
       {/* 4. Your Role in the Kingdom */}
       <section className="py-20 lg:py-28 section-gradient-2">

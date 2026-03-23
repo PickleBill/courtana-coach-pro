@@ -97,7 +97,7 @@ export default function AIHub() {
 
             {/* 1. Analyze Your Own Session — HERO position */}
             <ScrollReveal>
-              <div className="glass rounded-2xl overflow-hidden relative group cursor-pointer border-primary/15 glow-sm" onClick={() => setUploadOpen(true)}>
+              <div className="glass rounded-2xl overflow-hidden relative group cursor-pointer border-primary/15 glow-pulse" onClick={() => setUploadOpen(true)}>
                 <div className="h-56 bg-gradient-to-br from-primary/8 via-secondary/40 to-blue-500/5 relative flex items-center justify-center overflow-hidden">
                   {/* Futuristic court background */}
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_50%,_hsla(145,100%,45%,0.08),transparent_60%)]" />
@@ -239,7 +239,7 @@ export default function AIHub() {
 
             {/* 4. AI + Human comparison */}
             <ScrollReveal delay={0.1}>
-              <div className="glass rounded-2xl p-6 border-primary/10 relative overflow-hidden">
+              <div className="glass rounded-2xl p-6 border-primary/10 relative overflow-hidden animated-gradient-border">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/3 to-transparent pointer-events-none" />
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-4">
