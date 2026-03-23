@@ -33,6 +33,13 @@ const responseMap: Record<string, Record<string, string>> = {
     'paddle': "Based on your playing data and style analysis:\n\n🎯 **Recommended**: Freakshow Gen 3 Haptic Pro\n- Weight: 7.9oz (ideal for your control-first style)\n- Grip: 4.25\" (matches your hand size data)\n- Core: 16mm polymer (optimal for your dink-heavy game)\n\nThis paddle has a 94% satisfaction rate among players with similar profiles. Check the Rewards Store for exclusive network member pricing.",
     'default': "I've analyzed patterns across thousands of coaching sessions. To give you the most targeted advice, I'd recommend:\n\n1. **Upload a match video** → I'll break down your shot selection, positioning, and timing\n2. **Run the AI Analysis** → Get instant grades across 6 skill categories\n3. **Request a Pro Review** → A certified coach adds personalized insights\n\nThis three-step process improves player ratings by an average of 0.4 DUPR points in 90 days.",
   },
+  chuck: {
+    'third shot drop': "Chuck Norris doesn't drop third shots. The third shot drops itself out of respect. But for YOU, try keeping your paddle face open at 35-40° and let gravity do the work. Even gravity listens to Chuck Norris.",
+    'paddle': "Chuck Norris doesn't need a paddle. He once won a tournament with a cutting board. But since you're not Chuck Norris, I'd recommend something with a wide sweet spot — the Freakshow Gen 3 is solid. Check the Partner Store.",
+    'serve': "Chuck Norris served once. The ball is still in orbit. For mortals: focus on placement over power. Deep serves to the backhand win more points than aces. Consistency is king — even Chuck respects consistency.",
+    'dupr': "Chuck Norris's DUPR rating crashed the algorithm — they had to add a new tier. But DUPR is a great way to track your real progress. Connect your Courtana profile to auto-sync your rating after every session.",
+    'default': "Chuck Norris once won a game of pickleball using only his stare. While I can't teach you THAT, here's what I can say: the key to any racquet sport is footwork, timing, and the confidence to go for your shots. Upload a video and the Courtana AI will tell you exactly where to improve. Even Chuck uses data... sometimes.",
+  },
 };
 
 function getResponse(persona: Persona, input: string): string {
