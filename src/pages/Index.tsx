@@ -141,14 +141,14 @@ function Particles() {
 }
 
 export default function Index() {
-  usePageTitle('King of the Courtana — AI Coaching Ecosystem');
+  usePageTitle('Kings of The Court — AI Coaching Ecosystem');
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [waitlistContext, setWaitlistContext] = useState('');
 
   return (
     <div className="min-h-screen">
       {/* 1. Hero */}
-      <section className="relative pt-28 pb-20 lg:pt-40 lg:pb-32 overflow-hidden">
+      <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/3 w-[900px] h-[600px] bg-primary/6 rounded-full blur-[150px]" />
           <div className="absolute top-2/3 right-1/4 w-[400px] h-[300px] bg-[hsl(var(--gold))]/4 rounded-full blur-[120px]" />
@@ -165,9 +165,8 @@ export default function Index() {
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
             </motion.div>
 
-            <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.9] tracking-tight text-foreground" style={{ textWrap: 'balance' }}>
-              King of the<br />
-              <span className="text-gradient">Courtana</span>
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.9] tracking-tight text-foreground">
+              Kings of The <span className="text-gradient">Court</span>
             </h1>
             <p className="mt-6 text-lg lg:text-xl text-muted-foreground max-w-2xl leading-relaxed" style={{ textWrap: 'pretty' }}>
               AI-powered courts meet elite coaching networks. Every session captured, analyzed, and coached — from anywhere.

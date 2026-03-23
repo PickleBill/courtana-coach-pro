@@ -30,22 +30,14 @@ const moreLinks = [
 
 const allLinks = [...mainLinks, ...moreLinks];
 
-function PickleballCrownLogo() {
+function CrownLogo() {
   return (
-    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-200 group-hover:scale-95 group-active:scale-90">
-      {/* Crown */}
-      <path d="M8 14L11 8L18 12L25 8L28 14" stroke="hsl(43, 96%, 56%)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="hsl(43, 96%, 56%)" fillOpacity="0.15" />
-      <circle cx="11" cy="7.5" r="1.5" fill="hsl(43, 96%, 56%)" />
-      <circle cx="18" cy="11.5" r="1.5" fill="hsl(43, 96%, 56%)" />
-      <circle cx="25" cy="7.5" r="1.5" fill="hsl(43, 96%, 56%)" />
-      {/* Pickleball */}
-      <circle cx="18" cy="23" r="9" stroke="hsl(145, 100%, 45%)" strokeWidth="1.5" fill="hsl(145, 100%, 45%)" fillOpacity="0.12" />
-      {/* Holes */}
-      <circle cx="15" cy="21" r="1.2" fill="hsl(145, 100%, 45%)" fillOpacity="0.4" />
-      <circle cx="21" cy="21" r="1.2" fill="hsl(145, 100%, 45%)" fillOpacity="0.4" />
-      <circle cx="18" cy="26" r="1.2" fill="hsl(145, 100%, 45%)" fillOpacity="0.4" />
-      <circle cx="15" cy="25.5" r="0.8" fill="hsl(145, 100%, 45%)" fillOpacity="0.3" />
-      <circle cx="21" cy="25.5" r="0.8" fill="hsl(145, 100%, 45%)" fillOpacity="0.3" />
+    <svg width="28" height="22" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-200 group-hover:scale-95 group-active:scale-90">
+      <path d="M2 18L5 4L14 10L23 4L26 18H2Z" fill="hsl(43, 96%, 56%)" fillOpacity="0.15" stroke="hsl(43, 96%, 56%)" strokeWidth="1.5" strokeLinejoin="round" />
+      <circle cx="5" cy="4" r="2" fill="hsl(43, 96%, 56%)" />
+      <circle cx="14" cy="10" r="2" fill="hsl(43, 96%, 56%)" />
+      <circle cx="23" cy="4" r="2" fill="hsl(43, 96%, 56%)" />
+      <rect x="2" y="18" width="24" height="3" rx="1" fill="hsl(43, 96%, 56%)" fillOpacity="0.3" />
     </svg>
   );
 }
@@ -70,14 +62,14 @@ export default function Navbar() {
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/30">
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
-          <Link to="/" className="flex items-center gap-2 group">
-            <PickleballCrownLogo />
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <CrownLogo />
             <div className="flex flex-col">
               <span className="font-display font-bold text-base sm:text-lg tracking-tight leading-none text-foreground">
-                King of the Courtana
+                Kings of The Court
               </span>
               <span className="text-[8px] tracking-[0.12em] uppercase text-primary/60 font-medium leading-none mt-0.5">
-                Powered by Courtana
+                Coaching powered by Courtana
               </span>
             </div>
           </Link>
