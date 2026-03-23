@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -19,24 +19,29 @@ export default function Navbar() {
   const location = useLocation();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/40">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/30">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-display font-bold text-sm transition-transform duration-200 group-hover:scale-95 group-active:scale-90">
-            C
+          <div className="w-9 h-9 rounded-lg bg-primary/15 border border-primary/25 flex items-center justify-center text-primary transition-all duration-200 group-hover:scale-95 group-hover:bg-primary/20 group-active:scale-90">
+            <Crown size={18} />
           </div>
-          <span className="font-display font-semibold text-lg tracking-tight text-foreground">
-            Courtana
-          </span>
+          <div className="flex flex-col">
+            <span className="font-display font-bold text-lg tracking-tight leading-none text-foreground">
+              Courtana
+            </span>
+            <span className="text-[9px] tracking-[0.15em] uppercase text-primary/70 font-medium leading-none mt-0.5">
+              Coaching
+            </span>
+          </div>
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden lg:flex items-center gap-1">
+        <div className="hidden lg:flex items-center gap-0.5">
           {navLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200 ${
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
                 location.pathname === link.path
                   ? 'text-primary bg-primary/10'
                   : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
@@ -51,8 +56,8 @@ export default function Navbar() {
           <Button variant="ghost" size="sm" className="text-muted-foreground">
             Sign In
           </Button>
-          <Button size="sm" className="font-semibold active:scale-95 transition-transform">
-            Get Started
+          <Button size="sm" className="font-semibold active:scale-95 transition-transform glow-sm">
+            Join the Network
           </Button>
         </div>
 
@@ -72,7 +77,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden glass border-t border-border/30 overflow-hidden"
+            className="lg:hidden bg-card/95 backdrop-blur-xl border-t border-border/30 overflow-hidden"
           >
             <div className="px-4 py-4 space-y-1">
               {navLinks.map((link) => (
@@ -91,7 +96,7 @@ export default function Navbar() {
               ))}
               <div className="pt-3 border-t border-border/30 flex gap-2">
                 <Button variant="ghost" size="sm" className="flex-1">Sign In</Button>
-                <Button size="sm" className="flex-1">Get Started</Button>
+                <Button size="sm" className="flex-1">Join the Network</Button>
               </div>
             </div>
           </motion.div>
