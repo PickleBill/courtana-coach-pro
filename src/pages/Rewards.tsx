@@ -214,8 +214,8 @@ export default function Rewards() {
                   <div className="p-5 relative z-10">
                     <h3 className="font-display font-bold text-foreground mb-1">{exp.title}</h3>
                     <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{exp.desc}</p>
-                    <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs">
-                      View Details <ArrowRight size={12} />
+                     <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs" onClick={() => toast({ title: '🎁 Reward details coming soon', description: 'Check back after the Court Kings pilot launch.' })}>
+                       View Details <ArrowRight size={12} />
                     </Button>
                   </div>
                 </motion.div>
