@@ -54,6 +54,7 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
 
 export default function AIHub() {
   usePageTitle('AI Analysis Hub — Courtana Coaching');
+  const [matchOpen, setMatchOpen] = useState(false);
 
   return (
     <div className="min-h-screen pt-24 pb-16">
