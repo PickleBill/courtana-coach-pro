@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { aiAnalysisResult } from '@/data/mockData';
+import { toast } from '@/hooks/use-toast';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Button } from '@/components/ui/button';
@@ -110,10 +111,10 @@ export default function AIHub() {
               <h3 className="font-display text-xl font-bold text-foreground mb-1">Upload Match Video</h3>
               <p className="text-sm text-muted-foreground mb-6">Drag & drop or click to upload. MP4, MOV up to 500MB.</p>
               <div className="flex justify-center gap-3">
-                <Button className="active:scale-95 transition-transform glow-sm gap-1.5 px-6">
+                <Button className="active:scale-95 transition-transform glow-sm gap-1.5 px-6" onClick={() => { toast({ title: '📤 Video upload launches with your Courtana session.' }); setTimeout(() => window.open('https://courtana.com/ai-analysis/', '_blank'), 300); }}>
                   <Upload size={14} /> Upload Video
                 </Button>
-                <Button variant="outline" className="active:scale-95 transition-transform gap-1.5 px-6 border-border/50 hover:border-primary/20">
+                <Button variant="outline" className="active:scale-95 transition-transform gap-1.5 px-6 border-border/50 hover:border-primary/20" onClick={() => window.open('https://courtana.com/ai-analysis/', '_blank')}>
                   <Wifi size={14} /> Connect Courtana Session
                 </Button>
               </div>
@@ -135,7 +136,7 @@ export default function AIHub() {
           </div>
         </ScrollReveal>
 
-        <div className="grid lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
             {/* Video thumbnail + court SVG overlay */}
             <ScrollReveal>
@@ -287,7 +288,7 @@ export default function AIHub() {
                 <Button variant="outline" className="flex-1 gap-1.5 text-xs border-primary/20 text-primary hover:bg-primary/10 active:scale-95 transition-transform">
                   <Send size={12} /> Share with Coach
                 </Button>
-                <Button variant="outline" className="flex-1 gap-1.5 text-xs border-border/30 hover:border-primary/20 active:scale-95 transition-transform">
+                <Button variant="outline" className="flex-1 gap-1.5 text-xs border-border/30 hover:border-primary/20 active:scale-95 transition-transform" onClick={() => toast({ title: '📄 Report export coming soon', description: 'Request early access at partnerships@courtana.com' })}>
                   <ExternalLink size={12} /> Export Report
                 </Button>
               </div>

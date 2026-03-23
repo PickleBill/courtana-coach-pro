@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { toast } from '@/hooks/use-toast';
 import { rewards } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
@@ -100,7 +101,7 @@ export default function Rewards() {
           </div>
         </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Partner reward card */}
           <ScrollReveal delay={0}>
             <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className="glass rounded-2xl overflow-hidden glass-hover border border-[hsl(var(--gold))]/25 glow-gold relative">
@@ -149,7 +150,7 @@ export default function Rewards() {
                   </div>
                   <Progress value={100} className="h-2" />
                 </div>
-                <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs border-primary/30 text-primary hover:bg-primary/10 gap-1">
+                <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs border-primary/30 text-primary hover:bg-primary/10 gap-1" onClick={() => toast({ title: '👑 Court Kings gear claim submitted!', description: 'Shipping details within 24 hours.' })}>
                   Claim <ArrowRight size={11} />
                 </Button>
               </div>
@@ -184,8 +185,8 @@ export default function Rewards() {
                       <div className="flex items-center gap-1 text-xs text-[hsl(var(--gold))]">
                         <Star size={11} /> {reward.spotsRemaining} {reward.spotsRemaining === 1 ? 'spot' : 'spots'} left
                       </div>
-                      <Button variant="outline" size="sm" className={`active:scale-95 transition-transform text-xs ${!isLocked ? 'border-primary/30 text-primary hover:bg-primary/10' : ''}`}>
-                        {isLocked ? 'View Details' : 'Claim'} <ArrowRight size={12} />
+                       <Button variant="outline" size="sm" className={`active:scale-95 transition-transform text-xs ${!isLocked ? 'border-primary/30 text-primary hover:bg-primary/10' : ''}`} onClick={() => toast({ title: isLocked ? '🔒 Reward locked' : '🎁 Reward details coming soon', description: isLocked ? `Earn ${reward.pointsRequired - playerProgress.points} more XP to unlock.` : 'Check back after the Court Kings pilot launch.' })}>
+                         {isLocked ? 'View Details' : 'Claim'} <ArrowRight size={12} />
                       </Button>
                     </div>
                   </div>
@@ -213,8 +214,8 @@ export default function Rewards() {
                   <div className="p-5 relative z-10">
                     <h3 className="font-display font-bold text-foreground mb-1">{exp.title}</h3>
                     <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{exp.desc}</p>
-                    <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs">
-                      View Details <ArrowRight size={12} />
+                     <Button variant="outline" size="sm" className="w-full active:scale-95 transition-transform text-xs" onClick={() => toast({ title: '🎁 Reward details coming soon', description: 'Check back after the Court Kings pilot launch.' })}>
+                       View Details <ArrowRight size={12} />
                     </Button>
                   </div>
                 </motion.div>

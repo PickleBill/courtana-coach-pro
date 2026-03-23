@@ -162,7 +162,7 @@ export default function Index() {
       {/* Stats bar with count-up */}
       <ScrollReveal>
         <section className="border-y border-border/20 section-gradient-2">
-          <div className="container mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-5 gap-8">
+          <div className="container mx-auto px-4 py-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8">
             {[
               { label: 'Sessions Analyzed', value: 128, suffix: 'K+', decimals: 0 },
               { label: 'Certified Coaches', value: 342, suffix: '', decimals: 0 },
@@ -227,7 +227,7 @@ export default function Index() {
               <p className="text-muted-foreground text-lg max-w-lg mx-auto">Three doors into the ecosystem. Every role benefits from the network effect.</p>
             </div>
           </ScrollReveal>
-          <div className="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-5xl mx-auto">
             {audienceCards.map((card, i) => (
               <ScrollReveal key={card.title} delay={i * 0.12}>
                 <Link to={card.link} className="block h-full">
@@ -410,7 +410,7 @@ export default function Index() {
               </div>
 
               {/* Partnership value exchange (V4d) */}
-              <div className="grid sm:grid-cols-2 gap-5 mb-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
                 <div className="glass rounded-2xl p-6 border-[hsl(var(--gold))]/15">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-8 h-8 rounded-lg bg-[hsl(var(--gold))]/12 flex items-center justify-center">
@@ -451,7 +451,7 @@ export default function Index() {
               </div>
 
               <div className="flex justify-center gap-4">
-                <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm">Partner With Us</Button>
+                <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm" onClick={() => window.open('https://courtkings.com/partner-with-us/', '_blank')}>Partner With Us</Button>
                 <Button size="lg" variant="outline" className="active:scale-95 transition-transform px-8 h-12" asChild>
                   <Link to="/dashboard">See Coach Economics</Link>
                 </Button>
