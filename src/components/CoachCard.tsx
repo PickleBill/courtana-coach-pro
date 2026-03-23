@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { Coach } from '@/data/mockData';
 import { Star, Users, Clock, Crown, ShieldCheck, Sparkles, Play } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import BookingModal from '@/components/BookingModal';
 import { motion } from 'framer-motion';
 
 const tierConfig = {
