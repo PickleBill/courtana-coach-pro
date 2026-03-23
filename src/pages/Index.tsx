@@ -11,7 +11,7 @@ import LiveCounter from '@/components/LiveCounter';
 import { coaches } from '@/data/mockData';
 import CoachCard from '@/components/CoachCard';
 import usePageTitle from '@/hooks/usePageTitle';
-import { ArrowRight, Zap, Users, Trophy, Brain, TrendingUp, Shield, Crown, Gamepad2, Activity, ExternalLink, Play, Globe, Camera, Sparkles, Quote, DollarSign, Clock, BarChart3 } from 'lucide-react';
+import { ArrowRight, Zap, Users, Trophy, Brain, TrendingUp, Shield, Crown, Gamepad2, Activity, ExternalLink, Play, Globe, Camera, Sparkles, Quote, DollarSign, Clock, BarChart3, Radio } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 
