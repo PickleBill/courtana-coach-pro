@@ -103,10 +103,17 @@ export default function CoachCard({ coach }: { coach: Coach }) {
             </span>
           )}
         </div>
-        <span className="font-display font-bold text-foreground text-lg">
-          ${coach.price}<span className="text-xs text-muted-foreground font-normal ml-1">{coach.priceLabel}</span>
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="font-display font-bold text-foreground text-lg">
+            ${coach.price}<span className="text-xs text-muted-foreground font-normal ml-1">{coach.priceLabel}</span>
+          </span>
+          <Button size="sm" className="glow-sm active:scale-95 transition-transform text-xs h-8 px-3" onClick={(e) => { e.stopPropagation(); setBookingOpen(true); }}>
+            Book
+          </Button>
+        </div>
       </div>
     </div>
+    <BookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} coach={coach} />
+    </>
   );
 }
