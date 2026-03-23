@@ -148,7 +148,7 @@ export default function Index() {
   return (
     <div className="min-h-screen">
       {/* 1. Hero */}
-      <section className="relative pt-28 pb-20 lg:pt-40 lg:pb-32 overflow-hidden">
+      <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/3 w-[900px] h-[600px] bg-primary/6 rounded-full blur-[150px]" />
           <div className="absolute top-2/3 right-1/4 w-[400px] h-[300px] bg-[hsl(var(--gold))]/4 rounded-full blur-[120px]" />
