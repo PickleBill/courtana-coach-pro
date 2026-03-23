@@ -20,6 +20,7 @@ const responseMap: Record<string, Record<string, string>> = {
     'paddle': "Great question — it depends on your playstyle. For control players, I'd recommend the Freakshow Gen 3 with haptic feedback — it's what I train with. For power players, look at something with a longer handle and thicker core. Check out our Partner Store for exclusive deals on my recommended gear.",
     'serve': "Consistency beats power on serves. I see players try to crush it and they miss 20% of the time. In pro play, you can't give away free points. Focus on placement: deep to the backhand, low and to the body, or short angles. The serve sets up your third shot — that's where the real play begins.",
     'dinking': "Dinking is chess, not checkers. Most rec players dink cross-court because it's comfortable. Start adding inside-out dinks and change the pace. My secret? I watch my opponent's feet. If they're not set, I speed it up. If they're balanced, I keep it soft and wait.",
+    'dupr': "DUPR is the gold standard for tracking your real skill level. I look at DUPR ratings when selecting students for my network — it tells me where you are and where you need to go. Connect your Courtana profile and your DUPR auto-updates after every analyzed session.",
     'default': "That's a great question. The biggest thing I see holding players back is trying to do too much at once. Pick ONE skill to focus on for two weeks, drill it relentlessly, then move on. Upload a video of your matches to Courtana and I can give you a personalized breakdown of what to prioritize.",
   },
   marcus: {
