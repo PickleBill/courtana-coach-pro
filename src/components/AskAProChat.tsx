@@ -196,7 +196,7 @@ export default function AskAProChat() {
                     {['How do I improve my third shot drop?', 'What paddle should I use?', 'Help with my footwork'].map(q => (
                       <button
                         key={q}
-                        onClick={() => { setInput(q); }}
+                        onClick={() => { sendMessage(q); }}
                         className="block w-full text-left px-3 py-2 rounded-lg bg-secondary/30 border border-border/20 text-xs text-muted-foreground hover:text-foreground hover:border-primary/20 transition-all"
                       >
                         {q}
