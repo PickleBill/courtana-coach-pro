@@ -48,6 +48,7 @@ const maxEarning = Math.max(...weeklyEarnings.map(d => d.amount));
 
 export default function Dashboard() {
   usePageTitle('Coach Dashboard — Courtana Coaching');
+  const navigate = useNavigate();
   const certifiedCoaches = coaches.filter((c) => c.tier === 'certified');
 
   return (
