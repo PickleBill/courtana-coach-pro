@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Upload, Zap, CheckCircle, User, Clock } from 'lucide-react';
+import { X, Upload, Zap, CheckCircle, User, Clock, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+
+const EXPEDITE_PRICE_ID = 'price_1TEArkRa7U25oaITsJiEgv2S';
 
 interface Props {
   open: boolean;
@@ -13,14 +16,35 @@ interface Props {
 export default function VideoUploadModal({ open, onClose }: Props) {
   const [step, setStep] = useState<'upload' | 'confirm' | 'done'>('upload');
   const [expedite, setExpedite] = useState(false);
+  const [paying, setPaying] = useState(false);
 
-  const handleSend = () => {
+  const handleSend = async () => {
+    if (expedite) {
+      setPaying(true);
+      try {
+        const { data, error } = await supabase.functions.invoke('create-checkout', {
+          body: {
+            priceId: EXPEDITE_PRICE_ID,
+            mode: 'payment',
+            coachName: 'Coach Marcus',
+            sessionType: 'Expedited Video Review',
+          },
+        });
+        if (error) throw error;
+        if (data?.url) {
+          window.open(data.url, '_blank');
+        }
+      } catch (err) {
+        console.error('Expedite checkout error:', err);
+      }
+      setPaying(false);
+    }
     setStep('done');
     setTimeout(() => {
       toast({
         title: '🎾 Video sent to Coach Marcus!',
         description: expedite
-          ? "Expedited review — you'll get feedback within 2 hours."
+          ? "Expedited review — complete payment in the Stripe tab for 2-hour response."
           : "You'll get feedback within 48 hours. Average response time: 2.4 hours.",
       });
       onClose();
