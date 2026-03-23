@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import ScrollReveal from '@/components/ScrollReveal';
+import ActivityTicker from '@/components/ActivityTicker';
 import { ecosystemStats, coaches } from '@/data/mockData';
 import CoachCard from '@/components/CoachCard';
-import { ArrowRight, Zap, Users, Trophy, Brain, TrendingUp, Shield, Crown, Gamepad2, Activity } from 'lucide-react';
+import { ArrowRight, Zap, Users, Trophy, Brain, TrendingUp, Shield, Crown, Gamepad2, Activity, ExternalLink, Play, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
 
 const formatNum = (n: number) => n >= 1000000 ? `${(n / 1000000).toFixed(1)}M` : n >= 1000 ? `${(n / 1000).toFixed(0)}K` : n.toString();
 
@@ -18,7 +20,7 @@ const flywheelSteps = [
 
 const audienceCards = [
   {
-    title: 'I\'m a Player',
+    title: "I'm a Player",
     desc: 'Get coached by the best — from AI analysis to personalized pro feedback. Level up on any court, on your time.',
     cta: 'Find Your Coach',
     link: '/coaches',
@@ -26,7 +28,7 @@ const audienceCards = [
     gradient: 'from-primary/20 to-primary/5',
   },
   {
-    title: 'I\'m a Coach',
+    title: "I'm a Coach",
     desc: 'Review sessions in minutes, not hours. Grow your student base globally. Earn 4x more with less time.',
     cta: 'Join the Network',
     link: '/dashboard',
@@ -34,7 +36,7 @@ const audienceCards = [
     gradient: 'from-blue-500/20 to-blue-500/5',
   },
   {
-    title: 'I\'m a Pro / Celebrity',
+    title: "I'm a Pro / Celebrity",
     desc: 'Build your coaching empire. Approve vetted networks, earn revenue share, create once-in-a-lifetime fan experiences.',
     cta: 'Scout Talent',
     link: '/scout',
@@ -43,17 +45,71 @@ const audienceCards = [
   },
 ];
 
+const seeItLiveCards = [
+  {
+    title: 'Smart Court in Action',
+    desc: 'See how Courtana-powered courts capture and analyze every rally in real time.',
+    url: 'https://courtana.com/',
+    icon: Zap,
+  },
+  {
+    title: 'Live Player Profile',
+    desc: 'Real player profile with badges, XP progression, and competitive rank.',
+    url: 'https://courtana.com/player/bGLx1SV3k1lT/',
+    icon: Users,
+  },
+  {
+    title: 'Session Highlights',
+    desc: 'Actual highlight clips automatically generated from a live session.',
+    url: 'https://courtana.com/session-highlights/J8UKbUJaBKxT',
+    icon: Play,
+  },
+];
+
+const partnerCategories = ['Equipment Partners', 'Brand Partners', 'Wellness Partners', 'Facility Partners', 'Media Partners', 'Tech Partners', 'Event Partners', 'Apparel Partners'];
+
+// Floating particles component
+function Particles() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {Array.from({ length: 20 }).map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 rounded-full bg-primary/20"
+          initial={{
+            x: `${Math.random() * 100}%`,
+            y: `${Math.random() * 100}%`,
+            opacity: 0,
+          }}
+          animate={{
+            y: [`${20 + Math.random() * 60}%`, `${10 + Math.random() * 40}%`],
+            opacity: [0, 0.6, 0],
+          }}
+          transition={{
+            duration: 4 + Math.random() * 4,
+            repeat: Infinity,
+            repeatType: 'loop',
+            delay: Math.random() * 5,
+            ease: 'easeInOut',
+          }}
+          style={{ width: 1 + Math.random() * 3, height: 1 + Math.random() * 3 }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function Index() {
   return (
     <div className="min-h-screen">
       {/* Hero */}
       <section className="relative pt-28 pb-20 lg:pt-40 lg:pb-32 overflow-hidden">
-        {/* Background effects */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/3 w-[900px] h-[600px] bg-primary/6 rounded-full blur-[150px]" />
           <div className="absolute top-2/3 right-1/4 w-[400px] h-[300px] bg-[hsl(var(--gold))]/4 rounded-full blur-[120px]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_hsla(145,100%,45%,0.03)_0%,transparent_60%)]" />
         </div>
+        <Particles />
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -62,7 +118,6 @@ export default function Index() {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="max-w-4xl"
           >
-            {/* Partnership badge */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -74,7 +129,7 @@ export default function Index() {
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
             </motion.div>
 
-            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight text-foreground" style={{ textWrap: 'balance' }}>
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.9] tracking-tight text-foreground" style={{ textWrap: 'balance' }}>
               King of the<br />
               <span className="text-gradient">Court</span>
             </h1>
@@ -90,7 +145,6 @@ export default function Index() {
               </Button>
             </div>
 
-            {/* Live activity indicator */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -112,10 +166,11 @@ export default function Index() {
       {/* Stats bar */}
       <ScrollReveal>
         <section className="border-y border-border/20 section-gradient-2">
-          <div className="container mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="container mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-5 gap-8">
             {[
               { label: 'Sessions Analyzed', value: formatNum(ecosystemStats.sessionsAnalyzed), suffix: '+' },
               { label: 'Certified Coaches', value: formatNum(ecosystemStats.coachesOnPlatform), suffix: '' },
+              { label: 'Pro Networks', value: '12', suffix: '' },
               { label: 'Facilities Connected', value: ecosystemStats.facilitiesConnected.toString(), suffix: '' },
               { label: 'Player Satisfaction', value: `${ecosystemStats.playerSatisfaction}`, suffix: '%' },
             ].map((stat) => (
@@ -128,7 +183,53 @@ export default function Index() {
         </section>
       </ScrollReveal>
 
-      {/* Flywheel — THE CENTERPIECE */}
+      {/* See It Live */}
+      <section className="py-20 lg:py-24 section-gradient-1">
+        <div className="container mx-auto px-4">
+          <ScrollReveal>
+            <div className="text-center mb-12">
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs mb-4 badge-glow">
+                <Globe size={10} className="mr-1" /> Live on Courtana
+              </Badge>
+              <h2 className="font-display text-3xl lg:text-4xl font-bold mb-3" style={{ textWrap: 'balance' }}>
+                See It Live
+              </h2>
+              <p className="text-muted-foreground max-w-md mx-auto">
+                Not mock-ups — these are real, live features running on courtana.com right now.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid md:grid-cols-3 gap-5 max-w-4xl mx-auto">
+            {seeItLiveCards.map((card, i) => (
+              <ScrollReveal key={card.title} delay={i * 0.1}>
+                <a href={card.url} target="_blank" rel="noopener noreferrer" className="block h-full">
+                  <motion.div
+                    whileHover={{ scale: 1.03, y: -4 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                    className="glass rounded-2xl p-6 glass-hover group active:scale-[0.97] transition-transform h-full relative overflow-hidden"
+                  >
+                    <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                      <span className="text-[10px] text-primary font-medium">Live</span>
+                    </div>
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-colors">
+                      <card.icon size={20} className="text-primary" />
+                    </div>
+                    <h3 className="font-display font-bold text-foreground mb-1.5">{card.title}</h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed mb-4">{card.desc}</p>
+                    <span className="text-xs text-primary font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
+                      View on Courtana <ExternalLink size={11} />
+                    </span>
+                  </motion.div>
+                </a>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Flywheel */}
       <section className="py-24 lg:py-32 relative">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/4 rounded-full blur-[200px]" />
@@ -145,11 +246,8 @@ export default function Index() {
             </div>
           </ScrollReveal>
 
-          {/* Flywheel visual */}
           <div className="relative max-w-5xl mx-auto">
-            {/* Connecting line */}
             <div className="hidden md:block absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent -translate-y-1/2" />
-            
             <div className="grid md:grid-cols-5 gap-4 lg:gap-5">
               {flywheelSteps.map((step, i) => (
                 <ScrollReveal key={step.label} delay={i * 0.1}>
@@ -158,7 +256,6 @@ export default function Index() {
                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                     className="glass rounded-2xl p-6 text-center glass-hover relative group cursor-default"
                   >
-                    {/* Step number */}
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-card border border-primary/30 flex items-center justify-center text-[10px] font-bold text-primary">
                       {i + 1}
                     </div>
@@ -174,8 +271,6 @@ export default function Index() {
                 </ScrollReveal>
               ))}
             </div>
-
-            {/* Loop arrow */}
             <ScrollReveal delay={0.6}>
               <div className="hidden md:flex justify-center mt-6">
                 <div className="flex items-center gap-2 text-xs text-primary/40">
@@ -188,6 +283,9 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      {/* Activity ticker */}
+      <ActivityTicker />
 
       {/* Audience entry */}
       <section className="py-20 lg:py-28 section-gradient-1">
@@ -209,9 +307,8 @@ export default function Index() {
                   <motion.div
                     whileHover={{ scale: 1.03, y: -6 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                    className={`glass rounded-2xl p-8 glass-hover group active:scale-[0.97] transition-transform h-full relative overflow-hidden`}
+                    className="glass rounded-2xl p-8 glass-hover group active:scale-[0.97] transition-transform h-full relative overflow-hidden"
                   >
-                    {/* Gradient bg */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                     <div className="relative z-10">
                       <div className="w-14 h-14 rounded-2xl bg-secondary/60 border border-border/40 flex items-center justify-center mb-5 group-hover:border-primary/20 transition-colors">
@@ -258,7 +355,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Court Kings CTA */}
+      {/* Court Kings Partnership */}
       <ScrollReveal>
         <section className="py-20 lg:py-28 section-gradient-1 relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
@@ -286,6 +383,36 @@ export default function Index() {
           </div>
         </section>
       </ScrollReveal>
+
+      {/* Community Partners scroll */}
+      <section className="py-16 border-t border-border/15">
+        <div className="container mx-auto px-4">
+          <ScrollReveal>
+            <div className="text-center mb-10">
+              <h3 className="font-display text-lg font-bold text-foreground mb-1">Court Kings Community Partners</h3>
+              <p className="text-xs text-muted-foreground">The growing ecosystem of brands, facilities, and partners</p>
+            </div>
+          </ScrollReveal>
+          <div className="overflow-hidden relative">
+            <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
+            <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
+            <motion.div
+              animate={{ x: [0, -800] }}
+              transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+              className="flex gap-8 whitespace-nowrap"
+            >
+              {[...partnerCategories, ...partnerCategories].map((cat, i) => (
+                <div key={i} className="flex items-center gap-3 px-5 py-3 rounded-xl bg-secondary/20 border border-border/15 shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-primary/8 border border-primary/10 flex items-center justify-center">
+                    <Globe size={14} className="text-primary/60" />
+                  </div>
+                  <span className="text-sm text-muted-foreground font-medium">{cat}</span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

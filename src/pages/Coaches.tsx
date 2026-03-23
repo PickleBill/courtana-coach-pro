@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { coaches } from '@/data/mockData';
 import CoachCard from '@/components/CoachCard';
+import CoachMatchQuiz from '@/components/CoachMatchQuiz';
 import ScrollReveal from '@/components/ScrollReveal';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Crown, ShieldCheck, Sparkles, Filter, Activity } from 'lucide-react';
+import { Crown, ShieldCheck, Sparkles, Filter, Activity, Target } from 'lucide-react';
+import { AnimatePresence } from 'framer-motion';
 
 const tiers = ['all', 'celebrity', 'certified', 'rising'] as const;
 const tierConfig = {
@@ -16,6 +18,7 @@ const tierConfig = {
 
 export default function Coaches() {
   const [filter, setFilter] = useState<typeof tiers[number]>('all');
+  const [showQuiz, setShowQuiz] = useState(false);
   const filtered = filter === 'all' ? coaches : coaches.filter((c) => c.tier === filter);
 
   return (
@@ -29,10 +32,15 @@ export default function Coaches() {
                 Three tiers of coaching — from the world's #1 pros to vetted network coaches to affordable rising talent.
               </p>
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
-              <Activity size={12} className="text-primary" />
-              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-              <span>23 coaches online now</span>
+            <div className="flex items-center gap-4">
+              <Button onClick={() => setShowQuiz(true)} variant="outline" className="gap-1.5 border-primary/25 text-primary hover:bg-primary/10 active:scale-95 transition-transform">
+                <Target size={14} /> Match Me
+              </Button>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
+                <Activity size={12} className="text-primary" />
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                <span>23 coaches online now</span>
+              </div>
             </div>
           </div>
         </ScrollReveal>
@@ -99,6 +107,11 @@ export default function Coaches() {
           </section>
         </ScrollReveal>
       </div>
+
+      {/* Quiz modal */}
+      <AnimatePresence>
+        {showQuiz && <CoachMatchQuiz onClose={() => setShowQuiz(false)} />}
+      </AnimatePresence>
     </div>
   );
 }
