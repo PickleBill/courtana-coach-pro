@@ -362,6 +362,9 @@ export default function Index() {
               </div>
 
               {/* Partnership value exchange */}
+              <p className="text-sm text-muted-foreground italic text-center mb-8 max-w-xl mx-auto">
+                "Every Court Kings facility ships with a built-in coaching ecosystem. Players get better, coaches earn more, and your courts generate revenue beyond court time."
+              </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
                 <div className="glass rounded-2xl p-6 border-[hsl(var(--gold))]/15">
                   <div className="flex items-center gap-2 mb-4">
