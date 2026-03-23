@@ -227,7 +227,7 @@ export default function Index() {
               <p className="text-muted-foreground text-lg max-w-lg mx-auto">Three doors into the ecosystem. Every role benefits from the network effect.</p>
             </div>
           </ScrollReveal>
-          <div className="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-5xl mx-auto">
             {audienceCards.map((card, i) => (
               <ScrollReveal key={card.title} delay={i * 0.12}>
                 <Link to={card.link} className="block h-full">
