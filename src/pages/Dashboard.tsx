@@ -95,13 +95,14 @@ export default function Dashboard() {
 
         {/* Quick Actions */}
         <ScrollReveal>
-          <div className="grid grid-cols-3 gap-3 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
             {[
-              { label: 'Review Next Video', icon: Play, color: 'text-primary' },
-              { label: 'Message Student', icon: MessageSquare, color: 'text-blue-400' },
-              { label: 'Update Curriculum', icon: BookOpen, color: 'text-[hsl(var(--gold))]' },
+              { label: 'Review Next Video', icon: Play, color: 'text-primary', action: () => { navigate('/ai-hub'); toast({ title: 'Opening AI Hub', description: 'Navigate to review pending videos.' }); } },
+              { label: 'Message Student', icon: MessageSquare, color: 'text-blue-400', action: () => toast({ title: 'Messages', description: 'Opening student messages...' }) },
+              { label: 'Update Curriculum', icon: BookOpen, color: 'text-[hsl(var(--gold))]', action: () => navigate('/curriculum') },
+              { label: 'Send Update', icon: Send, color: 'text-[hsl(var(--platinum))]', action: () => toast({ title: 'Update Sent', description: 'Weekly progress update sent to all 34 active students.' }) },
             ].map((action) => (
-              <Button key={action.label} variant="outline" className="h-auto py-4 flex-col gap-2 border-border/30 hover:border-primary/20 active:scale-[0.97] transition-transform">
+              <Button key={action.label} variant="outline" className="h-auto py-4 flex-col gap-2 border-border/30 hover:border-primary/20 active:scale-[0.97] transition-transform" onClick={action.action}>
                 <action.icon size={18} className={action.color} />
                 <span className="text-xs font-medium">{action.label}</span>
               </Button>

@@ -120,8 +120,8 @@ export default function Navbar() {
             <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => setSignInOpen(true)}>
               Sign In
             </Button>
-            <Button size="sm" className="font-semibold active:scale-95 transition-transform glow-sm" onClick={scrollToPartner}>
-              Join the Network
+            <Button size="sm" className="font-semibold active:scale-95 transition-transform glow-sm" asChild>
+              <Link to="/coaches">Join the Network</Link>
             </Button>
           </div>
 

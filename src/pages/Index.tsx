@@ -166,7 +166,7 @@ export default function Index() {
               { label: 'Sessions Analyzed', value: 128, suffix: 'K+', decimals: 0 },
               { label: 'Certified Coaches', value: 342, suffix: '', decimals: 0 },
               { label: 'Pro Networks', value: 12, suffix: '', decimals: 0 },
-              { label: 'Facilities Connected', value: 48, suffix: '', decimals: 0 },
+              { label: 'Court Kings Facilities', value: 24, suffix: '+', decimals: 0 },
               { label: 'Player Satisfaction', value: 94.7, suffix: '%', decimals: 1 },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
