@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { coaches } from '@/data/mockData';
 import CoachCard from '@/components/CoachCard';
 import CoachMatchQuiz from '@/components/CoachMatchQuiz';
