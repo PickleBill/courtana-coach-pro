@@ -30,15 +30,11 @@ const moreLinks = [
 
 const allLinks = [...mainLinks, ...moreLinks];
 
-function CrownLogo() {
+function CKLogo() {
   return (
-    <svg width="28" height="22" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-200 group-hover:scale-95 group-active:scale-90">
-      <path d="M2 18L5 4L14 10L23 4L26 18H2Z" fill="hsl(43, 96%, 56%)" fillOpacity="0.15" stroke="hsl(43, 96%, 56%)" strokeWidth="1.5" strokeLinejoin="round" />
-      <circle cx="5" cy="4" r="2" fill="hsl(43, 96%, 56%)" />
-      <circle cx="14" cy="10" r="2" fill="hsl(43, 96%, 56%)" />
-      <circle cx="23" cy="4" r="2" fill="hsl(43, 96%, 56%)" />
-      <rect x="2" y="18" width="24" height="3" rx="1" fill="hsl(43, 96%, 56%)" fillOpacity="0.3" />
-    </svg>
+    <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 transition-transform duration-200 group-hover:scale-95 group-active:scale-90">
+      <span className="font-display font-black text-sm tracking-tighter text-primary leading-none">CK</span>
+    </div>
   );
 }
 
@@ -63,10 +59,10 @@ export default function Navbar() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/30">
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
           <Link to="/" className="flex items-center gap-2.5 group">
-            <CrownLogo />
+            <CKLogo />
             <div className="flex flex-col">
               <span className="font-display font-bold text-base sm:text-lg tracking-tight leading-none text-foreground">
-                Kings of The Court
+                CK Coach
               </span>
               <span className="text-[8px] tracking-[0.12em] uppercase text-primary/60 font-medium leading-none mt-0.5">
                 Coaching powered by Courtana

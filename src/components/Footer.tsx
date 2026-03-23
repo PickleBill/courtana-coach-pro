@@ -8,8 +8,8 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-display font-bold text-xs">C</div>
-              <span className="font-display font-semibold text-foreground">Kings of The Court</span>
+              <div className="w-7 h-7 rounded-md bg-primary/10 border border-primary/20 flex items-center justify-center font-display font-black text-[10px] tracking-tighter text-primary">CK</div>
+              <span className="font-display font-semibold text-foreground">CK Coach</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               The coaching ecosystem for racquet sports. Powered by AI, driven by pros.

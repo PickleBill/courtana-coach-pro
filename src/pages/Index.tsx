@@ -141,7 +141,7 @@ function Particles() {
 }
 
 export default function Index() {
-  usePageTitle('Kings of The Court — AI Coaching Ecosystem');
+  usePageTitle('CK Coach — AI Coaching Ecosystem');
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [waitlistContext, setWaitlistContext] = useState('');
 
@@ -166,7 +166,7 @@ export default function Index() {
             </motion.div>
 
             <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.9] tracking-tight text-foreground">
-              Kings of The <span className="text-gradient">Court</span>
+              CK <span className="text-gradient">Coach</span>
             </h1>
             <p className="mt-6 text-lg lg:text-xl text-muted-foreground max-w-2xl leading-relaxed" style={{ textWrap: 'pretty' }}>
               AI-powered courts meet elite coaching networks. Every session captured, analyzed, and coached — from anywhere.
