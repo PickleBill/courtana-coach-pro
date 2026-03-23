@@ -4,7 +4,7 @@ import usePageTitle from '@/hooks/usePageTitle';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Upload, Wifi, Send, CheckCircle, AlertTriangle, Lightbulb, Brain, ArrowRight, User, Zap, Play, ExternalLink, Clock } from 'lucide-react';
+import { Upload, Wifi, Send, CheckCircle, AlertTriangle, Lightbulb, Brain, ArrowRight, User, Zap, Play, ExternalLink, Clock, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const gradeColors: Record<string, string> = {
@@ -26,6 +26,29 @@ const recentSessions = [
   { date: 'Mar 10, 2026', grade: 'B-', rallies: 31, label: 'Kitchen Drills — Black Barn, OH' },
 ];
 
+// Sparkline data for each shot type (last 5 sessions)
+const sparklineData: Record<string, number[]> = {
+  'Third Shot Drop': [72, 78, 80, 84, 87],
+  'Dinking': [75, 77, 79, 81, 82],
+  'Serve': [70, 73, 76, 75, 78],
+  'Return of Serve': [85, 87, 88, 90, 91],
+  'Volley': [68, 70, 71, 73, 74],
+  'Overhead': [60, 63, 65, 66, 68],
+};
+
+function Sparkline({ data, color }: { data: number[]; color: string }) {
+  const min = Math.min(...data) - 5;
+  const max = Math.max(...data) + 5;
+  const h = 24;
+  const w = 48;
+  const points = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / (max - min)) * h}`).join(' ');
+  return (
+    <svg width={w} height={h} className="shrink-0">
+      <polyline points={points} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={color} />
+    </svg>
+  );
+}
+
 export default function AIHub() {
   usePageTitle('AI Analysis Hub — Courtana Coaching');
 
@@ -33,10 +56,18 @@ export default function AIHub() {
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4">
         <ScrollReveal>
-          <h1 className="font-display text-4xl lg:text-5xl font-bold mb-2">AI Coaching Hub</h1>
-          <p className="text-muted-foreground mb-10 max-w-lg text-lg">
-            Upload a video or connect your Courtana session. Our AI breaks down every shot — then a pro adds the human touch.
-          </p>
+          <div className="flex items-start justify-between flex-wrap gap-4 mb-10">
+            <div>
+              <h1 className="font-display text-4xl lg:text-5xl font-bold mb-2">AI Coaching Hub</h1>
+              <p className="text-muted-foreground max-w-lg text-lg">
+                Upload a video or connect your Courtana session. Our AI breaks down every shot — then a pro adds the human touch.
+              </p>
+            </div>
+            {/* AI Confidence badge (V4c/V4d) */}
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-sm px-4 py-2 badge-glow gap-1.5">
+              <ShieldCheck size={14} /> AI Confidence: 94.2%
+            </Badge>
+          </div>
         </ScrollReveal>
 
         {/* Upload area */}
@@ -77,15 +108,37 @@ export default function AIHub() {
 
         <div className="grid lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            {/* Video thumbnail + shot markers */}
+            {/* Video thumbnail + court SVG overlay */}
             <ScrollReveal>
               <div className="glass rounded-2xl overflow-hidden relative group cursor-pointer">
-                <div className="h-64 bg-gradient-to-br from-secondary/60 via-primary/5 to-secondary/40 relative flex items-center justify-center">
+                <div className="h-72 bg-gradient-to-br from-secondary/60 via-primary/5 to-secondary/40 relative flex items-center justify-center">
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,_hsla(145,100%,45%,0.06),transparent_50%)]" />
-                  {/* Heat zones */}
-                  <div className="absolute left-[10%] top-[20%] w-[25%] h-[30%] rounded-lg bg-primary/8 border border-primary/15" />
-                  <div className="absolute left-[40%] top-[40%] w-[20%] h-[35%] rounded-lg bg-[hsl(var(--gold))]/8 border border-[hsl(var(--gold))]/15" />
-                  <div className="absolute right-[10%] top-[15%] w-[20%] h-[25%] rounded-lg bg-blue-400/8 border border-blue-400/15" />
+
+                  {/* Court SVG underlay (V4c) */}
+                  <svg className="absolute inset-4 w-[calc(100%-2rem)] h-[calc(100%-2rem)] opacity-20" viewBox="0 0 400 200" fill="none">
+                    {/* Court outline */}
+                    <rect x="20" y="10" width="360" height="180" rx="4" stroke="hsl(var(--primary))" strokeWidth="1" strokeDasharray="4 4" />
+                    {/* Net */}
+                    <line x1="200" y1="10" x2="200" y2="190" stroke="hsl(var(--primary))" strokeWidth="1.5" opacity="0.5" />
+                    {/* Kitchen lines */}
+                    <line x1="130" y1="10" x2="130" y2="190" stroke="hsl(var(--primary))" strokeWidth="0.5" strokeDasharray="3 3" />
+                    <line x1="270" y1="10" x2="270" y2="190" stroke="hsl(var(--primary))" strokeWidth="0.5" strokeDasharray="3 3" />
+                    {/* Center line */}
+                    <line x1="20" y1="100" x2="130" y2="100" stroke="hsl(var(--primary))" strokeWidth="0.5" strokeDasharray="3 3" />
+                    <line x1="270" y1="100" x2="380" y2="100" stroke="hsl(var(--primary))" strokeWidth="0.5" strokeDasharray="3 3" />
+                  </svg>
+
+                  {/* Heat zones with court-aware positioning */}
+                  <div className="absolute left-[8%] top-[15%] w-[28%] h-[35%] rounded-lg bg-primary/10 border border-primary/20">
+                    <span className="absolute top-1 left-2 text-[9px] text-primary/60 font-medium">Strong Zone</span>
+                  </div>
+                  <div className="absolute left-[38%] top-[35%] w-[22%] h-[40%] rounded-lg bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))]/20">
+                    <span className="absolute top-1 left-2 text-[9px] text-[hsl(var(--gold))]/60 font-medium">Developing</span>
+                  </div>
+                  <div className="absolute right-[8%] top-[12%] w-[22%] h-[30%] rounded-lg bg-blue-400/10 border border-blue-400/20">
+                    <span className="absolute top-1 left-2 text-[9px] text-blue-400/60 font-medium">Consistent</span>
+                  </div>
+
                   {/* Shot markers */}
                   {[
                     { x: '20%', y: '35%', label: 'Serve A-', color: 'text-primary' },
@@ -100,6 +153,7 @@ export default function AIHub() {
                       </div>
                     </motion.div>
                   ))}
+
                   <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform">
                     <Play size={24} className="text-primary-foreground ml-1" />
                   </div>
@@ -110,10 +164,17 @@ export default function AIHub() {
                     47 rallies analyzed
                   </Badge>
                 </div>
+
+                {/* Court legend (V4c) */}
+                <div className="px-5 py-3 bg-card/80 border-t border-border/20 flex items-center gap-4 text-[10px] text-muted-foreground">
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-primary/20 border border-primary/30" /> Strong</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-blue-400/20 border border-blue-400/30" /> Consistent</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-[hsl(var(--gold))]/20 border border-[hsl(var(--gold))]/30" /> Developing</span>
+                </div>
               </div>
             </ScrollReveal>
 
-            {/* Shot grades grid */}
+            {/* Shot grades grid with sparklines (V4c) */}
             <ScrollReveal>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {aiAnalysisResult.shotBreakdown.map((shot, i) => (
@@ -121,6 +182,11 @@ export default function AIHub() {
                     <div className={`stat-number text-2xl ${gradeColors[shot.grade]}`}>{shot.grade}</div>
                     <div className="text-[11px] text-muted-foreground mt-1 font-medium">{shot.shot}</div>
                     <div className="text-[10px] text-muted-foreground/60 mt-0.5">{shot.score}/100</div>
+                    {/* Sparkline trend */}
+                    <div className="flex justify-center mt-2">
+                      <Sparkline data={sparklineData[shot.shot] || [50, 55, 60, 65, 70]} color={gradeColors[shot.grade]} />
+                    </div>
+                    <div className="text-[9px] text-primary/60 mt-0.5">5-session trend ↑</div>
                   </motion.div>
                 ))}
               </div>
