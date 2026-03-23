@@ -141,7 +141,7 @@ function Particles() {
 }
 
 export default function Index() {
-  usePageTitle('Courtana Coaching — King of the Court');
+  usePageTitle('King of the Courtana — AI Coaching Ecosystem');
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [waitlistContext, setWaitlistContext] = useState('');
 
