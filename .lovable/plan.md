@@ -1,90 +1,59 @@
 
 
-# V4 Prompt Sequence — Execution Plan with Stakeholder-Informed Edits
+# V5 Sequence Implementation Plan
 
-## Assessment: What's Already Done vs What V4 Asks For
+## What the V5 Prompts Do
 
-After reading every page file and all 4 prompts against the stakeholder perspectives doc, here's the gap analysis:
+Three sequential prompts that layer on top of V4:
 
-### V4a (Global + Landing) — ~60% already exists
-- **Already done:** index.html cleaned (Lovable defaults gone), How It Works section exists, See It Live section exists, stats with CountUp exist, LiveCounter for dynamic numbers exists, partner scroll exists, particles exist
-- **Still needed:** Reorder "Your Role" above flywheel (V4a #3), partner names instead of categories (V4a #6), footer branded content (V4a #7), nav "More" dropdown (V4a #8), See It Live hover thumbnails (V4a #9), page transitions in App.tsx (V4a #10)
+**V5a — Demo Polish + Real Partner Data** (~8 changes)
+Wire broken Quick Action buttons in Dashboard.tsx, add "Court Kings Facilities: 24+" stat to Index.tsx stats bar, replace partner ticker with real CK partner names, add pilot facility pills to the Court Kings section, add Chuck Norris persona to AskAProChat.tsx (live API call to chucknorris.io), add welcome message to chat, add coach search input to Coaches.tsx, wire navbar CTA.
 
-### V4b (Coaches + Scout + Curriculum) — ~40% already exists
-- **Already done:** Featured Coach spotlight card for Ben Johns, Coach Match Quiz, pro mentors with rev share numbers, revenue share expandable section
-- **Still needed:** CoachCard hover animation smoothing (V4b #2), video preview pulse (V4b #3), quiz contextual result card (V4b #4), rising star enhancements (V4b #5), rev share flow animation (V4b #6), curriculum celebrations (V4b #7), coach feedback polish (V4b #8), social proof strip (V4b #9)
+**V5b — AI Edge Features + Matchmaking** (~3 components + 3 refinements)
+New TournamentFeed.tsx component with mock tournament data from real CK venues, new MatchmakingModal.tsx (3-step "Tinder for pickleball" flow), add "Analyzing" pulse badge + "CourtSense Shot Analysis" branding + data layer stats row to AIHub.tsx.
 
-### V4c (AI Hub + Dashboard + Rewards) — ~30% already exists
-- **Already done:** Heat zones exist (basic colored divs), shot grades grid exists, AI+Coach comparison exists, time leverage card is already hero-sized with `text-5xl lg:text-6xl`, recent activity feed exists
-- **Still needed:** Court SVG underlay + legend (V4c #1), sparkline trends (V4c #2), sequential reveal animation (V4c #3), prominent Courtana link badge (V4c #4), comparison bar visual (V4c #5), weekly earnings chart (V4c #6), pending review urgency (V4c #7), Court Kings gear reward (V4c #8), progress bar gamification (V4c #9)
+**V5c — DaaS Vision + Court Kings Shop + Rewards** (~3 components + 3 edits)
+New CourtAvailabilityBar.tsx (live court marquee for Index.tsx), new CourtKingsShop.tsx (3 real CK products with Shopify CDN images for Rewards.tsx), "Earn XP at Court Kings" CTA card on Rewards, "Share with Coach" button + Pickle DaaS teaser section on AIHub.tsx, dismissible demo banner on Dashboard, DUPR keyword response in AskAProChat.
 
-### V4d (Stakeholder Credibility) — ~10% already exists
-- **Almost all new:** Testimonials, partnership value exchange visual, "Why Coaches Love This" stats, AI confidence badge, chat demo question, footer link, mobile CTA bar
+## Current State Assessment
 
-## Stakeholder Lens: What to Edit/Add to the Sequence
+- **Navbar CTA**: Currently has `scrollToPartner` — V5a wants it to navigate to `/coaches`. Simple fix.
+- **Quick Actions**: Currently 3 buttons (Review/Message/Curriculum) with no navigation wiring. V5a wants 4 wired buttons.
+- **Partner ticker**: Already has real names (Court Kings, PPA Tour, DUPR, etc.) — V5a's list overlaps ~70%. Will merge, adding Centerline Athletics, Dink Dynamics, Dinkville Nashville, Cellutrex.
+- **Chuck Norris**: Entirely new — AskAProChat has 3 personas, needs a 4th with live API.
+- **Tournament/Matchmaking**: Entirely new components for AIHub.
+- **Court Kings Shop**: New component using real Shopify CDN product images.
+- **CourtAvailabilityBar**: New component for Index.
 
-From the stakeholder perspectives doc, these are the highest-leverage gaps NOT covered by V4a-V4d:
+## Edits to the Sequence
 
-1. **Player POV gap:** No pricing overview on homepage. The stakeholder doc says "a first-time visitor who's price-curious will bounce." **Edit to V4d:** Add a small pricing teaser below testimonials — "Starting at $35/session" with tier range.
+1. **V5a partner names**: The current `partnerNames` array already has Court Kings, PPA Tour, DUPR, Black Barn, etc. I'll merge rather than replace — keeping existing good names and adding the CK-specific ones (Centerline Athletics, Dink Dynamics, Dinkville Nashville, Cellutrex).
 
-2. **Coach POV gap:** "I'm a Coach" card links to Dashboard (someone else's logged-in state). **Edit to V4a:** Change the Coach audience card CTA from "Join the Network" → link to `/coaches` with a scroll anchor to the "Why Coaches Love This" section (added in V4d).
+2. **V5a Quick Actions**: The prompt says 4 buttons but current code has 3. I'll add the 4th ("Send Update") and wire all with `useNavigate` + toast.
 
-3. **Investor POV gap:** Partner scroll shows generic categories, not real names. **V4a #6 already fixes this** — the prompt replaces with real brand names. This is critical for Rich.
+3. **V5a stats bar**: Need to find where the stats are rendered in Index.tsx and add the Court Kings entry.
 
-4. **First-time visitor POV:** Nav has 7 items — overwhelming. **V4a #8 already fixes this** with a "More" dropdown. Keep it.
+4. **V5b AIHub state**: Need to add `matchOpen` state and wire both new components into the existing AIHub page layout.
 
-5. **Investor POV gap:** No growth trajectory / trend data. **Add to V4c:** On Dashboard, the weekly earnings chart (V4c #6) partially addresses this. I'll enhance it with a "Platform Growth" note.
+5. **V5c product images**: These reference `shop.courtkings.com` CDN URLs — will use directly as `<img>` sources. If CORS blocks them, I'll add fallback placeholder styling.
 
-## Execution Plan: Modified Sequence
+## Uploaded Assets Plan
 
-I'll run all 4 prompts in order with these modifications:
+The uploaded files (MHTML pages, levelup.png, courtana.ai) are **reference only** for now. After V5 is stable, the next pass could:
+- Copy the levelup.png to `src/assets/` and use it as a visual in the Rewards or Curriculum page to show the gamification TV overlay
+- Extract visual patterns from the Courtana profile/session MHTML to align card layouts
+- Use the AI Analysis MHTML structure to make our AIHub shot grades match the real Courtana UI more closely
 
-### Pass 1: V4a — Global + Landing (~10 changes)
-Focus: Reorder homepage sections, replace partner placeholders with real names, add nav dropdown, page transitions, footer polish
+For now, these inform design decisions but don't get embedded directly.
 
-Key edits vs the original prompt:
-- Skip items already done (#1 index.html, #4 LiveCounter, #5 CountUp — all exist)
-- Execute: #3 (move "Your Role" up), #6 (real partner names), #7 (footer), #8 (nav dropdown), #9 (See It Live thumbnails), #10 (page transitions)
-- **New edit:** Change "I'm a Coach" card link from `/dashboard` to `/coaches`
+## Execution Order
 
-### Pass 2: V4b — Coaches + Scout + Curriculum (~9 changes)
-Focus: CoachCard hover smoothing, quiz result card, rising star enhancements, curriculum celebrations, social proof strip
+1. **Pass 1 (V5a)**: Wire navbar, add CK stat, merge partner names, add pilot facility pills, wire quick actions, add Chuck Norris persona + welcome message, add coach search
+2. **Pass 2 (V5b)**: Create TournamentFeed + MatchmakingModal, add to AIHub with state, add Analyzing badge + CourtSense branding + data layer stats
+3. **Pass 3 (V5c)**: Create CourtAvailabilityBar + CourtKingsShop, add to Index/Rewards, add Earn XP card, add Share + DaaS teaser to AIHub, add demo banner to Dashboard, add DUPR response to chat
 
-All items are net-new. Execute as written.
-
-### Pass 3: V4c — AI Hub + Dashboard + Rewards (~9 changes)
-Focus: Court SVG overlay, sparklines, sequential reveal, comparison bars, weekly earnings chart, Court Kings gear card
-
-Key edits:
-- Skip V4c #5 (time leverage sizing) — already at `text-5xl lg:text-6xl`
-- Execute the comparison bar visual as an addition to the existing card
-- **New edit:** Add "AI Confidence: 94.2%" badge from V4d #4 here instead (it's an AI Hub change, fits better in V4c)
-
-### Pass 4: V4d — Credibility Layer (~6 changes)
-Focus: Testimonials, partnership value exchange visual, "Why Coaches Love This" stats, chat demo question, mobile CTA bar
-
-Key edits:
-- Move V4d #4 (AI confidence badge) to V4c — already handled
-- **New:** Add pricing teaser below testimonials (stakeholder gap fix)
-- Execute the rest as written
-
-### Estimated scope per pass:
-- V4a: ~7 meaningful changes (3 already done, skip those)
-- V4b: ~9 changes (all new)
-- V4c: ~8 changes (1 already done, add 1 from V4d)
-- V4d: ~6 changes (moved 1 to V4c, added 1 new)
-
-Total: ~30 changes across 4 passes, each well within the attention budget.
-
-## Technical Approach
-
-- All changes are to existing files — no new pages or components needed
-- Partner names array swap is a one-liner in `Index.tsx`
-- Nav dropdown uses existing shadcn DropdownMenu component
-- Page transitions wrap Routes in AnimatePresence (App.tsx)
-- SVG court overlay is inline SVG in AIHub.tsx
-- Sparklines are simple `<svg><polyline>` elements — no charting library
-- Weekly earnings chart uses div bars like the prompt specifies
-- Sequential reveal uses staggered framer-motion delays
-- Mobile CTA bar is a new fixed-bottom div in App.tsx, hidden on `lg:`
+Files touched per pass:
+- V5a: `Navbar.tsx`, `Index.tsx`, `Dashboard.tsx`, `AskAProChat.tsx`, `Coaches.tsx`
+- V5b: New `TournamentFeed.tsx`, new `MatchmakingModal.tsx`, `AIHub.tsx`
+- V5c: New `CourtAvailabilityBar.tsx`, new `CourtKingsShop.tsx`, `Index.tsx`, `Rewards.tsx`, `AIHub.tsx`, `Dashboard.tsx`, `AskAProChat.tsx`
 
