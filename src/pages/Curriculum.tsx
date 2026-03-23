@@ -209,6 +209,7 @@ export default function Curriculum() {
           </div>
         </div>
       </div>
+      <VideoUploadModal open={uploadOpen} onClose={() => setUploadOpen(false)} />
     </div>
   );
 }
