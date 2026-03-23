@@ -61,7 +61,7 @@ export default function Dashboard() {
         {showBanner && (
           <div className="mb-6 px-4 py-3 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-between">
             <p className="text-sm text-foreground">
-              <span className="font-semibold text-primary">🎯 Demo Mode</span> — You're viewing Marcus Chen's coach dashboard. This is a live preview of the Courtana coaching platform.
+              <span className="font-semibold text-primary">🎯 Demo Mode</span> — You're viewing a sample coach dashboard. In production, this populates with real coaching data from Courtana-powered courts at your facility.
             </p>
             <button onClick={() => setShowBanner(false)} className="text-xs text-muted-foreground hover:text-foreground ml-4 shrink-0">✕ Dismiss</button>
           </div>
