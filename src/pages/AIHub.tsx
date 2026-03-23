@@ -280,6 +280,32 @@ export default function AIHub() {
                 </div>
               </div>
             </ScrollReveal>
+
+            {/* Share with Coach + DaaS teaser (V5c) */}
+            <ScrollReveal delay={0.18}>
+              <div className="flex gap-3">
+                <Button variant="outline" className="flex-1 gap-1.5 text-xs border-primary/20 text-primary hover:bg-primary/10 active:scale-95 transition-transform">
+                  <Send size={12} /> Share with Coach
+                </Button>
+                <Button variant="outline" className="flex-1 gap-1.5 text-xs border-border/30 hover:border-primary/20 active:scale-95 transition-transform">
+                  <ExternalLink size={12} /> Export Report
+                </Button>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={0.2}>
+              <div className="glass rounded-xl p-5 border-blue-400/15 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-400/3 to-transparent pointer-events-none" />
+                <div className="relative z-10">
+                  <Badge variant="outline" className="bg-blue-400/10 text-blue-400 border-blue-400/20 text-[10px] mb-3">
+                    <Brain size={8} className="mr-0.5" /> Coming Soon
+                  </Badge>
+                  <h4 className="font-display font-bold text-foreground text-sm mb-1">Pickle DaaS™</h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">Data-as-a-Service for facilities. Real-time player analytics, court utilization insights, and coaching marketplace integration — all from one API.</p>
+                  <p className="text-[10px] text-primary mt-2 font-medium">Interested? Contact partnerships@courtana.com</p>
+                </div>
+              </div>
+            </ScrollReveal>
           </div>
 
           {/* Sidebar */}
