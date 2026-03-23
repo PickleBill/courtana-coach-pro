@@ -94,26 +94,37 @@ export default function Coaches() {
           </div>
         </ScrollReveal>
 
-        {/* Tier filter tabs */}
+        {/* Search + Tier filter tabs */}
         <ScrollReveal delay={0.1}>
-          <div className="flex gap-2 mb-10 flex-wrap">
-            {tiers.map((t) => {
-              const cfg = tierConfig[t];
-              const TierIcon = cfg.icon;
-              return (
-                <Button
-                  key={t}
-                  variant={filter === t ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setFilter(t)}
-                  className={`active:scale-95 transition-all gap-1.5 ${filter === t ? 'glow-sm' : 'border-border/50 hover:border-primary/20'}`}
-                >
-                  <TierIcon size={13} />
-                  {cfg.label}
-                  <span className="text-[10px] opacity-60 ml-0.5">({cfg.count})</span>
-                </Button>
-              );
-            })}
+          <div className="flex flex-col sm:flex-row gap-3 mb-10">
+            <div className="relative flex-1 max-w-xs">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search coaches, specialties..."
+                className="pl-9 bg-secondary/30 border-border/30 h-9 text-sm"
+              />
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {tiers.map((t) => {
+                const cfg = tierConfig[t];
+                const TierIcon = cfg.icon;
+                return (
+                  <Button
+                    key={t}
+                    variant={filter === t ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setFilter(t)}
+                    className={`active:scale-95 transition-all gap-1.5 ${filter === t ? 'glow-sm' : 'border-border/50 hover:border-primary/20'}`}
+                  >
+                    <TierIcon size={13} />
+                    {cfg.label}
+                    <span className="text-[10px] opacity-60 ml-0.5">({cfg.count})</span>
+                  </Button>
+                );
+              })}
+            </div>
           </div>
         </ScrollReveal>
 

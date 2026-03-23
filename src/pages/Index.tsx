@@ -437,6 +437,15 @@ export default function Index() {
                 </div>
               </div>
 
+              {/* Pilot Facility Pills */}
+              <div className="flex flex-wrap justify-center gap-2 mb-8">
+                {['Black Barn Pickleball — Ohio', 'Dinkville — Nashville', 'Centerline Athletics — Austin'].map((f) => (
+                  <Badge key={f} variant="outline" className="bg-[hsl(var(--gold))]/8 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/20 text-xs px-3 py-1">
+                    🏟️ {f}
+                  </Badge>
+                ))}
+              </div>
+
               <div className="flex justify-center gap-4">
                 <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm">Partner With Us</Button>
                 <Button size="lg" variant="outline" className="active:scale-95 transition-transform px-8 h-12" asChild>
