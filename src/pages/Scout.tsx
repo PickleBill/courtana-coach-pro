@@ -48,7 +48,6 @@ export default function Scout() {
                         <span className="flex items-center gap-1 text-[hsl(var(--gold))]"><DollarSign size={10} /> $24,750/mo shared</span>
                       </div>
                       <span className="text-primary text-[10px] hover:underline cursor-pointer mt-0.5 inline-block">View full network →</span>
-                      </div>
                     </div>
                     <Badge variant="outline" className="bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/25 text-[10px] badge-glow shrink-0">
                       <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))] mr-1 animate-pulse" />
