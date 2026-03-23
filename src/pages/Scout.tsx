@@ -1,19 +1,35 @@
 import { useState } from 'react';
 import { risingStars, coaches } from '@/data/mockData';
-import WaitlistModal from '@/components/WaitlistModal';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MapPin, Target, Star, Crown, Users, Eye, ArrowRight, Sparkles, DollarSign, Play, ChevronDown, ChevronUp } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Slider } from '@/components/ui/slider';
+import { MapPin, Target, Star, Crown, Users, Eye, ArrowRight, Sparkles, DollarSign, Play, ChevronDown, ChevronUp, X, CheckCircle, Send } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from '@/hooks/use-toast';
+
+const termOptions = [
+  { id: '3mo', label: '3 months' },
+  { id: '6mo', label: '6 months' },
+  { id: '12mo', label: '12 months' },
+];
 
 export default function Scout() {
   usePageTitle('Scout & Draft — Courtana Coaching');
   const celebrities = coaches.filter((c) => c.tier === 'celebrity');
   const [showRevShare, setShowRevShare] = useState(true);
-  const [waitlistOpen, setWaitlistOpen] = useState(false);
-  const [waitlistCtx, setWaitlistCtx] = useState('');
+  const [offerPlayer, setOfferPlayer] = useState<typeof risingStars[0] | null>(null);
+  const [offerValue, setOfferValue] = useState([2000]);
+  const [offerTerm, setOfferTerm] = useState('6mo');
+  const [offerSent, setOfferSent] = useState<Set<string>>(new Set());
+
+  const handleSendOffer = () => {
+    if (!offerPlayer) return;
+    setOfferSent(prev => new Set(prev).add(offerPlayer.id));
+    toast({ title: `📝 Contract offer sent to ${offerPlayer.name}!`, description: `$${offerValue[0].toLocaleString()}/mo for ${termOptions.find(t => t.id === offerTerm)?.label}. They'll review within 48 hours.` });
+    setOfferPlayer(null);
+  };
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -119,9 +135,15 @@ export default function Scout() {
                     ))}
                   </div>
                   <div className="flex gap-2">
-                     <Button className="flex-1 active:scale-95 transition-transform glow-sm font-semibold gap-1.5 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70" onClick={() => { setWaitlistCtx(`Offer Contract — ${player.name}`); setWaitlistOpen(true); }}>
-                       Offer Contract <ArrowRight size={14} />
-                     </Button>
+                    <Button
+                      className={`flex-1 active:scale-95 transition-transform font-semibold gap-1.5 ${
+                        offerSent.has(player.id) ? 'bg-primary/20 text-primary' : 'glow-sm bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70'
+                      }`}
+                      onClick={() => offerSent.has(player.id) ? null : setOfferPlayer(player)}
+                      disabled={offerSent.has(player.id)}
+                    >
+                      {offerSent.has(player.id) ? <><CheckCircle size={14} /> Offer Sent</> : <>Offer Contract <ArrowRight size={14} /></>}
+                    </Button>
                     <Button variant="outline" size="icon" className="shrink-0 border-blue-400/20 text-blue-400 hover:bg-blue-400/10">
                       <Eye size={14} />
                     </Button>
@@ -132,7 +154,93 @@ export default function Scout() {
           ))}
         </div>
 
-        {/* Revenue Share — Always visible */}
+        {/* Contract Offer Slide-in */}
+        <AnimatePresence>
+          {offerPlayer && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+              onClick={(e) => e.target === e.currentTarget && setOfferPlayer(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.95, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 20 }}
+                className="w-full max-w-md bg-card border border-border/40 rounded-2xl overflow-hidden shadow-2xl"
+              >
+                <div className="p-5 border-b border-border/30 flex items-center justify-between">
+                  <h3 className="font-display font-bold text-foreground">Offer Contract to {offerPlayer.name}</h3>
+                  <button onClick={() => setOfferPlayer(null)} className="p-1.5 rounded-lg hover:bg-secondary/50 text-muted-foreground"><X size={16} /></button>
+                </div>
+                <div className="p-5 space-y-5">
+                  {/* Player summary */}
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/20 border border-border/20">
+                    <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center font-display font-bold text-blue-400">{offerPlayer.avatar}</div>
+                    <div>
+                      <p className="font-display font-semibold text-foreground">{offerPlayer.name}</p>
+                      <p className="text-xs text-muted-foreground">DUPR {offerPlayer.dupr} · {offerPlayer.location}</p>
+                    </div>
+                  </div>
+
+                  {/* Contract value slider */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-medium text-foreground">Monthly Contract Value</p>
+                      <span className="stat-number text-xl text-primary">${offerValue[0].toLocaleString()}<span className="text-xs text-muted-foreground font-normal">/mo</span></span>
+                    </div>
+                    <Slider
+                      value={offerValue}
+                      onValueChange={setOfferValue}
+                      min={500}
+                      max={5000}
+                      step={250}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
+                      <span>$500</span>
+                      <span>$5,000</span>
+                    </div>
+                  </div>
+
+                  {/* Term selector */}
+                  <div>
+                    <p className="text-xs font-medium text-foreground mb-2">Contract Term</p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {termOptions.map(opt => (
+                        <button
+                          key={opt.id}
+                          onClick={() => setOfferTerm(opt.id)}
+                          className={`px-3 py-2.5 rounded-lg text-xs font-medium transition-colors border ${
+                            offerTerm === opt.id ? 'bg-primary/15 border-primary/30 text-primary' : 'bg-secondary/30 border-border/20 text-muted-foreground hover:text-foreground'
+                          }`}
+                        >{opt.label}</button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Summary */}
+                  <div className="p-3 rounded-lg bg-secondary/20 border border-border/20">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs text-muted-foreground">Total Contract Value</span>
+                      <span className="font-display font-bold text-primary">
+                        ${(offerValue[0] * (offerTerm === '3mo' ? 3 : offerTerm === '6mo' ? 6 : 12)).toLocaleString()}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground">Revenue share: 40% pro / 45% coach / 15% platform</p>
+                  </div>
+
+                  <Button className="w-full h-11 font-semibold active:scale-[0.97] transition-transform glow-sm gap-1.5" onClick={handleSendOffer}>
+                    <Send size={14} /> Send Contract Offer
+                  </Button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Revenue Share */}
         <ScrollReveal>
           <div className="glass rounded-2xl overflow-hidden relative">
             <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--gold))]/3 via-primary/3 to-transparent pointer-events-none" />
@@ -175,13 +283,11 @@ export default function Scout() {
                     Coach earns <span className="text-primary font-semibold">$90</span>,
                     Platform earns <span className="text-muted-foreground font-semibold">$30</span>
                   </p>
-                  <p className="text-[10px] text-muted-foreground/60 mt-2">All payouts handled automatically via the Courtana platform</p>
                 </div>
               </motion.div>
             )}
           </div>
         </ScrollReveal>
-        <WaitlistModal open={waitlistOpen} onClose={() => setWaitlistOpen(false)} context={waitlistCtx} />
       </div>
     </div>
   );
