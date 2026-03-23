@@ -33,11 +33,7 @@ export default function Navbar() {
 
   const isMoreActive = moreLinks.some(l => l.path === location.pathname);
 
-  const scrollToPartner = () => {
-    const el = document.getElementById('court-kings-partnership');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-    else window.location.href = '/#court-kings-partnership';
-  };
+  // No-op — CTA now navigates via Link
 
   return (
     <>
@@ -124,8 +120,8 @@ export default function Navbar() {
             <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => setSignInOpen(true)}>
               Sign In
             </Button>
-            <Button size="sm" className="font-semibold active:scale-95 transition-transform glow-sm" onClick={scrollToPartner}>
-              Join the Network
+            <Button size="sm" className="font-semibold active:scale-95 transition-transform glow-sm" asChild>
+              <Link to="/coaches">Join the Network</Link>
             </Button>
           </div>
 

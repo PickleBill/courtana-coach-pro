@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Crown, ShieldCheck, Brain, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-type Persona = 'ben' | 'marcus' | 'ai';
+type Persona = 'ben' | 'marcus' | 'ai' | 'chuck';
 
 const personas = {
   ben: { name: 'Ben Johns', icon: Crown, color: 'text-[hsl(var(--gold))]', bg: 'bg-[hsl(var(--gold))]/12', avatar: 'BJ', label: '👑' },
   marcus: { name: 'Marcus Chen', icon: ShieldCheck, color: 'text-primary', bg: 'bg-primary/12', avatar: 'MC', label: '✓' },
   ai: { name: 'AI Coach', icon: Brain, color: 'text-blue-400', bg: 'bg-blue-400/12', avatar: '🤖', label: '🤖' },
+  chuck: { name: 'Chuck Norris', icon: Sparkles, color: 'text-red-400', bg: 'bg-red-400/12', avatar: 'CN', label: '🥋' },
 };
 
 type Message = { role: 'user' | 'assistant'; content: string };
@@ -19,18 +20,28 @@ const responseMap: Record<string, Record<string, string>> = {
     'paddle': "Great question — it depends on your playstyle. For control players, I'd recommend the Freakshow Gen 3 with haptic feedback — it's what I train with. For power players, look at something with a longer handle and thicker core. Check out our Partner Store for exclusive deals on my recommended gear.",
     'serve': "Consistency beats power on serves. I see players try to crush it and they miss 20% of the time. In pro play, you can't give away free points. Focus on placement: deep to the backhand, low and to the body, or short angles. The serve sets up your third shot — that's where the real play begins.",
     'dinking': "Dinking is chess, not checkers. Most rec players dink cross-court because it's comfortable. Start adding inside-out dinks and change the pace. My secret? I watch my opponent's feet. If they're not set, I speed it up. If they're balanced, I keep it soft and wait.",
+    'dupr': "DUPR is the gold standard for tracking your real skill level. I look at DUPR ratings when selecting students for my network — it tells me where you are and where you need to go. Connect your Courtana profile and your DUPR auto-updates after every analyzed session.",
     'default': "That's a great question. The biggest thing I see holding players back is trying to do too much at once. Pick ONE skill to focus on for two weeks, drill it relentlessly, then move on. Upload a video of your matches to Courtana and I can give you a personalized breakdown of what to prioritize.",
   },
   marcus: {
     'third shot drop': "I coach this differently than most. Start with the kitchen drill — stand AT the kitchen line, softly tap balls over. Once that's consistent, move back 2 feet at a time. The key insight: your paddle face angle matters more than your swing speed. Record yourself from the side and upload it — I'll annotate your paddle angle on each rep.",
     'paddle': "As a former tennis player, I had to adjust to pickleball paddles significantly. The biggest factor is weight distribution, not just weight. For defensive players, a head-light paddle gives you faster hands at the kitchen. I'd check our partner rewards — there are exclusive discounts for coaching network members.",
     'footwork': "Footwork is my bread and butter — it's why they call me 'The Wall.' Three things to focus on: split-step timing (before every shot), recovery step (back to neutral after each shot), and lateral movement efficiency. Most players take 3 steps when 2 would do. I have a whole module on this in the curriculum.",
+    'dupr': "DUPR is a fantastic metric for tracking progress. When I onboard new students, their DUPR tells me a lot about where to focus. With Courtana's integration, your DUPR updates automatically after every analyzed session — no manual input needed.",
     'default': "I'd love to help you with that. As part of Ben Johns' coaching network, I combine pro-level strategy with hands-on coaching methodology. The best next step? Upload a match video to the AI Analysis hub — the AI will give you instant feedback, and I can layer my expert notes on top. That human + AI combo is incredibly powerful.",
   },
   ai: {
     'third shot drop': "Based on analysis of 12,000+ third shot drops across all skill levels, here are the key metrics that separate 4.0 from 5.0 players:\n\n📊 **Contact Point**: Elite players hit 6-8 inches below net height\n📊 **Paddle Angle**: 35-42° open face (most rec players are at 50°+)\n📊 **Follow-through**: 8-12 inches (shorter = more control)\n\nRecommended drill: Wall drop drill, 3 sets of 50 reps. Would you like me to generate a custom practice plan?",
     'paddle': "Based on your playing data and style analysis:\n\n🎯 **Recommended**: Freakshow Gen 3 Haptic Pro\n- Weight: 7.9oz (ideal for your control-first style)\n- Grip: 4.25\" (matches your hand size data)\n- Core: 16mm polymer (optimal for your dink-heavy game)\n\nThis paddle has a 94% satisfaction rate among players with similar profiles. Check the Rewards Store for exclusive network member pricing.",
+    'dupr': "DUPR integration is built into the Courtana platform. After every analyzed session, your DUPR rating is automatically recalculated based on shot quality, rally win rate, and opponent strength. Our data shows players using Courtana improve their DUPR by 0.4 points in 90 days on average.",
     'default': "I've analyzed patterns across thousands of coaching sessions. To give you the most targeted advice, I'd recommend:\n\n1. **Upload a match video** → I'll break down your shot selection, positioning, and timing\n2. **Run the AI Analysis** → Get instant grades across 6 skill categories\n3. **Request a Pro Review** → A certified coach adds personalized insights\n\nThis three-step process improves player ratings by an average of 0.4 DUPR points in 90 days.",
+  },
+  chuck: {
+    'third shot drop': "Chuck Norris doesn't drop third shots. The third shot drops itself out of respect. But for YOU, try keeping your paddle face open at 35-40° and let gravity do the work. Even gravity listens to Chuck Norris.",
+    'paddle': "Chuck Norris doesn't need a paddle. He once won a tournament with a cutting board. But since you're not Chuck Norris, I'd recommend something with a wide sweet spot — the Freakshow Gen 3 is solid. Check the Partner Store.",
+    'serve': "Chuck Norris served once. The ball is still in orbit. For mortals: focus on placement over power. Deep serves to the backhand win more points than aces. Consistency is king — even Chuck respects consistency.",
+    'dupr': "Chuck Norris's DUPR rating crashed the algorithm — they had to add a new tier. But DUPR is a great way to track your real progress. Connect your Courtana profile to auto-sync your rating after every session.",
+    'default': "Chuck Norris once won a game of pickleball using only his stare. While I can't teach you THAT, here's what I can say: the key to any racquet sport is footwork, timing, and the confidence to go for your shots. Upload a video and the Courtana AI will tell you exactly where to improve. Even Chuck uses data... sometimes.",
   },
 };
 
@@ -51,6 +62,7 @@ export default function AskAProChat() {
   const [typing, setTyping] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [hasShownWelcome, setHasShownWelcome] = useState(false);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -59,6 +71,12 @@ export default function AskAProChat() {
   useEffect(() => {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 300);
+      if (!hasShownWelcome && messages.length === 0) {
+        setHasShownWelcome(true);
+        setTimeout(() => {
+          setMessages([{ role: 'assistant', content: `Hey! I'm ${personas[persona].name}. Ask me anything about your game — technique, drills, strategy, or gear. Let's level up. 🏓` }]);
+        }, 600);
+      }
     }
   }, [open]);
 

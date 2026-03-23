@@ -1,11 +1,14 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { dashboardMetrics, coaches } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { DollarSign, Clock, Users, TrendingUp, CheckCircle, BarChart3, Crown, Timer, ArrowRight, Zap, Video, MessageSquare, UserPlus, Play, BookOpen, AlertCircle } from 'lucide-react';
+import { DollarSign, Clock, Users, TrendingUp, CheckCircle, BarChart3, Crown, Timer, ArrowRight, Zap, Video, MessageSquare, UserPlus, Play, BookOpen, AlertCircle, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { toast } from '@/hooks/use-toast';
 
 const metricCards = [
   { label: 'Monthly Earnings', value: `$${dashboardMetrics.monthlyEarnings.toLocaleString()}`, icon: DollarSign, delta: '+23% vs last month', highlight: true },
@@ -45,12 +48,23 @@ const weeklyEarnings = [
 const maxEarning = Math.max(...weeklyEarnings.map(d => d.amount));
 
 export default function Dashboard() {
+  const [showBanner, setShowBanner] = useState(true);
   usePageTitle('Coach Dashboard — Courtana Coaching');
+  const navigate = useNavigate();
   const certifiedCoaches = coaches.filter((c) => c.tier === 'certified');
 
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4">
+        {/* Demo banner (V5c) */}
+        {showBanner && (
+          <div className="mb-6 px-4 py-3 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-between">
+            <p className="text-sm text-foreground">
+              <span className="font-semibold text-primary">🎯 Demo Mode</span> — You're viewing Marcus Chen's coach dashboard. This is a live preview of the Courtana coaching platform.
+            </p>
+            <button onClick={() => setShowBanner(false)} className="text-xs text-muted-foreground hover:text-foreground ml-4 shrink-0">✕ Dismiss</button>
+          </div>
+        )}
         <ScrollReveal>
           <div className="flex items-start justify-between flex-wrap gap-4 mb-8">
             <div>
@@ -92,13 +106,14 @@ export default function Dashboard() {
 
         {/* Quick Actions */}
         <ScrollReveal>
-          <div className="grid grid-cols-3 gap-3 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
             {[
-              { label: 'Review Next Video', icon: Play, color: 'text-primary' },
-              { label: 'Message Student', icon: MessageSquare, color: 'text-blue-400' },
-              { label: 'Update Curriculum', icon: BookOpen, color: 'text-[hsl(var(--gold))]' },
+              { label: 'Review Next Video', icon: Play, color: 'text-primary', action: () => { navigate('/ai-hub'); toast({ title: 'Opening AI Hub', description: 'Navigate to review pending videos.' }); } },
+              { label: 'Message Student', icon: MessageSquare, color: 'text-blue-400', action: () => toast({ title: 'Messages', description: 'Opening student messages...' }) },
+              { label: 'Update Curriculum', icon: BookOpen, color: 'text-[hsl(var(--gold))]', action: () => navigate('/curriculum') },
+              { label: 'Send Update', icon: Send, color: 'text-[hsl(var(--platinum))]', action: () => toast({ title: 'Update Sent', description: 'Weekly progress update sent to all 34 active students.' }) },
             ].map((action) => (
-              <Button key={action.label} variant="outline" className="h-auto py-4 flex-col gap-2 border-border/30 hover:border-primary/20 active:scale-[0.97] transition-transform">
+              <Button key={action.label} variant="outline" className="h-auto py-4 flex-col gap-2 border-border/30 hover:border-primary/20 active:scale-[0.97] transition-transform" onClick={action.action}>
                 <action.icon size={18} className={action.color} />
                 <span className="text-xs font-medium">{action.label}</span>
               </Button>

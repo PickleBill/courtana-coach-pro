@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import ScrollReveal from '@/components/ScrollReveal';
 import ActivityTicker from '@/components/ActivityTicker';
+import CourtAvailabilityBar from '@/components/CourtAvailabilityBar';
 import CountUp from '@/components/CountUp';
 import LiveCounter from '@/components/LiveCounter';
 import { ecosystemStats, coaches } from '@/data/mockData';
@@ -40,7 +41,7 @@ const howItWorks = [
 const partnerNames = [
   'Court Kings', 'PPA Tour', 'USA Pickleball', 'Pickleball Freakshow', 'DUPR', 'Black Barn Pickleball',
   'Major League Pickleball', 'Selkirk Sport', 'Courtana', 'Life Time', 'Chicken N Pickle', 'JOOLA',
-  'Franklin Sports', 'Engage Pickleball', 'Paddletek', 'Vulcan Sporting Goods',
+  'Centerline Athletics', 'Dink Dynamics', 'Dinkville Nashville', 'Cellutrex', 'Franklin Sports', 'Paddletek',
 ];
 
 const testimonials = [
@@ -166,7 +167,7 @@ export default function Index() {
               { label: 'Sessions Analyzed', value: 128, suffix: 'K+', decimals: 0 },
               { label: 'Certified Coaches', value: 342, suffix: '', decimals: 0 },
               { label: 'Pro Networks', value: 12, suffix: '', decimals: 0 },
-              { label: 'Facilities Connected', value: 48, suffix: '', decimals: 0 },
+              { label: 'Court Kings Facilities', value: 24, suffix: '+', decimals: 0 },
               { label: 'Player Satisfaction', value: 94.7, suffix: '%', decimals: 1 },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
@@ -291,6 +292,9 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      {/* Court Availability Marquee (V5c) */}
+      <CourtAvailabilityBar />
 
       {/* Activity ticker */}
       <ActivityTicker />
@@ -435,6 +439,15 @@ export default function Index() {
                     <li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" /> Gamification, XP, and rewards engine</li>
                   </ul>
                 </div>
+              </div>
+
+              {/* Pilot Facility Pills */}
+              <div className="flex flex-wrap justify-center gap-2 mb-8">
+                {['Black Barn Pickleball — Ohio', 'Dinkville — Nashville', 'Centerline Athletics — Austin'].map((f) => (
+                  <Badge key={f} variant="outline" className="bg-[hsl(var(--gold))]/8 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/20 text-xs px-3 py-1">
+                    🏟️ {f}
+                  </Badge>
+                ))}
               </div>
 
               <div className="flex justify-center gap-4">

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { coaches } from '@/data/mockData';
 import CoachCard from '@/components/CoachCard';
 import CoachMatchQuiz from '@/components/CoachMatchQuiz';
@@ -6,7 +6,8 @@ import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Crown, ShieldCheck, Sparkles, Filter, Activity, Target, Quote } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Crown, ShieldCheck, Sparkles, Filter, Activity, Target, Quote, Search } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const tiers = ['all', 'celebrity', 'certified', 'rising'] as const;
@@ -21,7 +22,15 @@ export default function Coaches() {
   usePageTitle('Coach Marketplace — Courtana Coaching');
   const [filter, setFilter] = useState<typeof tiers[number]>('all');
   const [showQuiz, setShowQuiz] = useState(false);
-  const filtered = filter === 'all' ? coaches : coaches.filter((c) => c.tier === filter);
+  const [search, setSearch] = useState('');
+  const filtered = useMemo(() => {
+    let list = filter === 'all' ? coaches : coaches.filter((c) => c.tier === filter);
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      list = list.filter(c => c.name.toLowerCase().includes(q) || c.specialties.some(s => s.toLowerCase().includes(q)) || c.sport.toLowerCase().includes(q));
+    }
+    return list;
+  }, [filter, search]);
 
   const benJohns = coaches.find(c => c.name === 'Ben Johns')!;
 
@@ -85,26 +94,37 @@ export default function Coaches() {
           </div>
         </ScrollReveal>
 
-        {/* Tier filter tabs */}
+        {/* Search + Tier filter tabs */}
         <ScrollReveal delay={0.1}>
-          <div className="flex gap-2 mb-10 flex-wrap">
-            {tiers.map((t) => {
-              const cfg = tierConfig[t];
-              const TierIcon = cfg.icon;
-              return (
-                <Button
-                  key={t}
-                  variant={filter === t ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setFilter(t)}
-                  className={`active:scale-95 transition-all gap-1.5 ${filter === t ? 'glow-sm' : 'border-border/50 hover:border-primary/20'}`}
-                >
-                  <TierIcon size={13} />
-                  {cfg.label}
-                  <span className="text-[10px] opacity-60 ml-0.5">({cfg.count})</span>
-                </Button>
-              );
-            })}
+          <div className="flex flex-col sm:flex-row gap-3 mb-10">
+            <div className="relative flex-1 max-w-xs">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search coaches, specialties..."
+                className="pl-9 bg-secondary/30 border-border/30 h-9 text-sm"
+              />
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {tiers.map((t) => {
+                const cfg = tierConfig[t];
+                const TierIcon = cfg.icon;
+                return (
+                  <Button
+                    key={t}
+                    variant={filter === t ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setFilter(t)}
+                    className={`active:scale-95 transition-all gap-1.5 ${filter === t ? 'glow-sm' : 'border-border/50 hover:border-primary/20'}`}
+                  >
+                    <TierIcon size={13} />
+                    {cfg.label}
+                    <span className="text-[10px] opacity-60 ml-0.5">({cfg.count})</span>
+                  </Button>
+                );
+              })}
+            </div>
           </div>
         </ScrollReveal>
 

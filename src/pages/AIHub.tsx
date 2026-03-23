@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { aiAnalysisResult } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Upload, Wifi, Send, CheckCircle, AlertTriangle, Lightbulb, Brain, ArrowRight, User, Zap, Play, ExternalLink, Clock, ShieldCheck } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Upload, Wifi, Send, CheckCircle, AlertTriangle, Lightbulb, Brain, ArrowRight, User, Zap, Play, ExternalLink, Clock, ShieldCheck, Users, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import TournamentFeed from '@/components/TournamentFeed';
+import MatchmakingModal from '@/components/MatchmakingModal';
 
 const gradeColors: Record<string, string> = {
   'A+': 'text-primary', 'A': 'text-primary', 'A-': 'text-primary',
@@ -51,22 +54,48 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
 
 export default function AIHub() {
   usePageTitle('AI Analysis Hub — Courtana Coaching');
+  const [matchOpen, setMatchOpen] = useState(false);
 
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4">
         <ScrollReveal>
-          <div className="flex items-start justify-between flex-wrap gap-4 mb-10">
+          <div className="flex items-start justify-between flex-wrap gap-4 mb-4">
             <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs gap-1 badge-glow">
+                  <Sparkles size={10} /> CourtSense™ Shot Analysis
+                </Badge>
+                <Badge variant="outline" className="bg-blue-400/10 text-blue-400 border-blue-400/20 text-[10px] gap-1 animate-pulse">
+                  <Zap size={8} /> Analyzing
+                </Badge>
+              </div>
               <h1 className="font-display text-4xl lg:text-5xl font-bold mb-2">AI Coaching Hub</h1>
               <p className="text-muted-foreground max-w-lg text-lg">
                 Upload a video or connect your Courtana session. Our AI breaks down every shot — then a pro adds the human touch.
               </p>
             </div>
-            {/* AI Confidence badge (V4c/V4d) */}
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-sm px-4 py-2 badge-glow gap-1.5">
-              <ShieldCheck size={14} /> AI Confidence: 94.2%
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" className="gap-1.5 border-primary/25 text-primary hover:bg-primary/10 active:scale-95 transition-transform" onClick={() => setMatchOpen(true)}>
+                <Users size={14} /> Find Players
+              </Button>
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-sm px-4 py-2 badge-glow gap-1.5">
+                <ShieldCheck size={14} /> AI Confidence: 94.2%
+              </Badge>
+            </div>
+          </div>
+          {/* Data layer stats row */}
+          <div className="flex flex-wrap gap-4 mb-10 text-xs text-muted-foreground">
+            {[
+              { label: 'Frames Processed', value: '14,847' },
+              { label: 'Shot Events Detected', value: '312' },
+              { label: 'Player Tracking Points', value: '89,201' },
+              { label: 'Model Version', value: 'CourtSense v3.2' },
+            ].map((d) => (
+              <span key={d.label} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary/20 border border-border/15">
+                <span className="text-foreground font-medium">{d.value}</span> {d.label}
+              </span>
+            ))}
           </div>
         </ScrollReveal>
 
@@ -251,6 +280,32 @@ export default function AIHub() {
                 </div>
               </div>
             </ScrollReveal>
+
+            {/* Share with Coach + DaaS teaser (V5c) */}
+            <ScrollReveal delay={0.18}>
+              <div className="flex gap-3">
+                <Button variant="outline" className="flex-1 gap-1.5 text-xs border-primary/20 text-primary hover:bg-primary/10 active:scale-95 transition-transform">
+                  <Send size={12} /> Share with Coach
+                </Button>
+                <Button variant="outline" className="flex-1 gap-1.5 text-xs border-border/30 hover:border-primary/20 active:scale-95 transition-transform">
+                  <ExternalLink size={12} /> Export Report
+                </Button>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={0.2}>
+              <div className="glass rounded-xl p-5 border-blue-400/15 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-400/3 to-transparent pointer-events-none" />
+                <div className="relative z-10">
+                  <Badge variant="outline" className="bg-blue-400/10 text-blue-400 border-blue-400/20 text-[10px] mb-3">
+                    <Brain size={8} className="mr-0.5" /> Coming Soon
+                  </Badge>
+                  <h4 className="font-display font-bold text-foreground text-sm mb-1">Pickle DaaS™</h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">Data-as-a-Service for facilities. Real-time player analytics, court utilization insights, and coaching marketplace integration — all from one API.</p>
+                  <p className="text-[10px] text-primary mt-2 font-medium">Interested? Contact partnerships@courtana.com</p>
+                </div>
+              </div>
+            </ScrollReveal>
           </div>
 
           {/* Sidebar */}
@@ -311,9 +366,19 @@ export default function AIHub() {
                 </ul>
               </div>
             </ScrollReveal>
+
+            {/* Tournament Feed (V5b) */}
+            <ScrollReveal delay={0.18}>
+              <TournamentFeed />
+            </ScrollReveal>
           </div>
         </div>
       </div>
+
+      {/* Matchmaking Modal (V5b) */}
+      <AnimatePresence>
+        {matchOpen && <MatchmakingModal onClose={() => setMatchOpen(false)} />}
+      </AnimatePresence>
     </div>
   );
 }

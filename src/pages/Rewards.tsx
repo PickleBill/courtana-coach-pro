@@ -1,11 +1,13 @@
+import { Link } from 'react-router-dom';
 import { rewards } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Lock, Trophy, Star, ArrowRight, ExternalLink, ShoppingBag, Crown, Ticket, Wrench } from 'lucide-react';
+import { Lock, Trophy, Star, ArrowRight, ExternalLink, ShoppingBag, Crown, Ticket, Wrench, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
+import CourtKingsShop from '@/components/CourtKingsShop';
 
 const tierStyles = {
   silver: { bg: 'bg-slate-400/8', border: 'border-slate-400/20', text: 'text-slate-300', label: 'Silver', glow: '', shimmer: 'from-slate-300/5 via-slate-200/10 to-slate-300/5' },
@@ -220,6 +222,28 @@ export default function Rewards() {
             );
           })}
         </div>
+
+        {/* Earn XP at Court Kings (V5c) */}
+        <ScrollReveal>
+          <div className="glass rounded-2xl p-6 mt-10 relative overflow-hidden glow border-primary/15">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/4 to-transparent pointer-events-none" />
+            <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Zap size={16} className="text-primary" />
+                  <span className="font-display font-bold text-foreground">Earn XP at Court Kings Facilities</span>
+                </div>
+                <p className="text-sm text-muted-foreground">Play on a Courtana-powered Court Kings court and automatically earn 2x XP on every session. Your progress syncs in real time.</p>
+              </div>
+              <Button className="shrink-0 gap-1.5 glow-sm active:scale-95 transition-transform" asChild>
+                <Link to="/ai-hub">Find a Court <ArrowRight size={14} /></Link>
+              </Button>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        {/* Court Kings Shop (V5c) */}
+        <CourtKingsShop />
       </div>
     </div>
   );
