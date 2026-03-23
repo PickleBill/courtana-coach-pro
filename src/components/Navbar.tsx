@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Crown, ChevronDown } from 'lucide-react';
+import { Menu, X, Crown, ChevronDown, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import SignInModal from '@/components/SignInModal';
+import { useAuth } from '@/hooks/useAuth';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 
 const mainLinks = [
@@ -29,11 +31,16 @@ const allLinks = [...mainLinks, ...moreLinks];
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [signInOpen, setSignInOpen] = useState(false);
+  const [signInMode, setSignInMode] = useState<'signin' | 'signup'>('signin');
   const location = useLocation();
+  const { user, profile, signOut, loading } = useAuth();
 
   const isMoreActive = moreLinks.some(l => l.path === location.pathname);
 
-  // No-op — CTA now navigates via Link
+  const openSignIn = (mode: 'signin' | 'signup') => {
+    setSignInMode(mode);
+    setSignInOpen(true);
+  };
 
   return (
     <>
@@ -117,12 +124,41 @@ export default function Navbar() {
           </div>
 
           <div className="hidden lg:flex items-center gap-3">
-            <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => setSignInOpen(true)}>
-              Sign In
-            </Button>
-            <Button size="sm" className="font-semibold active:scale-95 transition-transform glow-sm" asChild>
-              <Link to="/coaches">Join the Network</Link>
-            </Button>
+            {!loading && user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-secondary/50 transition-colors">
+                    {profile?.avatar_url ? (
+                      <img src={profile.avatar_url} alt="" className="w-7 h-7 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center text-primary text-xs font-bold">
+                        {(profile?.display_name || user.email || '?').charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <span className="text-sm font-medium text-foreground">{profile?.display_name || user.email?.split('@')[0]}</span>
+                    <ChevronDown size={12} className="text-muted-foreground" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-card border-border/40 backdrop-blur-xl">
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard" className="cursor-pointer"><User size={14} className="mr-2" /> Dashboard</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut} className="cursor-pointer text-destructive">
+                    <LogOut size={14} className="mr-2" /> Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => openSignIn('signin')}>
+                  Sign In
+                </Button>
+                <Button size="sm" className="font-semibold active:scale-95 transition-transform glow-sm" onClick={() => openSignIn('signup')}>
+                  Join the Network
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile hamburger */}
@@ -159,15 +195,23 @@ export default function Navbar() {
                   </Link>
                 ))}
                 <div className="pt-3 border-t border-border/30 flex gap-2">
-                  <Button variant="ghost" size="sm" className="flex-1" onClick={() => { setMobileOpen(false); setSignInOpen(true); }}>Sign In</Button>
-                  <Button size="sm" className="flex-1" onClick={() => setMobileOpen(false)} asChild><Link to="/coaches">Join the Network</Link></Button>
+                  {user ? (
+                    <Button variant="ghost" size="sm" className="flex-1" onClick={() => { setMobileOpen(false); signOut(); }}>
+                      <LogOut size={14} className="mr-2" /> Sign Out
+                    </Button>
+                  ) : (
+                    <>
+                      <Button variant="ghost" size="sm" className="flex-1" onClick={() => { setMobileOpen(false); openSignIn('signin'); }}>Sign In</Button>
+                      <Button size="sm" className="flex-1" onClick={() => { setMobileOpen(false); openSignIn('signup'); }}>Join the Network</Button>
+                    </>
+                  )}
                 </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </nav>
-      <SignInModal open={signInOpen} onClose={() => setSignInOpen(false)} />
+      <SignInModal open={signInOpen} onClose={() => setSignInOpen(false)} mode={signInMode} />
     </>
   );
 }

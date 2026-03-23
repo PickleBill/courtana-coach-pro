@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { Slider } from '@/components/ui/slider';
 import { Zap } from 'lucide-react';
 
 export default function CoachingCalculator() {
@@ -25,30 +26,51 @@ export default function CoachingCalculator() {
           {/* Sliders */}
           <div className="space-y-7">
             <div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-3">
                 <label className="text-sm font-medium text-foreground">Sessions reviewed per week</label>
                 <span className="stat-number text-lg text-primary">{sessions}</span>
               </div>
-              <input type="range" min={5} max={50} step={1} value={sessions} onChange={(e) => setSessions(Number(e.target.value))} className="w-full accent-[hsl(var(--primary))] h-2 rounded-full bg-secondary/40 cursor-pointer" />
-              <div className="flex justify-between text-[10px] text-muted-foreground mt-1"><span>5</span><span>50</span></div>
+              <Slider
+                value={[sessions]}
+                onValueChange={(v) => setSessions(v[0])}
+                min={5}
+                max={50}
+                step={1}
+                className="w-full"
+              />
+              <div className="flex justify-between text-[10px] text-muted-foreground mt-1.5"><span>5</span><span>50</span></div>
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-3">
                 <label className="text-sm font-medium text-foreground">Avg minutes per review</label>
                 <span className="stat-number text-lg text-primary">{minutes.toFixed(1)} min</span>
               </div>
-              <input type="range" min={2} max={8} step={0.1} value={minutes} onChange={(e) => setMinutes(Number(e.target.value))} className="w-full accent-[hsl(var(--primary))] h-2 rounded-full bg-secondary/40 cursor-pointer" />
-              <div className="flex justify-between text-[10px] text-muted-foreground mt-1"><span>2 min</span><span>8 min</span></div>
+              <Slider
+                value={[minutes * 10]}
+                onValueChange={(v) => setMinutes(v[0] / 10)}
+                min={20}
+                max={80}
+                step={1}
+                className="w-full"
+              />
+              <div className="flex justify-between text-[10px] text-muted-foreground mt-1.5"><span>2 min</span><span>8 min</span></div>
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-3">
                 <label className="text-sm font-medium text-foreground">Avg revenue per session</label>
                 <span className="stat-number text-lg text-primary">${revenue}</span>
               </div>
-              <input type="range" min={35} max={150} step={1} value={revenue} onChange={(e) => setRevenue(Number(e.target.value))} className="w-full accent-[hsl(var(--primary))] h-2 rounded-full bg-secondary/40 cursor-pointer" />
-              <div className="flex justify-between text-[10px] text-muted-foreground mt-1"><span>$35</span><span>$150</span></div>
+              <Slider
+                value={[revenue]}
+                onValueChange={(v) => setRevenue(v[0])}
+                min={35}
+                max={150}
+                step={1}
+                className="w-full"
+              />
+              <div className="flex justify-between text-[10px] text-muted-foreground mt-1.5"><span>$35</span><span>$150</span></div>
             </div>
           </div>
 

@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
+import WaitlistModal from '@/components/WaitlistModal';
 import { Button } from '@/components/ui/button';
 import ScrollReveal from '@/components/ScrollReveal';
 import ActivityTicker from '@/components/ActivityTicker';
@@ -77,6 +79,8 @@ function Particles() {
 
 export default function Index() {
   usePageTitle('Courtana Coaching — King of the Court');
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const [waitlistContext, setWaitlistContext] = useState('');
 
   return (
     <div className="min-h-screen">
@@ -407,7 +411,7 @@ export default function Index() {
               </div>
 
               <div className="flex justify-center gap-4">
-                <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm" onClick={() => { toast({ title: "You're on the list!", description: "We'll notify you when early access opens." }); }}>Join the Ecosystem — Early Access</Button>
+                <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm" onClick={() => { setWaitlistContext('Court Kings × Courtana Early Access'); setWaitlistOpen(true); }}>Join the Ecosystem — Early Access</Button>
                 <Button size="lg" variant="outline" className="active:scale-95 transition-transform px-8 h-12" asChild>
                   <Link to="/dashboard">See Coach Economics</Link>
                 </Button>
@@ -491,6 +495,7 @@ export default function Index() {
           </div>
         </div>
       </section>
+      <WaitlistModal open={waitlistOpen} onClose={() => setWaitlistOpen(false)} context={waitlistContext} />
     </div>
   );
 }
