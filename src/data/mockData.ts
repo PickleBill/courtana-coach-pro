@@ -362,6 +362,8 @@ export const curriculumItems: CurriculumItem[] = [
   { id: '4', title: 'Session Analysis: Serve & Return', description: 'Upload a match for AI + coach analysis of your serve game', type: 'analysis', completed: false },
   { id: '5', title: 'Speed-up Decision Making', description: 'When to attack vs reset — live drill scenarios', type: 'drill', completed: false },
   { id: '6', title: 'Final Assessment: Full Match Review', description: 'Complete match uploaded for comprehensive coach feedback', type: 'analysis', completed: false },
+  { id: '7', title: 'AI Drill Assignment: Kitchen Reset Combo', description: 'AI-generated drill sequence based on your last 3 sessions. Complete on court, upload video.', type: 'drill', completed: false },
+  { id: '8', title: 'Play a Competitive Match', description: 'Enter a DUPR-rated match. Your performance is auto-analyzed and added to your curriculum progress.', type: 'analysis', completed: false },
 ];
 
 export const rewards: Reward[] = [

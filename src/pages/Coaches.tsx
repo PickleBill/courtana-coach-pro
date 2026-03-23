@@ -75,7 +75,6 @@ export default function Coaches() {
                   <Badge variant="outline" className="text-[10px] text-muted-foreground">
                     {spotlightCoach.slotsRemaining} slots remaining
                   </Badge>
-                  </Badge>
                 </div>
                 <h3 className="font-display text-xl font-bold text-foreground mb-1">{spotlightCoach.name}</h3>
                 <div className="flex items-start gap-2 mt-2">

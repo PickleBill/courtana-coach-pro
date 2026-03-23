@@ -197,6 +197,18 @@ export default function AIHub() {
                       </li>
                     ))}
                   </ul>
+                  {/* Export Session Report CTA */}
+                  <div className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/15">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs font-semibold text-foreground">Export Session Report</p>
+                        <p className="text-[10px] text-muted-foreground">All alpha data from the Underground 50 — analyzed and packaged.</p>
+                      </div>
+                      <Button size="sm" variant="outline" className="text-xs border-primary/20 text-primary hover:bg-primary/10 gap-1 active:scale-95 transition-transform" onClick={() => toast({ title: '📄 Report export coming soon', description: 'Request early access at partnerships@courtana.com' })}>
+                        <ExternalLink size={11} /> Export PDF
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </ScrollReveal>
             </div>
