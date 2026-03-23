@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { toast } from '@/hooks/use-toast';
 import { rewards } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
