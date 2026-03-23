@@ -165,9 +165,8 @@ export default function Index() {
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
             </motion.div>
 
-            <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.9] tracking-tight text-foreground" style={{ textWrap: 'balance' }}>
-              King of the<br />
-              <span className="text-gradient">Courtana</span>
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.9] tracking-tight text-foreground">
+              Kings of The <span className="text-gradient">Court</span>
             </h1>
             <p className="mt-6 text-lg lg:text-xl text-muted-foreground max-w-2xl leading-relaxed" style={{ textWrap: 'pretty' }}>
               AI-powered courts meet elite coaching networks. Every session captured, analyzed, and coached — from anywhere.

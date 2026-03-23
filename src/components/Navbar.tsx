@@ -62,14 +62,14 @@ export default function Navbar() {
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/30">
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
-          <Link to="/" className="flex items-center gap-2 group">
-            <PickleballCrownLogo />
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <CrownLogo />
             <div className="flex flex-col">
               <span className="font-display font-bold text-base sm:text-lg tracking-tight leading-none text-foreground">
-                King of the Courtana
+                Kings of The Court
               </span>
               <span className="text-[8px] tracking-[0.12em] uppercase text-primary/60 font-medium leading-none mt-0.5">
-                Powered by Courtana
+                Coaching powered by Courtana
               </span>
             </div>
           </Link>
