@@ -1,11 +1,13 @@
+import { Link } from 'react-router-dom';
 import { rewards } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Lock, Trophy, Star, ArrowRight, ExternalLink, ShoppingBag, Crown, Ticket, Wrench } from 'lucide-react';
+import { Lock, Trophy, Star, ArrowRight, ExternalLink, ShoppingBag, Crown, Ticket, Wrench, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
+import CourtKingsShop from '@/components/CourtKingsShop';
 
 const tierStyles = {
   silver: { bg: 'bg-slate-400/8', border: 'border-slate-400/20', text: 'text-slate-300', label: 'Silver', glow: '', shimmer: 'from-slate-300/5 via-slate-200/10 to-slate-300/5' },
