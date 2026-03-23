@@ -56,6 +56,15 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4">
+        {/* Demo banner (V5c) */}
+        {showBanner && (
+          <div className="mb-6 px-4 py-3 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-between">
+            <p className="text-sm text-foreground">
+              <span className="font-semibold text-primary">🎯 Demo Mode</span> — You're viewing Marcus Chen's coach dashboard. This is a live preview of the Courtana coaching platform.
+            </p>
+            <button onClick={() => setShowBanner(false)} className="text-xs text-muted-foreground hover:text-foreground ml-4 shrink-0">✕ Dismiss</button>
+          </div>
+        )}
         <ScrollReveal>
           <div className="flex items-start justify-between flex-wrap gap-4 mb-8">
             <div>
