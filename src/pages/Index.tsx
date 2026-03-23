@@ -495,6 +495,7 @@ export default function Index() {
           </div>
         </div>
       </section>
+      <WaitlistModal open={waitlistOpen} onClose={() => setWaitlistOpen(false)} context={waitlistContext} />
     </div>
   );
 }
