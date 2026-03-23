@@ -2,13 +2,14 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import ScrollReveal from '@/components/ScrollReveal';
 import ActivityTicker from '@/components/ActivityTicker';
+import CountUp from '@/components/CountUp';
+import LiveCounter from '@/components/LiveCounter';
 import { ecosystemStats, coaches } from '@/data/mockData';
 import CoachCard from '@/components/CoachCard';
-import { ArrowRight, Zap, Users, Trophy, Brain, TrendingUp, Shield, Crown, Gamepad2, Activity, ExternalLink, Play, Globe } from 'lucide-react';
+import usePageTitle from '@/hooks/usePageTitle';
+import { ArrowRight, Zap, Users, Trophy, Brain, TrendingUp, Shield, Crown, Gamepad2, Activity, ExternalLink, Play, Globe, Camera, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
-
-const formatNum = (n: number) => n >= 1000000 ? `${(n / 1000000).toFixed(1)}M` : n >= 1000 ? `${(n / 1000).toFixed(0)}K` : n.toString();
 
 const flywheelSteps = [
   { icon: Zap, label: 'Smart Court', desc: 'Courtana-powered facilities capture every shot in real time', color: 'text-primary' },
@@ -19,56 +20,25 @@ const flywheelSteps = [
 ];
 
 const audienceCards = [
-  {
-    title: "I'm a Player",
-    desc: 'Get coached by the best — from AI analysis to personalized pro feedback. Level up on any court, on your time.',
-    cta: 'Find Your Coach',
-    link: '/coaches',
-    icon: Gamepad2,
-    gradient: 'from-primary/20 to-primary/5',
-  },
-  {
-    title: "I'm a Coach",
-    desc: 'Review sessions in minutes, not hours. Grow your student base globally. Earn 4x more with less time.',
-    cta: 'Join the Network',
-    link: '/dashboard',
-    icon: Shield,
-    gradient: 'from-blue-500/20 to-blue-500/5',
-  },
-  {
-    title: "I'm a Pro / Celebrity",
-    desc: 'Build your coaching empire. Approve vetted networks, earn revenue share, create once-in-a-lifetime fan experiences.',
-    cta: 'Scout Talent',
-    link: '/scout',
-    icon: Crown,
-    gradient: 'from-[hsl(var(--gold))]/20 to-[hsl(var(--gold))]/5',
-  },
+  { title: "I'm a Player", desc: 'Get coached by the best — from AI analysis to personalized pro feedback. Level up on any court, on your time.', cta: 'Find Your Coach', link: '/coaches', icon: Gamepad2, gradient: 'from-primary/20 to-primary/5' },
+  { title: "I'm a Coach", desc: 'Review sessions in minutes, not hours. Grow your student base globally. Earn 4x more with less time.', cta: 'Join the Network', link: '/dashboard', icon: Shield, gradient: 'from-blue-500/20 to-blue-500/5' },
+  { title: "I'm a Pro / Celebrity", desc: 'Build your coaching empire. Approve vetted networks, earn revenue share, create once-in-a-lifetime fan experiences.', cta: 'Scout Talent', link: '/scout', icon: Crown, gradient: 'from-[hsl(var(--gold))]/20 to-[hsl(var(--gold))]/5' },
 ];
 
 const seeItLiveCards = [
-  {
-    title: 'Smart Court in Action',
-    desc: 'See how Courtana-powered courts capture and analyze every rally in real time.',
-    url: 'https://courtana.com/',
-    icon: Zap,
-  },
-  {
-    title: 'Live Player Profile',
-    desc: 'Real player profile with badges, XP progression, and competitive rank.',
-    url: 'https://courtana.com/player/bGLx1SV3k1lT/',
-    icon: Users,
-  },
-  {
-    title: 'Session Highlights',
-    desc: 'Actual highlight clips automatically generated from a live session.',
-    url: 'https://courtana.com/session-highlights/J8UKbUJaBKxT',
-    icon: Play,
-  },
+  { title: 'Smart Court in Action', desc: 'See how Courtana-powered courts capture and analyze every rally in real time.', url: 'https://courtana.com/', icon: Zap },
+  { title: 'Live Player Profile', desc: 'Real player profile with badges, XP progression, and competitive rank.', url: 'https://courtana.com/player/bGLx1SV3k1lT/', icon: Users },
+  { title: 'Session Highlights', desc: 'Actual highlight clips automatically generated from a live session.', url: 'https://courtana.com/session-highlights/J8UKbUJaBKxT', icon: Play },
+];
+
+const howItWorks = [
+  { icon: Camera, title: 'Play', desc: 'AI cameras capture your session automatically' },
+  { icon: Brain, title: 'Analyze', desc: 'Get instant shot grades, pattern recognition, and improvement areas' },
+  { icon: TrendingUp, title: 'Improve', desc: 'Connect with coaches who review your AI analysis and build your curriculum' },
 ];
 
 const partnerCategories = ['Equipment Partners', 'Brand Partners', 'Wellness Partners', 'Facility Partners', 'Media Partners', 'Tech Partners', 'Event Partners', 'Apparel Partners'];
 
-// Floating particles component
 function Particles() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -76,22 +46,9 @@ function Particles() {
         <motion.div
           key={i}
           className="absolute w-1 h-1 rounded-full bg-primary/20"
-          initial={{
-            x: `${Math.random() * 100}%`,
-            y: `${Math.random() * 100}%`,
-            opacity: 0,
-          }}
-          animate={{
-            y: [`${20 + Math.random() * 60}%`, `${10 + Math.random() * 40}%`],
-            opacity: [0, 0.6, 0],
-          }}
-          transition={{
-            duration: 4 + Math.random() * 4,
-            repeat: Infinity,
-            repeatType: 'loop',
-            delay: Math.random() * 5,
-            ease: 'easeInOut',
-          }}
+          initial={{ x: `${Math.random() * 100}%`, y: `${Math.random() * 100}%`, opacity: 0 }}
+          animate={{ y: [`${20 + Math.random() * 60}%`, `${10 + Math.random() * 40}%`], opacity: [0, 0.6, 0] }}
+          transition={{ duration: 4 + Math.random() * 4, repeat: Infinity, repeatType: 'loop', delay: Math.random() * 5, ease: 'easeInOut' }}
           style={{ width: 1 + Math.random() * 3, height: 1 + Math.random() * 3 }}
         />
       ))}
@@ -100,6 +57,8 @@ function Particles() {
 }
 
 export default function Index() {
+  usePageTitle('Courtana Coaching — King of the Court');
+
   return (
     <div className="min-h-screen">
       {/* Hero */}
@@ -112,18 +71,8 @@ export default function Index() {
         <Particles />
 
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-4xl"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/8 border border-primary/15 text-primary text-xs font-medium mb-8 badge-glow"
-            >
+          <motion.div initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }} className="max-w-4xl">
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.2 }} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/8 border border-primary/15 text-primary text-xs font-medium mb-8 badge-glow">
               <Crown size={12} />
               Powered by Courtana × Court Kings
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
@@ -143,39 +92,71 @@ export default function Index() {
               <Button size="lg" variant="outline" className="active:scale-95 transition-transform text-base px-8 h-12 border-border/60 hover:border-primary/30" asChild>
                 <Link to="/ai-hub">Try AI Analysis</Link>
               </Button>
+              <Button size="lg" variant="ghost" className="active:scale-95 transition-transform text-base px-8 h-12 text-muted-foreground" asChild>
+                <a href="#how-it-works">Watch Demo</a>
+              </Button>
             </div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="mt-10 flex items-center gap-3 text-xs text-muted-foreground"
-            >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="mt-10 flex items-center gap-3 text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <Activity size={12} className="text-primary" />
                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                12 sessions being analyzed right now
+                <LiveCounter min={10} max={15} className="text-primary font-semibold" /> sessions being analyzed right now
               </span>
               <span className="text-border">·</span>
-              <span>47 coaches online</span>
+              <span><LiveCounter min={40} max={55} /> coaches online</span>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Stats bar */}
+      {/* How It Works */}
+      <section id="how-it-works" className="py-20 lg:py-24 section-gradient-2">
+        <div className="container mx-auto px-4">
+          <ScrollReveal>
+            <div className="text-center mb-14">
+              <h2 className="font-display text-3xl lg:text-4xl font-bold mb-3" style={{ textWrap: 'balance' }}>How It Works</h2>
+              <p className="text-muted-foreground max-w-md mx-auto">Three steps from court to coaching — powered by AI and expert review.</p>
+            </div>
+          </ScrollReveal>
+          <div className="max-w-4xl mx-auto relative">
+            {/* Connector line */}
+            <div className="hidden md:block absolute top-1/2 left-[16%] right-[16%] h-px bg-gradient-to-r from-primary/20 via-primary/30 to-primary/20 -translate-y-1/2" />
+            <div className="grid md:grid-cols-3 gap-6">
+              {howItWorks.map((step, i) => (
+                <ScrollReveal key={step.title} delay={i * 0.12}>
+                  <motion.div whileHover={{ scale: 1.03, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className="glass rounded-2xl p-8 text-center glass-hover relative">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold shadow-lg shadow-primary/25">
+                      {i + 1}
+                    </div>
+                    <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-5">
+                      <step.icon size={28} className="text-primary" />
+                    </div>
+                    <h3 className="font-display text-xl font-bold text-foreground mb-2">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
+                  </motion.div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats bar with count-up */}
       <ScrollReveal>
         <section className="border-y border-border/20 section-gradient-2">
           <div className="container mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-5 gap-8">
             {[
-              { label: 'Sessions Analyzed', value: formatNum(ecosystemStats.sessionsAnalyzed), suffix: '+' },
-              { label: 'Certified Coaches', value: formatNum(ecosystemStats.coachesOnPlatform), suffix: '' },
-              { label: 'Pro Networks', value: '12', suffix: '' },
-              { label: 'Facilities Connected', value: ecosystemStats.facilitiesConnected.toString(), suffix: '' },
-              { label: 'Player Satisfaction', value: `${ecosystemStats.playerSatisfaction}`, suffix: '%' },
+              { label: 'Sessions Analyzed', value: 128, suffix: 'K+', decimals: 0 },
+              { label: 'Certified Coaches', value: 342, suffix: '', decimals: 0 },
+              { label: 'Pro Networks', value: 12, suffix: '', decimals: 0 },
+              { label: 'Facilities Connected', value: 48, suffix: '', decimals: 0 },
+              { label: 'Player Satisfaction', value: 94.7, suffix: '%', decimals: 1 },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="stat-number text-3xl lg:text-4xl text-primary">{stat.value}<span className="text-primary/60">{stat.suffix}</span></div>
+                <div className="stat-number text-3xl lg:text-4xl text-primary">
+                  <CountUp end={stat.value} suffix={stat.suffix} decimals={stat.decimals} />
+                </div>
                 <div className="text-xs text-muted-foreground mt-1.5 uppercase tracking-wider">{stat.label}</div>
               </div>
             ))}
@@ -191,24 +172,15 @@ export default function Index() {
               <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs mb-4 badge-glow">
                 <Globe size={10} className="mr-1" /> Live on Courtana
               </Badge>
-              <h2 className="font-display text-3xl lg:text-4xl font-bold mb-3" style={{ textWrap: 'balance' }}>
-                See It Live
-              </h2>
-              <p className="text-muted-foreground max-w-md mx-auto">
-                Not mock-ups — these are real, live features running on courtana.com right now.
-              </p>
+              <h2 className="font-display text-3xl lg:text-4xl font-bold mb-3" style={{ textWrap: 'balance' }}>See It Live</h2>
+              <p className="text-muted-foreground max-w-md mx-auto">Not mock-ups — these are real, live features running on courtana.com right now.</p>
             </div>
           </ScrollReveal>
-
           <div className="grid md:grid-cols-3 gap-5 max-w-4xl mx-auto">
             {seeItLiveCards.map((card, i) => (
               <ScrollReveal key={card.title} delay={i * 0.1}>
                 <a href={card.url} target="_blank" rel="noopener noreferrer" className="block h-full">
-                  <motion.div
-                    whileHover={{ scale: 1.03, y: -4 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                    className="glass rounded-2xl p-6 glass-hover group active:scale-[0.97] transition-transform h-full relative overflow-hidden"
-                  >
+                  <motion.div whileHover={{ scale: 1.03, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className="glass rounded-2xl p-6 glass-hover group active:scale-[0.97] transition-transform h-full relative overflow-hidden">
                     <div className="absolute top-3 right-3 flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                       <span className="text-[10px] text-primary font-medium">Live</span>
@@ -237,36 +209,23 @@ export default function Index() {
         <div className="container mx-auto px-4 relative z-10">
           <ScrollReveal>
             <div className="text-center mb-16">
-              <h2 className="font-display text-3xl lg:text-5xl font-bold mb-4" style={{ textWrap: 'balance' }}>
-                The Ecosystem Flywheel
-              </h2>
-              <p className="text-muted-foreground max-w-xl mx-auto text-lg">
-                Every element feeds the next — creating a self-reinforcing loop that grows the entire network.
-              </p>
+              <h2 className="font-display text-3xl lg:text-5xl font-bold mb-4" style={{ textWrap: 'balance' }}>The Ecosystem Flywheel</h2>
+              <p className="text-muted-foreground max-w-xl mx-auto text-lg">Every element feeds the next — creating a self-reinforcing loop that grows the entire network.</p>
             </div>
           </ScrollReveal>
-
           <div className="relative max-w-5xl mx-auto">
             <div className="hidden md:block absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent -translate-y-1/2" />
             <div className="grid md:grid-cols-5 gap-4 lg:gap-5">
               {flywheelSteps.map((step, i) => (
                 <ScrollReveal key={step.label} delay={i * 0.1}>
-                  <motion.div
-                    whileHover={{ scale: 1.04, y: -4 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                    className="glass rounded-2xl p-6 text-center glass-hover relative group cursor-default"
-                  >
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-card border border-primary/30 flex items-center justify-center text-[10px] font-bold text-primary">
-                      {i + 1}
-                    </div>
+                  <motion.div whileHover={{ scale: 1.04, y: -4 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className="glass rounded-2xl p-6 text-center glass-hover relative group cursor-default">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-card border border-primary/30 flex items-center justify-center text-[10px] font-bold text-primary">{i + 1}</div>
                     <div className="w-14 h-14 rounded-2xl bg-primary/8 border border-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/15 transition-all duration-300">
                       <step.icon size={24} className={step.color} />
                     </div>
                     <h3 className="font-display font-bold text-foreground text-base mb-1.5">{step.label}</h3>
                     <p className="text-xs text-muted-foreground leading-relaxed">{step.desc}</p>
-                    {i < flywheelSteps.length - 1 && (
-                      <ArrowRight size={16} className="hidden md:block absolute -right-3.5 top-1/2 -translate-y-1/2 text-primary/30 z-10" />
-                    )}
+                    {i < flywheelSteps.length - 1 && <ArrowRight size={16} className="hidden md:block absolute -right-3.5 top-1/2 -translate-y-1/2 text-primary/30 z-10" />}
                   </motion.div>
                 </ScrollReveal>
               ))}
@@ -292,23 +251,15 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <div className="text-center mb-14">
-              <h2 className="font-display text-3xl lg:text-5xl font-bold mb-4" style={{ textWrap: 'balance' }}>
-                Your Role in the Kingdom
-              </h2>
-              <p className="text-muted-foreground text-lg max-w-lg mx-auto">
-                Three doors into the ecosystem. Every role benefits from the network effect.
-              </p>
+              <h2 className="font-display text-3xl lg:text-5xl font-bold mb-4" style={{ textWrap: 'balance' }}>Your Role in the Kingdom</h2>
+              <p className="text-muted-foreground text-lg max-w-lg mx-auto">Three doors into the ecosystem. Every role benefits from the network effect.</p>
             </div>
           </ScrollReveal>
           <div className="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
             {audienceCards.map((card, i) => (
               <ScrollReveal key={card.title} delay={i * 0.12}>
                 <Link to={card.link} className="block h-full">
-                  <motion.div
-                    whileHover={{ scale: 1.03, y: -6 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                    className="glass rounded-2xl p-8 glass-hover group active:scale-[0.97] transition-transform h-full relative overflow-hidden"
-                  >
+                  <motion.div whileHover={{ scale: 1.03, y: -6 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }} className="glass rounded-2xl p-8 glass-hover group active:scale-[0.97] transition-transform h-full relative overflow-hidden">
                     <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                     <div className="relative z-10">
                       <div className="w-14 h-14 rounded-2xl bg-secondary/60 border border-border/40 flex items-center justify-center mb-5 group-hover:border-primary/20 transition-colors">
@@ -328,16 +279,14 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Featured coaches preview */}
+      {/* Featured coaches */}
       <section className="py-20 lg:py-28">
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <div className="flex items-end justify-between mb-12">
               <div>
                 <div className="text-xs text-primary font-medium uppercase tracking-wider mb-3">Elite Network</div>
-                <h2 className="font-display text-3xl lg:text-4xl font-bold" style={{ textWrap: 'balance' }}>
-                  Featured Coaches
-                </h2>
+                <h2 className="font-display text-3xl lg:text-4xl font-bold" style={{ textWrap: 'balance' }}>Featured Coaches</h2>
                 <p className="text-muted-foreground mt-2">From world #1 pros to rising stars ready to help you level up.</p>
               </div>
               <Button variant="ghost" className="hidden sm:flex text-primary" asChild>
@@ -357,25 +306,20 @@ export default function Index() {
 
       {/* Court Kings Partnership */}
       <ScrollReveal>
-        <section className="py-20 lg:py-28 section-gradient-1 relative overflow-hidden">
+        <section id="court-kings-partnership" className="py-20 lg:py-28 section-gradient-1 relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] bg-[hsl(var(--gold))]/5 rounded-full blur-[150px]" />
           </div>
           <div className="container mx-auto px-4 text-center max-w-2xl relative z-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))]/20 text-[hsl(var(--gold))] text-xs font-medium mb-6">
-              <Crown size={12} />
-              Strategic Partnership
+              <Crown size={12} /> Strategic Partnership
             </div>
-            <h2 className="font-display text-3xl lg:text-5xl font-bold mb-5" style={{ textWrap: 'balance' }}>
-              Court Kings × Courtana
-            </h2>
+            <h2 className="font-display text-3xl lg:text-5xl font-bold mb-5" style={{ textWrap: 'balance' }}>Court Kings × Courtana</h2>
             <p className="text-muted-foreground leading-relaxed mb-10 text-lg">
               Building the coaching infrastructure layer for every racquet sport facility in America. Court Kings brings the courts, pros, and nationwide distribution. Courtana brings AI, smart court tech, and the player ecosystem.
             </p>
             <div className="flex justify-center gap-4">
-              <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm">
-                Partner With Us
-              </Button>
+              <Button size="lg" className="font-semibold active:scale-95 transition-transform px-8 h-12 glow-sm">Partner With Us</Button>
               <Button size="lg" variant="outline" className="active:scale-95 transition-transform px-8 h-12" asChild>
                 <Link to="/dashboard">See Coach Economics</Link>
               </Button>
@@ -384,23 +328,20 @@ export default function Index() {
         </section>
       </ScrollReveal>
 
-      {/* Community Partners scroll */}
+      {/* Community Partners */}
       <section className="py-16 border-t border-border/15">
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <div className="text-center mb-10">
               <h3 className="font-display text-lg font-bold text-foreground mb-1">Court Kings Community Partners</h3>
-              <p className="text-xs text-muted-foreground">The growing ecosystem of brands, facilities, and partners</p>
+              <p className="text-xs text-muted-foreground mb-1">Join 40+ partners building the future of racquet sports</p>
+              <a href="https://courtkings.com/community-partners/" target="_blank" rel="noopener noreferrer" className="text-[10px] text-primary hover:underline">Become a Partner →</a>
             </div>
           </ScrollReveal>
           <div className="overflow-hidden relative">
             <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
             <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
-            <motion.div
-              animate={{ x: [0, -800] }}
-              transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-              className="flex gap-8 whitespace-nowrap"
-            >
+            <motion.div animate={{ x: [0, -800] }} transition={{ duration: 30, repeat: Infinity, ease: 'linear' }} className="flex gap-8 whitespace-nowrap">
               {[...partnerCategories, ...partnerCategories].map((cat, i) => (
                 <div key={i} className="flex items-center gap-3 px-5 py-3 rounded-xl bg-secondary/20 border border-border/15 shrink-0">
                   <div className="w-8 h-8 rounded-lg bg-primary/8 border border-primary/10 flex items-center justify-center">

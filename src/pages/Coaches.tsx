@@ -3,10 +3,11 @@ import { coaches } from '@/data/mockData';
 import CoachCard from '@/components/CoachCard';
 import CoachMatchQuiz from '@/components/CoachMatchQuiz';
 import ScrollReveal from '@/components/ScrollReveal';
+import usePageTitle from '@/hooks/usePageTitle';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Crown, ShieldCheck, Sparkles, Filter, Activity, Target } from 'lucide-react';
-import { AnimatePresence } from 'framer-motion';
+import { Crown, ShieldCheck, Sparkles, Filter, Activity, Target, Quote } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const tiers = ['all', 'celebrity', 'certified', 'rising'] as const;
 const tierConfig = {
@@ -17,9 +18,12 @@ const tierConfig = {
 };
 
 export default function Coaches() {
+  usePageTitle('Coach Marketplace — Courtana Coaching');
   const [filter, setFilter] = useState<typeof tiers[number]>('all');
   const [showQuiz, setShowQuiz] = useState(false);
   const filtered = filter === 'all' ? coaches : coaches.filter((c) => c.tier === filter);
+
+  const benJohns = coaches.find(c => c.name === 'Ben Johns')!;
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -45,9 +49,45 @@ export default function Coaches() {
           </div>
         </ScrollReveal>
 
+        {/* Featured Coach Spotlight */}
+        <ScrollReveal delay={0.05}>
+          <div className="glass rounded-2xl p-6 lg:p-8 mb-10 mt-6 relative overflow-hidden glow-gold border-[hsl(var(--gold))]/20">
+            <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--gold))]/4 to-transparent pointer-events-none" />
+            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center gap-6">
+              <div className="w-20 h-20 rounded-2xl bg-[hsl(var(--gold))]/15 border border-[hsl(var(--gold))]/25 flex items-center justify-center font-display font-bold text-2xl text-[hsl(var(--gold))] shrink-0">
+                {benJohns.avatar}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <Badge variant="outline" className="bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/25 text-xs">
+                    <Crown size={10} className="mr-1" /> Featured Coach
+                  </Badge>
+                  <Badge variant="outline" className="text-[10px] text-muted-foreground">
+                    {benJohns.slotsRemaining} slots remaining
+                  </Badge>
+                </div>
+                <h3 className="font-display text-xl font-bold text-foreground mb-1">{benJohns.name}</h3>
+                <div className="flex items-start gap-2 mt-2">
+                  <Quote size={14} className="text-[hsl(var(--gold))]/50 shrink-0 mt-0.5" />
+                  <p className="text-sm text-muted-foreground italic leading-relaxed">
+                    "I review every video myself. When I see a player improving through our analysis, that's why I do this. The AI catches patterns I might miss, and together we accelerate improvement 10x."
+                  </p>
+                </div>
+              </div>
+              <div className="text-right shrink-0">
+                <div className="stat-number text-3xl text-[hsl(var(--gold))]">${benJohns.price}</div>
+                <div className="text-xs text-muted-foreground">{benJohns.priceLabel}</div>
+                <Button size="sm" className="mt-3 active:scale-95 transition-transform glow-sm font-semibold">
+                  Book Session
+                </Button>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+
         {/* Tier filter tabs */}
         <ScrollReveal delay={0.1}>
-          <div className="flex gap-2 mb-10 flex-wrap mt-6">
+          <div className="flex gap-2 mb-10 flex-wrap">
             {tiers.map((t) => {
               const cfg = tierConfig[t];
               const TierIcon = cfg.icon;
@@ -108,7 +148,6 @@ export default function Coaches() {
         </ScrollReveal>
       </div>
 
-      {/* Quiz modal */}
       <AnimatePresence>
         {showQuiz && <CoachMatchQuiz onClose={() => setShowQuiz(false)} />}
       </AnimatePresence>

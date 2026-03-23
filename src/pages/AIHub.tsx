@@ -1,9 +1,10 @@
 import { aiAnalysisResult } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
+import usePageTitle from '@/hooks/usePageTitle';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Upload, Wifi, Send, CheckCircle, AlertTriangle, Lightbulb, Brain, ArrowRight, User, Zap, Play, ExternalLink } from 'lucide-react';
+import { Upload, Wifi, Send, CheckCircle, AlertTriangle, Lightbulb, Brain, ArrowRight, User, Zap, Play, ExternalLink, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const gradeColors: Record<string, string> = {
@@ -18,7 +19,16 @@ const gradeBg: Record<string, string> = {
   'C+': 'bg-[hsl(var(--gold))]/12', 'C': 'bg-[hsl(var(--gold))]/12',
 };
 
+const recentSessions = [
+  { date: 'Mar 21, 2026', grade: 'B+', rallies: 47, label: 'Doubles Match — Austin, TX' },
+  { date: 'Mar 18, 2026', grade: 'B', rallies: 38, label: 'Singles Practice — Nashville, TN' },
+  { date: 'Mar 14, 2026', grade: 'A-', rallies: 52, label: 'Tournament Warmup — San Diego, CA' },
+  { date: 'Mar 10, 2026', grade: 'B-', rallies: 31, label: 'Kitchen Drills — Black Barn, OH' },
+];
+
 export default function AIHub() {
+  usePageTitle('AI Analysis Hub — Courtana Coaching');
+
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4">
@@ -47,12 +57,7 @@ export default function AIHub() {
                   <Wifi size={14} /> Connect Courtana Session
                 </Button>
               </div>
-              <a
-                href="https://courtana.com/ai-analysis/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-primary/70 hover:text-primary mt-4 transition-colors"
-              >
+              <a href="https://courtana.com/ai-analysis/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-primary/70 hover:text-primary mt-4 transition-colors">
                 Try AI Analysis on Courtana <ExternalLink size={10} />
               </a>
             </div>
@@ -70,75 +75,64 @@ export default function AIHub() {
           </div>
         </ScrollReveal>
 
-        {/* Video thumbnail + shot markers */}
-        <ScrollReveal>
-          <div className="glass rounded-2xl overflow-hidden mb-6 relative group cursor-pointer">
-            <div className="h-56 bg-gradient-to-br from-secondary/60 via-primary/5 to-secondary/40 relative flex items-center justify-center">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,_hsla(145,100%,45%,0.06),transparent_50%)]" />
-              {/* Shot markers */}
-              {[
-                { x: '20%', y: '35%', label: 'Serve A-', color: 'bg-primary' },
-                { x: '55%', y: '55%', label: 'Drop B+', color: 'bg-blue-400' },
-                { x: '75%', y: '30%', label: 'Volley B-', color: 'bg-blue-400' },
-                { x: '40%', y: '70%', label: 'Kitchen A', color: 'bg-primary' },
-              ].map((marker, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 + i * 0.15, type: 'spring', stiffness: 400 }}
-                  className="absolute"
-                  style={{ left: marker.x, top: marker.y }}
-                >
-                  <div className={`px-2 py-0.5 rounded-md ${marker.color}/20 border border-current/30 text-[10px] font-semibold ${marker.color === 'bg-primary' ? 'text-primary' : 'text-blue-400'} backdrop-blur-sm`}>
-                    {marker.label}
+        <div className="grid lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3 space-y-6">
+            {/* Video thumbnail + shot markers */}
+            <ScrollReveal>
+              <div className="glass rounded-2xl overflow-hidden relative group cursor-pointer">
+                <div className="h-64 bg-gradient-to-br from-secondary/60 via-primary/5 to-secondary/40 relative flex items-center justify-center">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,_hsla(145,100%,45%,0.06),transparent_50%)]" />
+                  {/* Heat zones */}
+                  <div className="absolute left-[10%] top-[20%] w-[25%] h-[30%] rounded-lg bg-primary/8 border border-primary/15" />
+                  <div className="absolute left-[40%] top-[40%] w-[20%] h-[35%] rounded-lg bg-[hsl(var(--gold))]/8 border border-[hsl(var(--gold))]/15" />
+                  <div className="absolute right-[10%] top-[15%] w-[20%] h-[25%] rounded-lg bg-blue-400/8 border border-blue-400/15" />
+                  {/* Shot markers */}
+                  {[
+                    { x: '20%', y: '35%', label: 'Serve A-', color: 'text-primary' },
+                    { x: '55%', y: '55%', label: 'Drop B+', color: 'text-blue-400' },
+                    { x: '75%', y: '30%', label: 'Volley B-', color: 'text-blue-400' },
+                    { x: '40%', y: '70%', label: 'Kitchen A', color: 'text-primary' },
+                    { x: '65%', y: '65%', label: 'Lob C+', color: 'text-[hsl(var(--gold))]' },
+                  ].map((marker, i) => (
+                    <motion.div key={i} initial={{ scale: 0, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.12, type: 'spring', stiffness: 400 }} className="absolute" style={{ left: marker.x, top: marker.y }}>
+                      <div className={`px-2 py-0.5 rounded-md bg-card/80 border border-border/30 text-[10px] font-semibold ${marker.color} backdrop-blur-sm`}>
+                        {marker.label}
+                      </div>
+                    </motion.div>
+                  ))}
+                  <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform">
+                    <Play size={24} className="text-primary-foreground ml-1" />
                   </div>
-                </motion.div>
-              ))}
-              {/* Play button */}
-              <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform">
-                <Play size={24} className="text-primary-foreground ml-1" />
+                  <Badge variant="outline" className="absolute top-4 left-4 bg-card/80 text-foreground border-border/30 text-[10px] backdrop-blur-sm">
+                    Match Replay · 23:47 min
+                  </Badge>
+                  <Badge variant="outline" className="absolute top-4 right-4 bg-primary/10 text-primary border-primary/20 text-[10px]">
+                    47 rallies analyzed
+                  </Badge>
+                </div>
               </div>
-              <Badge variant="outline" className="absolute top-4 left-4 bg-card/80 text-foreground border-border/30 text-[10px] backdrop-blur-sm">
-                Match Replay · 23:47 min
-              </Badge>
-              <Badge variant="outline" className="absolute top-4 right-4 bg-primary/10 text-primary border-primary/20 text-[10px]">
-                47 rallies analyzed
-              </Badge>
-            </div>
-          </div>
-        </ScrollReveal>
+            </ScrollReveal>
 
-        {/* Shot grades grid */}
-        <ScrollReveal>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
-            {aiAnalysisResult.shotBreakdown.map((shot, i) => (
-              <motion.div
-                key={shot.shot}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="glass rounded-xl p-4 text-center glass-hover"
-              >
-                <div className={`stat-number text-2xl ${gradeColors[shot.grade]}`}>{shot.grade}</div>
-                <div className="text-[11px] text-muted-foreground mt-1 font-medium">{shot.shot}</div>
-                <div className="text-[10px] text-muted-foreground/60 mt-0.5">{shot.score}/100</div>
-              </motion.div>
-            ))}
-          </div>
-        </ScrollReveal>
+            {/* Shot grades grid */}
+            <ScrollReveal>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                {aiAnalysisResult.shotBreakdown.map((shot, i) => (
+                  <motion.div key={shot.shot} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="glass rounded-xl p-4 text-center glass-hover">
+                    <div className={`stat-number text-2xl ${gradeColors[shot.grade]}`}>{shot.grade}</div>
+                    <div className="text-[11px] text-muted-foreground mt-1 font-medium">{shot.shot}</div>
+                    <div className="text-[10px] text-muted-foreground/60 mt-0.5">{shot.score}/100</div>
+                  </motion.div>
+                ))}
+              </div>
+            </ScrollReveal>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-5">
             {/* Strengths & Weaknesses */}
             <div className="grid sm:grid-cols-2 gap-4">
               <ScrollReveal delay={0.05}>
                 <div className="glass rounded-xl p-5 h-full border-primary/10">
                   <h4 className="flex items-center gap-1.5 font-display font-semibold text-sm text-primary mb-3"><CheckCircle size={14} /> Strengths</h4>
                   <ul className="space-y-2.5">
-                    {aiAnalysisResult.strengths.map((s) => (
+                    {['Kitchen control is exceptional — top 20% percentile', 'Serve placement accuracy above average', 'Court positioning IQ in top 20% of analyzed players'].map((s) => (
                       <li key={s} className="text-sm text-muted-foreground flex items-start gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" /> {s}
                       </li>
@@ -150,7 +144,7 @@ export default function AIHub() {
                 <div className="glass rounded-xl p-5 h-full border-[hsl(var(--gold))]/10">
                   <h4 className="flex items-center gap-1.5 font-display font-semibold text-sm text-[hsl(var(--gold))] mb-3"><AlertTriangle size={14} /> Areas to Improve</h4>
                   <ul className="space-y-2.5">
-                    {aiAnalysisResult.weaknesses.map((w) => (
+                    {['Third shot drop consistency needs work — 62% success rate', 'Backhand return tends to float on 40% of attempts', 'Transition zone movement can be faster — split step timing late'].map((w) => (
                       <li key={w} className="text-sm text-muted-foreground flex items-start gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))] mt-1.5 shrink-0" /> {w}
                       </li>
@@ -171,7 +165,6 @@ export default function AIHub() {
                       <CheckCircle size={8} className="mr-0.5" /> Pro Review Received
                     </Badge>
                   </div>
-
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="p-4 rounded-lg bg-secondary/20 border border-border/20">
                       <div className="flex items-center gap-1.5 mb-2">
@@ -186,7 +179,7 @@ export default function AIHub() {
                         <span className="text-xs font-semibold text-foreground">Coach Marcus</span>
                         <span className="text-[10px] text-muted-foreground/50">2h ago</span>
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">The AI is spot on. I'd also add: watch your left foot — you're stepping too wide which kills your recovery. Try the wall drill with a 2-step limit. I've added a footwork module to your curriculum.</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">The AI is spot on — that third shot drop inconsistency is because you're dropping your paddle head too early. Try this drill: stand at the transition zone, partner feeds, focus on keeping the paddle face open until contact. I've added a footwork module to your curriculum.</p>
                     </div>
                   </div>
                 </div>
@@ -207,18 +200,33 @@ export default function AIHub() {
                     </div>
                     <h4 className="font-display font-bold text-foreground">Request Pro Review</h4>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-1">
-                    Get expert eyes on this analysis
-                  </p>
+                  <p className="text-sm text-muted-foreground mb-1">Get expert eyes on this analysis</p>
                   <p className="text-xs text-muted-foreground mb-5">
                     <span className="text-foreground font-medium">$75 one-time</span> or <span className="text-primary font-medium">Free with Gold subscription</span>
                   </p>
                   <Button className="w-full active:scale-95 transition-transform glow-sm font-semibold gap-1.5 h-11">
                     <Send size={14} /> Send to Coach
                   </Button>
-                  <p className="text-[10px] text-muted-foreground/60 text-center mt-3">
-                    Avg response time: 2.4 hours · 94% satisfaction
-                  </p>
+                  <p className="text-[10px] text-muted-foreground/60 text-center mt-3">Avg response time: 2.4 hours · 94% satisfaction</p>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            {/* Recent Sessions */}
+            <ScrollReveal delay={0.12}>
+              <div className="glass rounded-2xl p-5">
+                <h4 className="font-display font-semibold text-sm text-foreground mb-4 flex items-center gap-1.5"><Clock size={13} /> Recent Analyses</h4>
+                <div className="space-y-2.5">
+                  {recentSessions.map((s, i) => (
+                    <div key={i} className="p-3 rounded-lg bg-secondary/20 border border-border/15 hover:border-primary/15 transition-colors cursor-pointer">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className={`stat-number text-lg ${gradeColors[s.grade]}`}>{s.grade}</span>
+                        <span className="text-[10px] text-muted-foreground">{s.date}</span>
+                      </div>
+                      <p className="text-[11px] text-muted-foreground">{s.label}</p>
+                      <p className="text-[10px] text-muted-foreground/50">{s.rallies} rallies</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </ScrollReveal>

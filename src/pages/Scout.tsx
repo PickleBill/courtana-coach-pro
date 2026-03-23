@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { risingStars, coaches } from '@/data/mockData';
 import ScrollReveal from '@/components/ScrollReveal';
+import usePageTitle from '@/hooks/usePageTitle';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { MapPin, Target, Star, Crown, Users, Eye, ArrowRight, Sparkles, DollarSign, Play, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Scout() {
+  usePageTitle('Scout & Draft — Courtana Coaching');
   const celebrities = coaches.filter((c) => c.tier === 'celebrity');
-  const [showRevShare, setShowRevShare] = useState(false);
+  const [showRevShare, setShowRevShare] = useState(true);
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -42,9 +44,8 @@ export default function Scout() {
                     <div className="flex-1 min-w-0">
                       <h3 className="font-display font-semibold text-foreground">{pro.name}</h3>
                       <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5 flex-wrap">
-                        <span className="flex items-center gap-1"><Users size={10} /> {pro.studentsCoached} students</span>
-                        <span className="flex items-center gap-1"><Eye size={10} /> {coaches.filter(c => c.network === pro.name).length + 8} in network</span>
-                        <span className="flex items-center gap-1 text-[hsl(var(--gold))]"><DollarSign size={10} /> $24.7K shared/mo</span>
+                        <span className="flex items-center gap-1"><Users size={10} /> 12 in network</span>
+                        <span className="flex items-center gap-1 text-[hsl(var(--gold))]"><DollarSign size={10} /> $24,750/mo shared</span>
                       </div>
                     </div>
                     <Badge variant="outline" className="bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/25 text-[10px] badge-glow shrink-0">
@@ -74,10 +75,8 @@ export default function Scout() {
                 transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 className="glass rounded-2xl overflow-hidden glass-hover border-blue-400/15"
               >
-                {/* Highlight reel placeholder */}
                 <div className="h-36 bg-gradient-to-br from-blue-500/10 to-primary/5 relative flex items-center justify-center group cursor-pointer">
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_hsla(210,100%,60%,0.08),transparent_70%)]" />
-                  {/* Play button overlay */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center shadow-lg shadow-primary/20">
                       <Play size={18} className="text-primary-foreground ml-0.5" />
@@ -104,12 +103,10 @@ export default function Scout() {
                   <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-3">
                     <MapPin size={11} /> {player.location}
                   </div>
-
                   <div className="flex items-start gap-1.5 mb-4 p-2.5 rounded-lg bg-secondary/30 border border-border/20">
                     <Target size={13} className="text-primary mt-0.5 shrink-0" />
                     <p className="text-xs text-muted-foreground">{player.seeking}</p>
                   </div>
-
                   <div className="space-y-1.5 mb-5">
                     {player.highlights.map((h) => (
                       <div key={h} className="flex items-center gap-1.5 text-xs text-secondary-foreground">
@@ -117,17 +114,21 @@ export default function Scout() {
                       </div>
                     ))}
                   </div>
-
-                  <Button className="w-full active:scale-95 transition-transform glow-sm font-semibold gap-1.5 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
-                    Draft to Network <ArrowRight size={14} />
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button className="flex-1 active:scale-95 transition-transform glow-sm font-semibold gap-1.5 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
+                      Draft to Network <ArrowRight size={14} />
+                    </Button>
+                    <Button variant="outline" size="icon" className="shrink-0 border-blue-400/20 text-blue-400 hover:bg-blue-400/10">
+                      <Eye size={14} />
+                    </Button>
+                  </div>
                 </div>
               </motion.div>
             </ScrollReveal>
           ))}
         </div>
 
-        {/* Revenue Share — Expandable */}
+        {/* Revenue Share — Always visible */}
         <ScrollReveal>
           <div className="glass rounded-2xl overflow-hidden relative">
             <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--gold))]/3 via-primary/3 to-transparent pointer-events-none" />
@@ -136,7 +137,7 @@ export default function Scout() {
               className="relative z-10 w-full p-6 flex items-center justify-between text-left hover:bg-secondary/10 transition-colors"
             >
               <div>
-                <h2 className="font-display text-xl font-bold mb-0.5">How Revenue Share Works</h2>
+                <h2 className="font-display text-xl font-bold mb-0.5">How the Network Economy Works</h2>
                 <p className="text-muted-foreground text-sm">How earnings flow through the coaching network</p>
               </div>
               {showRevShare ? <ChevronUp size={18} className="text-muted-foreground" /> : <ChevronDown size={18} className="text-muted-foreground" />}
@@ -148,7 +149,7 @@ export default function Scout() {
                 animate={{ height: 'auto', opacity: 1 }}
                 className="relative z-10 px-6 pb-6"
               >
-                <div className="flex flex-col sm:flex-row items-center gap-3">
+                <div className="flex flex-col sm:flex-row items-center gap-3 mb-6">
                   {[
                     { label: 'Celebrity Pro', pct: '40%', color: 'text-[hsl(var(--gold))]', bg: 'bg-[hsl(var(--gold))]/10', border: 'border-[hsl(var(--gold))]/20' },
                     { label: 'Certified Coach', pct: '45%', color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/20' },
@@ -162,6 +163,15 @@ export default function Scout() {
                       {i < 2 && <ArrowRight size={16} className="text-muted-foreground/30 hidden sm:block shrink-0" />}
                     </div>
                   ))}
+                </div>
+                <div className="p-4 rounded-lg bg-secondary/20 border border-border/15 text-center">
+                  <p className="text-sm text-muted-foreground">
+                    <span className="font-semibold text-foreground">Example:</span> A Gold student pays <span className="text-primary font-semibold">$200/month</span> →
+                    Pro earns <span className="text-[hsl(var(--gold))] font-semibold">$80</span>,
+                    Coach earns <span className="text-primary font-semibold">$90</span>,
+                    Platform earns <span className="text-muted-foreground font-semibold">$30</span>
+                  </p>
+                  <p className="text-[10px] text-muted-foreground/60 mt-2">All payouts handled automatically via the Courtana platform</p>
                 </div>
               </motion.div>
             )}
