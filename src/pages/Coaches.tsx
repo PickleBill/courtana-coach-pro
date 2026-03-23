@@ -73,7 +73,8 @@ export default function Coaches() {
                     <Crown size={10} className="mr-1" /> Featured Coach
                   </Badge>
                   <Badge variant="outline" className="text-[10px] text-muted-foreground">
-                    {benJohns.slotsRemaining} slots remaining
+                    {spotlightCoach.slotsRemaining} slots remaining
+                  </Badge>
                   </Badge>
                 </div>
                 <h3 className="font-display text-xl font-bold text-foreground mb-1">{spotlightCoach.name}</h3>
