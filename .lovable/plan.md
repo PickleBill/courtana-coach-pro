@@ -1,97 +1,106 @@
-# UX Overhaul — Make It Real, Fix Dead Ends, Prioritize Action
-
-## What's Wrong (from your feedback)
-
-1. **Dead buttons everywhere** — "Confirm Booking" just animates and toasts, no actual checkout. "Request Pro Review" does nothing. "Review Now" just navigates to AI Hub with no context. "Offer Contract" opens a waitlist modal instead of something dynamic.
-2. **AI Hub layout is wrong** — the cool stuff (shot grades, drills, strengths) is buried below a giant SVG court visualization that looks fake. Upload/action should be prominent, analysis should be condensed.
-3. **Coach Match Quiz is too many steps** — 4 steps including budget (awkward). Should be 2-3 steps max, personality-driven, single-pane feel.
-4. **Curriculum is static** — no real interactivity beyond viewing. Reply input does nothing useful, no sense of progression or coach interaction loop.
-5. **Dashboard "7 videos waiting" loops to AI Hub** which doesn't show pending reviews — circular dead end.
-6. **Demo banner is unnecessary** — remove it.
-7. **Double AskAProChat** still possible — need to verify single instance.
-8. **Checkout doesn't exist** — booking modal shows "Confirm Booking" but never goes to payment.
-9. **"See It Live" card on homepage links to main courtana.com** — should link to something more specific like the highlights.
-
-## Execution Plan (3 passes)
-
-### Pass 1: Fix Every Dead Button + Remove Cruft (~8 changes)
-
-**Dashboard.tsx:**
-
-- Remove demo banner entirely
-- "Review Now" → instead of navigating to `/ai-hub`, open the ReviewModal directly with the first pending review pre-selected
-- "Message Student" → open a simple chat-style toast or inline panel, not just a generic toast
-
-**AIHub.tsx:**
-
-- "Request Pro Review" / "Send to Coach" button → wire to BookingModal or VideoUploadModal with coach pre-selected, or show a real action toast with next step
-- "Share with Coach" button → open VideoUploadModal
-- Consolidate the 4 redundant upload/connect/try/signup links into 2 clear CTAs: "Upload Video" and "See Sample Analysis" (links to `https://courtana.com/highlight/td7vCCWTXosp`)
-
-**BookingModal.tsx:**
-
-- "Confirm Booking" → show payment summary step with "Pay with Stripe" button (uses Stripe payment link or shows toast that Stripe checkout is loading). Even if Stripe secret key isn't set, show the UI flow.
-
-**Scout.tsx:**
-
-- "Offer Contract" → replace WaitlistModal with a slider-style offer card: show a contract value slider ($500-$5000/mo), term selector (3mo/6mo/12mo), and "Send Offer" button that toasts confirmation. Much more dynamic than a waitlist form.
-
-### Pass 2: Redesign Coach Match Quiz + AI Hub Layout (~6 changes)
-
-**CoachMatchQuiz.tsx — Complete rewrite to 2-step personality quiz:**
-
-- Step 1: Single pane with 6 clickable personality cards (not a dropdown): "I want to compete 🏆", "I just want to have fun 🎉", "I'm obsessed with technique 🔬", "I need accountability 💪", "I want to go pro 🌟", "I'm brand new 🌱" - yea maybe use emoji's but either make the questions more playful and funny or use the emoji to lighten or punny iy up.
-- Step 2: Show a quick "matching..." animation (1.5s), then reveal 3 coach matches with match %, personality fit reason, and a "Book Intro Session" button on each
-- No budget question. No learning style question. Fast, fun, personality-first.
-
-**AIHub.tsx — Reorder for action-first layout:**
-
-- Move "Analyze Your Own Session" (upload zone) to position 1, right after header. Make it more visual — show a court thumbnail background with the upload overlay.   you can put some future did connected court looking almost like a maybe even the good light peak into like the AI analysis ecosystem as of the background image of that which I think would get the point across in that big panel
-- Move shot grades grid to position 2 (condensed, horizontal scroll on mobile)
-- Move strengths/weaknesses to position 3 (combine into a single card with tabs or toggle, not two separate cards)
-- Move AI + Human comparison to position 4
-- Move "Ask the Coaches" roster to position 5
-
-AND--> MAKE ALL THESE DYNAMIC, use glow effects  Halo, animated subtle animations. Think about ways to click through. Maybe you don't click to a full separate page, but a subtle little thing that, like, this thing is going to, like, you're going to learn more and hint somewhere. I know you can do really good stuff with this if you've done it in other apps.
-
-What I'm trying to get at is that we want this thing to be interactive, and there are opportunities to use design aesthetic, copy called actions, and just different flows, even inside this hub where one thing affects the other. You just have this dynamic, visually appealing thing. You're almost there, but again just want to make it less basic. A good way to do that is to provide light contrast between the separate sections, so think through that and implement as best as you can. 
-
-- Push the court SVG visualization down to position 6 or remove it — it looks fake and isn't actionable
-- Remove the "Coming Soon" live court feed placeholder
-- Keep CourtSense Data Layer section but move to bottom
-
-### Pass 3: Curriculum Interactivity + Flow Connections (~5 changes)
-
-**Curriculum.tsx:**
-
-- Make the reply input functional: typing + Send button → shows a mock coach response after 2 seconds (pre-written, contextual to the module)
-- Add "Mark as Complete" button on the current module → animates the checkmark, advances progress bar, shows confetti toast, unlocks next module
-- Upload zone click → VideoUploadModal (already wired, verify it works)
-- Great also think about like a simple like ad you know curriculum or add a simple drill right like you can like pre-populate it and make it like you know they don't have to type out a whole bunch of stuff but like like show the coaches that they could do this and like, maybe even move the panels up and down in order or dragon drop. You've got a lot of creative latitude here and I know you can make it fun engaging.... and then use like sporadic opportunities to like create a nice CTA within that and all of these different animations, visuals and models
-
-**Dashboard.tsx → AI Hub flow fix:**
-
-- Instead of "Review Now" navigating away, show an inline expandable review panel right on the dashboard with the video preview, grade selector, and feedback textarea (reuse ReviewModal content but inline)
-
-**Rewards.tsx:**
-
-- "Claim" buttons → for items with a price, open a simple checkout confirmation: "Claim for 500 XP" → "Confirm" → animated success. For Court Kings gear, show a shipping info toast.
--  for anything clicked on here, it should have some sort of action. The gear should show a shipping information toast, I think, to confirm. What about all the exclusive events? That's like schedule, right, like "Book your slot". Give them a call to action that's real. Again, we said we integrated Stripe, and I want to actually get people to enter email addresses and do stuff with us. I think this is another opportunity to do it 
-
-**Index.tsx:**
-
-- Change "Smart Court in Action" link from `https://courtana.com/` to `https://courtana.com/highlight/LKXstelDDjZb` (actual highlight, not homepage)
-
-## Files Impacted
 
 
-| File                                | Changes                                                 |
-| ----------------------------------- | ------------------------------------------------------- |
-| `src/pages/Dashboard.tsx`           | Remove banner, fix Review Now flow, inline review panel |
-| `src/pages/AIHub.tsx`               | Reorder sections, consolidate CTAs, wire buttons        |
-| `src/components/CoachMatchQuiz.tsx` | Complete rewrite to 2-step personality quiz             |
-| `src/components/BookingModal.tsx`   | Add payment step with Stripe UI                         |
-| `src/pages/Scout.tsx`               | Replace waitlist with contract offer slider             |
-| `src/pages/Curriculum.tsx`          | Functional reply, mark complete, verify upload          |
-| `src/pages/Rewards.tsx`             | Wire claim buttons with XP/checkout flow                |
-| `src/pages/Index.tsx`               | Fix See It Live link                                    |
+# Phase 5 & 6: Mobile Polish, Notification System, Homepage Visuals, and Navbar Refresh
+
+## Changes Overview
+
+### 1. Navbar Brand Refresh
+- Change title to **"King of the Courtana"** throughout (page title, index.html, Navbar)
+- Replace the Crown icon logo with a custom pickleball-king SVG: a pickleball (circle with holes) wearing a crown on top. Simple inline SVG, 2-color (primary green + gold crown points)
+- Add "Powered by Courtana" in the navbar as a subtle `text-[9px]` tag, shifted up closer to the logo since "King of the Court" fits on one line as the brand name
+- Compact hero: put "King of the Courtana" on a single line in the hero h1
+
+### 2. Hero Dynamic Background
+- Add an animated SVG network/constellation background behind the hero: floating nodes connected by lines, slowly drifting — evokes "connected courts" and data flow
+- Use Framer Motion for subtle node animations (position drift + opacity pulse)
+- Overlay subtle stat readouts that fade in/out: "14,847 frames processed", "312 shot events", "89,201 tracking points" — like a HUD layer
+- Keep existing particle system but layer the network underneath
+
+### 3. Stats Bar — Fix CountUp Numbers
+- The CountUp component uses `useInView` — verify it triggers. The issue is likely that the ScrollReveal wrapper around the stats section prevents the CountUp `ref` from being in view at the right time. Fix: remove the outer `<ScrollReveal>` wrapper from the stats section so CountUp's own `useInView` handles the animation directly
+- This restores the rolling number animation
+
+### 4. Mobile Polish Pass (Phase 5)
+
+**All modals → full-screen on mobile:**
+- BookingModal, VideoUploadModal, ReviewModal, CoachMatchQuiz, WaitlistModal, SignInModal: add `max-h-[90vh] overflow-y-auto` on mobile, use `DialogContent` with `className="sm:max-w-lg max-h-[90vh] overflow-y-auto"`
+
+**Touch targets:**
+- CoachingCalculator sliders: already uses shadcn `Slider` — add larger thumb via CSS: `.slider-thumb { width: 24px; height: 24px; }` on mobile
+- All buttons in grids: minimum `h-12` on mobile for comfortable tapping
+
+**Layout fixes:**
+- MobileCTA: ensure it doesn't overlap content — add `pb-20` to page containers on mobile
+- AI Hub coach persona grid: `grid-cols-2` on mobile (already is), ensure cards don't get too cramped
+- Dashboard metric cards on mobile: 2-col grid already, verify spacing
+
+**Navbar mobile:**
+- Ensure menu closes on any navigation (already wired)
+- Add user avatar/name in mobile menu when authenticated
+
+### 5. Notification System (Phase 6)
+
+**Database:**
+- Create `notifications` table: `id`, `user_id`, `title`, `message`, `type` (review_complete, new_submission, xp_earned, system), `read`, `created_at`, `link` (optional route)
+- RLS: users can only read their own notifications
+- Enable realtime on notifications table
+
+**Navbar bell icon:**
+- Add Bell icon to Navbar (between nav links and auth section)
+- Badge with unread count (query from notifications table)
+- Dropdown showing last 5 notifications with timestamps
+- Click notification → navigate to `link` route and mark as read
+- For unauthenticated users: hide the bell
+
+**Seed notifications (for demo):**
+- On first auth, seed 3-4 demo notifications:
+  - "Coach Marcus reviewed your serve video" → `/curriculum`
+  - "You earned 50 XP for completing Module 3" → `/rewards`
+  - "New curriculum module unlocked: Kitchen Reset Combo" → `/curriculum`
+  - "Welcome to Courtana! Start with a free AI analysis" → `/ai-hub`
+
+**Edge function `notify-review-complete`:**
+- When coach submits review (Dashboard handleSubmitReview), call edge function to create notification for the student
+- For now, this is simulated client-side (insert into notifications table directly) since we don't have real student user IDs
+
+**Realtime subscription:**
+- In Navbar, subscribe to notifications channel for current user
+- New notification → increment badge count + show toast
+
+### 6. AI Hub — More Dynamic & Linked Up
+- Add subtle glow pulse on the "Analyze Your Session" hero card border
+- Shot grade cards: on click, expand inline to show that shot's 5-session trend detail + a "Drill for this" CTA linking to the relevant drill in the sidebar
+- "Request Pro Review" sidebar button → already wired to BookingModal, verify it works
+- Add subtle animated border gradient on the AI + Human comparison panel
+
+### 7. index.html Metadata Update
+- Change `<title>` to "King of the Courtana — AI Coaching Ecosystem"
+- Update og:title and twitter:title to match
+
+## File Impact
+
+| File | Changes |
+|---|---|
+| `index.html` | Title + meta updates |
+| `src/components/Navbar.tsx` | Pickleball crown logo SVG, "King of the Courtana" brand, Bell icon + notification dropdown |
+| `src/pages/Index.tsx` | Hero title change, animated network background, remove ScrollReveal from stats bar |
+| `src/index.css` | Mobile slider thumb size, glow-pulse keyframe |
+| `src/pages/AIHub.tsx` | Shot card click expand, animated borders |
+| `src/components/BookingModal.tsx` | Mobile full-screen dialog |
+| `src/components/VideoUploadModal.tsx` | Mobile full-screen dialog |
+| `src/components/CoachMatchQuiz.tsx` | Mobile full-screen dialog |
+| `src/components/SignInModal.tsx` | Mobile full-screen dialog |
+| `src/components/WaitlistModal.tsx` | Mobile full-screen dialog |
+| New migration | `notifications` table + RLS + realtime |
+| `src/hooks/useNotifications.ts` | New hook for notification queries + realtime |
+| `src/pages/Dashboard.tsx` | Client-side notification insert on review submit |
+
+## Execution Order
+
+1. Database migration (notifications table)
+2. Navbar refresh (logo, title, bell icon, notifications)
+3. Hero visual upgrade (network background, title, stats fix)
+4. Mobile polish pass (all modals + touch targets)
+5. AI Hub dynamic enhancements
+6. Metadata updates
+
