@@ -6,7 +6,8 @@ import ScrollReveal from '@/components/ScrollReveal';
 import usePageTitle from '@/hooks/usePageTitle';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Crown, ShieldCheck, Sparkles, Filter, Activity, Target, Quote } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Crown, ShieldCheck, Sparkles, Filter, Activity, Target, Quote, Search } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const tiers = ['all', 'celebrity', 'certified', 'rising'] as const;
