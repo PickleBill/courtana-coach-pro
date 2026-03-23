@@ -201,6 +201,41 @@ export default function AIHub() {
               </ScrollReveal>
             </div>
 
+            {/* Ask the Coaches — Multi-sport AI roster */}
+            <ScrollReveal delay={0.12}>
+              <div>
+                <h3 className="font-display text-xl font-bold mb-4 flex items-center gap-2">
+                  <Sparkles size={18} className="text-primary" /> Ask the Coaches
+                </h3>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                  {[
+                    { name: 'Anna Leigh Waters', avatar: 'ALW', accent: 'text-primary', border: 'border-primary/20', bg: 'bg-primary/8', sport: 'Pickleball', tagline: 'Net play, speed-ups, and competitive doubles strategy.' },
+                    { name: 'Carlos Alcaraz', avatar: 'CA', accent: 'text-blue-400', border: 'border-blue-400/20', bg: 'bg-blue-400/8', sport: 'Tennis', tagline: 'Groundstrokes, footwork, and match-level intensity.' },
+                    { name: 'Padel Pro TBD', avatar: 'PP', accent: 'text-[hsl(var(--gold))]', border: 'border-[hsl(var(--gold))]/20', bg: 'bg-[hsl(var(--gold))]/8', sport: 'Padel', tagline: 'Wall play, bandeja, and padel-specific positioning.', comingSoon: true },
+                    { name: 'Chuck Norris', avatar: 'CN', accent: 'text-red-400', border: 'border-red-400/20', bg: 'bg-red-400/8', sport: 'Wildcard', tagline: 'Ask Chuck anything. You might get a real answer. You might get a roundhouse kick.' },
+                  ].map((coach) => (
+                    <motion.div
+                      key={coach.name}
+                      whileHover={{ scale: 1.03, y: -2 }}
+                      className={`glass rounded-xl p-4 text-center glass-hover cursor-pointer relative ${coach.border}`}
+                      onClick={() => toast({ title: `${coach.name} is analyzing your session...`, description: 'AI synthesis in progress.' })}
+                    >
+                      {(coach as any).comingSoon && (
+                        <Badge variant="outline" className="absolute top-2 right-2 text-[8px] bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/20">Coming Soon</Badge>
+                      )}
+                      <div className={`w-12 h-12 rounded-full ${coach.bg} border ${coach.border} flex items-center justify-center font-display font-bold text-sm ${coach.accent} mx-auto mb-2`}>
+                        {coach.avatar}
+                      </div>
+                      <p className="font-display font-semibold text-foreground text-sm">{coach.name}</p>
+                      <Badge variant="outline" className="text-[9px] mt-1 mb-2">{coach.sport}</Badge>
+                      <p className="text-[10px] text-muted-foreground leading-relaxed">{coach.tagline}</p>
+                    </motion.div>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-3 text-center">Ask one coach or crowdsource all four. AI synthesizes responses from every perspective.</p>
+              </div>
+            </ScrollReveal>
+
             {/* 4. AI + Human comparison */}
             <ScrollReveal delay={0.15}>
               <div className="glass rounded-2xl p-6 border-primary/10 relative overflow-hidden">
